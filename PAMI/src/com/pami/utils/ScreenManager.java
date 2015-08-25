@@ -15,6 +15,7 @@ public class ScreenManager {
 	private static Stack<Activity> cacheActivityStack;
 
 	private ScreenManager() {
+		
 	}
 
 	public static ScreenManager getScreenManager() {
