@@ -20,8 +20,27 @@ public class ScreenManager {
 	public static ScreenManager getScreenManager() {
 		if (instance == null) {
 			instance = new ScreenManager();
+			activityStack = new Stack<Activity>();
 		}
 		return instance;
+	}
+	
+	/**
+	 * 判断Activity是否存在
+	 * @param cls 
+	 * @return true表示存在  false表示不存在
+	 */
+	public boolean isExist(Class cls){
+		if(cls == null){
+			return false;
+		}
+		for(int i=0;i<activityStack.size();i++){
+			Activity aa = activityStack.get(i);
+			if(aa.getClass() == cls){
+				return true;
+			}
+		}
+		return false;
 	}
 
 	/**
@@ -64,9 +83,6 @@ public class ScreenManager {
 	 * @param activity 需要添加到队列中的Activity
 	 */
 	public void pushActivity(Activity activity) {
-		if (activityStack == null) {
-			activityStack = new Stack<Activity>();
-		}
 		activityStack.add(activity);
 	}
 
@@ -99,42 +115,6 @@ public class ScreenManager {
 		}
 	}
 
-//	/**
-//	 * 添加activity
-//	 * @param activity
-//	 */
-//	public void pushCacheActivityStack(Activity activity) {
-//		if (cacheActivityStack == null) {
-//			cacheActivityStack = new Stack<Activity>();
-//		}
-//		cacheActivityStack.add(activity);
-//	}
-//
-//	/**
-//	 * 
-//	 * @param activity
-//	 */
-//	public void popCacheActivity(Activity activity) {
-//		if (activity != null) {
-//			activity.finish();
-//			cacheActivityStack.remove(activity);
-//			activity = null;
-//		}
-//	}
-//
-//	public void popAllCacheActivityExceptOne(Class cls) {
-//		while (true) {
-//			Activity activity = currentActivity();
-//			if (activity == null) {
-//				break;
-//			}
-//			if (cls != null && activity.getClass().equals(cls)) {
-//				break;
-//			}
-//			popActivity(activity);
-//		}
-//	}
-	
 	/**
 	 * 关闭指定的activity
 	 * @param cls 需要关闭的activity
