@@ -1,0 +1,76 @@
+<resources>
+
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+
+    <dimen name="distance_1dp">1dp</dimen>
+	<dimen name="distance_2dp">2dp</dimen>
+	<dimen name="distance_3dp">3dp</dimen>
+	<dimen name="distance_4dp">4dp</dimen>
+	<dimen name="distance_5dp">5dp</dimen>
+	<dimen name="distance_6dp">6dp</dimen>
+	<dimen name="distance_7dp">7dp</dimen>
+	<dimen name="distance_8dp">8dp</dimen>
+	<dimen name="distance_9dp">9dp</dimen>
+	<dimen name="distance_10dp">10dp</dimen>
+	<dimen name="distance_11dp">11dp</dimen>
+	<dimen name="distance_12dp">12dp</dimen>
+	<dimen name="distance_13dp">13dp</dimen>
+	<dimen name="distance_14dp">14dp</dimen>
+	<dimen name="distance_15dp">15dp</dimen>
+	<dimen name="distance_16dp">16dp</dimen>
+	<dimen name="distance_17dp">17dp</dimen>
+	<dimen name="distance_18dp">18dp</dimen>
+	<dimen name="distance_19dp">19dp</dimen>
+	<dimen name="distance_20dp">20dp</dimen>
+	<dimen name="distance_21dp">21dp</dimen>
+	<dimen name="distance_22dp">22dp</dimen>
+	<dimen name="distance_23dp">23dp</dimen>
+	<dimen name="distance_24dp">24dp</dimen>
+	<dimen name="distance_25dp">25dp</dimen>
+	<dimen name="distance_26dp">26dp</dimen>
+	<dimen name="distance_27dp">27dp</dimen>
+	<dimen name="distance_28dp">28dp</dimen>
+	<dimen name="distance_29dp">29dp</dimen>
+	<dimen name="distance_30dp">30dp</dimen>
+	<dimen name="distance_31dp">31dp</dimen>
+	<dimen name="distance_32dp">32dp</dimen>
+	<dimen name="distance_33dp">33dp</dimen>
+	<dimen name="distance_34dp">34dp</dimen>
+	<dimen name="distance_35dp">35dp</dimen>
+	<dimen name="distance_36dp">36dp</dimen>
+	<dimen name="distance_37dp">37dp</dimen>
+	<dimen name="distance_38dp">38dp</dimen>
+	<dimen name="distance_39dp">39dp</dimen>
+	<dimen name="distance_40dp">40dp</dimen>
+	<dimen name="distance_41dp">41dp</dimen>
+	<dimen name="distance_42dp">42dp</dimen>
+	<dimen name="distance_43dp">43dp</dimen>
+	<dimen name="distance_44dp">44dp</dimen>
+	<dimen name="distance_45dp">45dp</dimen>
+	<dimen name="distance_46dp">46dp</dimen>
+	<dimen name="distance_47dp">47dp</dimen>
+	<dimen name="distance_48dp">48dp</dimen>
+	<dimen name="distance_49dp">49dp</dimen>
+	<dimen name="distance_50dp">50dp</dimen>
+	
+	<dimen name="distance_1px">1px</dimen>
+	<dimen name="distance_2px">2px</dimen>
+	<dimen name="distance_3px">3px</dimen>
+	<dimen name="distance_4px">4px</dimen>
+	
+	<dimen name="size_9sp">9sp</dimen>
+	<dimen name="size_10sp">10sp</dimen>
+	<dimen name="size_11sp">11sp</dimen>
+	<dimen name="size_12sp">12sp</dimen>
+	<dimen name="size_13sp">13sp</dimen>
+	<dimen name="size_14sp">14sp</dimen>
+	<dimen name="size_15sp">15sp</dimen>
+	<dimen name="size_16sp">16sp</dimen>
+	<dimen name="size_17sp">17sp</dimen>
+	<dimen name="size_18sp">18sp</dimen>
+	<dimen name="size_19sp">19sp</dimen>
+	<dimen name="size_20sp">20sp</dimen>
+	
+</resources>
