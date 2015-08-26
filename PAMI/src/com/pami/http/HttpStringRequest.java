@@ -121,8 +121,6 @@ public class HttpStringRequest {
 			e.printStackTrace();
 		}
 
-		MLog.e("yyg", "----url--" + url);
-		MLog.e("yyg", "----param--" + param.toString());
 
 		StringRequest stringRequest = new StringRequest(method, url, listener, errorListener) {
 
