@@ -107,13 +107,25 @@ public abstract class BaseActivity extends FragmentActivity implements ViewInit,
 
 	}
 
+	/**
+	 * 设置titlebar的颜色
+	 * 颜色值在color.xml文件的 colorPrimaryDark 颜色值
+	 */
 	private void setBarColor() {
+		setBarColor(getResources().getIdentifier("colorPrimaryDark", "color", getPackageName()));
+	}
+	
+	/**
+	 * 指定titlebar的颜色 
+	 * @param colorId 颜色ID
+	 */
+	private void setBarColor(int colorId) {
 		
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            SystemBarTintManager tintManager = new SystemBarTintManager(this);
-            tintManager.setStatusBarTintEnabled(true);
-            tintManager.setStatusBarTintResource(getResources().getIdentifier("colorPrimaryDark", "color", getPackageName()));
-        }
+			SystemBarTintManager tintManager = new SystemBarTintManager(this);
+			tintManager.setStatusBarTintEnabled(true);
+			tintManager.setStatusBarTintResource(colorId);
+		}
 	}
 
 	/**
