@@ -7,7 +7,7 @@
     <FrameLayout
         android:id="@+id/activity_base_titlebar"
         android:layout_width="fill_parent"
-        android:layout_height="49dp"
+        android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:visibility="gone" >
     </FrameLayout>

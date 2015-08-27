@@ -4,9 +4,9 @@ import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.app.Dialog;
 import android.content.Context;
-import android.graphics.Color;
 import android.graphics.drawable.AnimationDrawable;
 import android.media.AudioManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.SlidingPaneLayout;
@@ -18,6 +18,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.FrameLayout;
+import android.widget.RelativeLayout.LayoutParams;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -34,6 +35,7 @@ import com.pami.utils.JsonUtils;
 import com.pami.utils.MLog;
 import com.pami.utils.NetUtils;
 import com.pami.utils.ScreenManager;
+import com.pami.utils.ScreenUtils;
 import com.pami.utils.Util;
 
 public abstract class BaseActivity extends FragmentActivity implements ViewInit, HttpActionListener, OnClickListener,
@@ -83,10 +85,10 @@ public abstract class BaseActivity extends FragmentActivity implements ViewInit,
 			myApplication.setContext(this);
 			myApplication.setFragmentManager(this.getSupportFragmentManager());
 
-			// setBarColor();
 
 			setTitleBar(getResources().getIdentifier("titlebar_base", "layout", getPackageName()));
-			showTitleBar();
+			setBarColor();
+//			showTitleBar();
 			initViewFromXML();
 			initData();
 			fillCacheData();
@@ -94,19 +96,6 @@ public abstract class BaseActivity extends FragmentActivity implements ViewInit,
 			initListener();
 			ScreenManager.getScreenManager().pushActivity(this);
 
-			// try {
-			//
-			// int versionNum = Integer.parseInt(Build.VERSION.SDK);//
-			// if(versionNum < 19){
-			// LayoutParams lp = (LayoutParams)
-			// activity_base_titlebar.getLayoutParams();
-			// lp.height = Util.formatDipToPx(BaseActivity.this, 50);
-			// activity_base_titlebar.setLayoutParams(lp);
-			// }
-			// } catch (Exception e) {
-			// MLog.e("yyg", "获取系统版本号错误");
-			// e.printStackTrace();
-			// }
 		} catch (Exception e) {
 			MLog.e("yyg", "构建view有错【BaseActivity】:" + e.toString());
 			e.printStackTrace();
@@ -119,20 +108,12 @@ public abstract class BaseActivity extends FragmentActivity implements ViewInit,
 	}
 
 	private void setBarColor() {
-		// 创建状态栏的管理实例
-		SystemBarTintManager tintManager = new SystemBarTintManager(this);
-		// 激活状态栏设置
-		tintManager.setStatusBarTintEnabled(true);
-		// 激活导航栏设置
-		tintManager.setNavigationBarTintEnabled(true);
-
-		// 设置一个颜色给系统栏
-		tintManager.setTintColor(Color.parseColor("#17aee5"));// 北美项目用
-		// tintManager.setTintColor(Color.parseColor("#fd3058"));//招聘项目用
-		// // 设置一个样式背景给导航栏
-		// tintManager.setNavigationBarTintResource(R.drawable.my_tint);
-		// // 设置一个状态栏资源
-		// tintManager.setStatusBarTintDrawable(MyDrawable);
+		
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            SystemBarTintManager tintManager = new SystemBarTintManager(this);
+            tintManager.setStatusBarTintEnabled(true);
+            tintManager.setStatusBarTintResource(getResources().getIdentifier("colorPrimaryDark", "color", getPackageName()));
+        }
 	}
 
 	/**
@@ -169,6 +150,7 @@ public abstract class BaseActivity extends FragmentActivity implements ViewInit,
 	 * @param layoutResID
 	 */
 	public void setTitleBar(int layoutResID) throws Exception {
+		activity_base_titlebar.setVisibility(View.VISIBLE);
 		activity_base_titlebar.removeAllViews();
 		LayoutInflater.from(this).inflate(layoutResID, activity_base_titlebar);
 	}
