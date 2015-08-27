@@ -18,6 +18,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.FrameLayout;
+import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -78,7 +79,7 @@ public abstract class BaseActivity extends FragmentActivity implements ViewInit,
 					getPackageName()));
 
 			loding_layout = findViewById(getResources().getIdentifier("loding_layout", "id", getPackageName()));
-
+			
 			myApplication = PMApplication.getInstance();
 			myApplication.setContext(mContext);
 			myApplication.addActivity(this);
