@@ -9,10 +9,9 @@ import android.app.Activity;
  *
  */
 public class ScreenManager {
-	private static Stack<Activity> activityStack;
+	
 	private static ScreenManager instance;
-
-	private static Stack<Activity> cacheActivityStack;
+	private static Stack<Activity> activityStack;
 
 	private ScreenManager() {
 		
@@ -121,8 +120,8 @@ public class ScreenManager {
 	 * @param cls 需要关闭的activity
 	 */
 	public void popActivity(Class cls){
-		for(int i=0;i<cacheActivityStack.size();i++){
-			Activity activity = cacheActivityStack.get(i);
+		for(int i=0;i<activityStack.size();i++){
+			Activity activity = activityStack.get(i);
 			if(cls == activity.getClass()){
 				popActivity(activity);
 				break;
