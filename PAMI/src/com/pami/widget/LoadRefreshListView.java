@@ -238,27 +238,31 @@ public class LoadRefreshListView extends ListView implements OnScrollListener {
 	 * 
 	 * @param footLoading
 	 */
-	private void updateListViewByState(int state) {
+	private void updateListViewByState(int state,boolean isHidFoot) {
 		switch (state) {
 		case FOOT_NORMAL: {
+			footView.setVisibility(View.VISIBLE);
 			this.footCurrentState = state;
 			load_more_progressbar.setVisibility(View.INVISIBLE);
 			list_foot_view_show_msg.setText("上拉加载更多···");
 			break;
 		}
 		case FOOT_LOADING: {
+			footView.setVisibility(View.VISIBLE);
 			this.footCurrentState = state;
 			load_more_progressbar.setVisibility(View.VISIBLE);
 			list_foot_view_show_msg.setText("正在努力加载数据···");
 			// 通过接口回调给页面
 			if(onLoadMoreAndRefreshListener != null){
-				Log.e("yyg", "加载更多");
 				onLoadMoreAndRefreshListener.onLoadMore();
 			}
 			break;
 		}
 		case FOOT_NO_MORE: {
 			this.footCurrentState = state;
+			if(isHidFoot){
+				footView.setVisibility(View.GONE);
+			}
 			load_more_progressbar.setVisibility(View.INVISIBLE);
 			list_foot_view_show_msg.setText("不能加载更多···");
 			break;
@@ -311,15 +315,23 @@ public class LoadRefreshListView extends ListView implements OnScrollListener {
 	 * 没有更多数据可以加载
 	 */
 	public void noLoadMore(){
-		updateListViewByState(FOOT_NO_MORE);
+		updateListViewByState(FOOT_NO_MORE,false);
+	}
+	
+	/**
+	 * 没有更多数据可以加载 并且设置FootView是否隐藏
+	 * @param isHidFoot true表示隐藏FootView
+	 */
+	public void noLoadMore(boolean isHidFoot){
+		updateListViewByState(FOOT_NO_MORE,isHidFoot);
 	}
 	
 	/**
 	 * 完成刷新 或者 加载更多
 	 */
 	public void completeAction(){
-		updateListViewByState(FOOT_NORMAL);
-		updateListViewByState(HEAD_NORMAL);
+		updateListViewByState(FOOT_NORMAL,false);
+		updateListViewByState(HEAD_NORMAL,false);
 		SimpleDateFormat sm = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 		head_load_time.setText("上次更新时间 "+sm.format(new Date(System.currentTimeMillis())));
 		startY = -100;
@@ -369,9 +381,9 @@ public class LoadRefreshListView extends ListView implements OnScrollListener {
 			if(isRefresh){
 				setFootBottomPadding(0);
 				if(headCurrentState == HEAD_RELEASE){
-					updateListViewByState(HEAD_REFRESHING);
+					updateListViewByState(HEAD_REFRESHING,false);
 				}else{
-					updateListViewByState(HEAD_NORMAL);
+					updateListViewByState(HEAD_NORMAL,false);
 				}
 			}
 			
@@ -400,7 +412,7 @@ public class LoadRefreshListView extends ListView implements OnScrollListener {
 				case HEAD_NORMAL:{
 					int head_view_move_distance = (int)(moveY - startY)/RATIO;
 					setHeadTopPadding(head_view_move_distance - headTotalHeight);
-					updateListViewByState(HEAD_PULL);
+					updateListViewByState(HEAD_PULL,false);
 					break;
 				}
 				case HEAD_PULL:{
@@ -408,12 +420,12 @@ public class LoadRefreshListView extends ListView implements OnScrollListener {
 					int head_view_move_distance = (int)(moveY - startY)/RATIO;
 					setHeadTopPadding(head_view_move_distance - headTotalHeight);
 					if(head_view_move_distance >= (headTotalHeight + (headTotalHeight/3))){
-						updateListViewByState(HEAD_RELEASE);
+						updateListViewByState(HEAD_RELEASE,false);
 						Log.e("yygtt", "head_view_move_distance = 切换到松开刷新");
 						head_load_status_icon.clearAnimation();
 						head_load_status_icon.startAnimation(headMarkFromDownToUpAnimation);
 					}else{
-						updateListViewByState(HEAD_PULL);
+						updateListViewByState(HEAD_PULL,false);
 					}
 					break;
 				}
@@ -423,12 +435,12 @@ public class LoadRefreshListView extends ListView implements OnScrollListener {
 							" startY="+startY+" headTotalHeight="+headTotalHeight+" 对比高度："+(headTotalHeight + (headTotalHeight/3)));
 					setHeadTopPadding(head_view_move_distance - headTotalHeight);
 					if(head_view_move_distance < (headTotalHeight + (headTotalHeight/3))){
-						updateListViewByState(HEAD_PULL);
+						updateListViewByState(HEAD_PULL,false);
 						Log.e("yygtt", "head_view_move_distance = 切换到下拉刷新");
 						head_load_status_icon.clearAnimation();
 						head_load_status_icon.startAnimation(headMarkFromUpToDownAnimation);
 					}else{
-						updateListViewByState(HEAD_RELEASE);
+						updateListViewByState(HEAD_RELEASE,false);
 					}
 					
 					break;
@@ -450,7 +462,7 @@ public class LoadRefreshListView extends ListView implements OnScrollListener {
 				setFootBottomPadding(foot_view_move_distance);
 				
 				if(footCurrentState == FOOT_NORMAL){
-					updateListViewByState(FOOT_LOADING);
+					updateListViewByState(FOOT_LOADING,false);
 				}
 			}
 		}
