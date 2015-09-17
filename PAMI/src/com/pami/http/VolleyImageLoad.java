@@ -4,7 +4,9 @@ package com.pami.http;
 import android.text.TextUtils;
 import android.widget.ImageView;
 
+import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
+import com.android.volley.toolbox.ImageLoader.ImageContainer;
 import com.android.volley.toolbox.ImageLoader.ImageListener;
 import com.pami.PMApplication;
 
@@ -40,7 +42,6 @@ public class VolleyImageLoad {
 		ImageLoader loader = new ImageLoader(PMApplication.getInstance().getRequestQueue(), VolleyImageCache.getInstence());
 		ImageListener imageListener = ImageLoader.getImageListener(imageView, defaultImageResId, errorImageResId);
 		loader.get(imageUrl, imageListener, maxWidth, maxHeight);
-		
 	}
 	
 }

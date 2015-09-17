@@ -1,15 +1,21 @@
 package com.pami.activity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnDismissListener;
 import android.graphics.drawable.AnimationDrawable;
 import android.media.AudioManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.SlidingPaneLayout;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -18,8 +24,6 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.FrameLayout;
-import android.widget.RelativeLayout;
-import android.widget.RelativeLayout.LayoutParams;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -36,7 +40,6 @@ import com.pami.utils.JsonUtils;
 import com.pami.utils.MLog;
 import com.pami.utils.NetUtils;
 import com.pami.utils.ScreenManager;
-import com.pami.utils.ScreenUtils;
 import com.pami.utils.Util;
 
 public abstract class BaseActivity extends FragmentActivity implements ViewInit, HttpActionListener, OnClickListener,
@@ -58,6 +61,8 @@ public abstract class BaseActivity extends FragmentActivity implements ViewInit,
 	private Toast mToast;
 
 	private SlidingPaneLayout mSlidingPaneLayout;
+	
+	private List<String> httpFlags = new ArrayList<String>();
 
 	@Override
 	protected void onCreate(Bundle arg0) {
@@ -257,17 +262,17 @@ public abstract class BaseActivity extends FragmentActivity implements ViewInit,
 
 	@Override
 	public void handleActionStart(String actionName, Object object) {
-
+		httpFlags.add(actionName);
 	}
 
 	@Override
 	public void handleActionFinish(String actionName, Object object) {
-
+		httpFlags.remove(actionName);
 	}
 
-	public void showLoadingDialog() {
+	public void showLoadingDialog(Object httpTag) {
 		if (NetUtils.isNetworkConnected(BaseActivity.this)) {
-			showLoadingDialog(this.getString(getResources().getIdentifier("text_loading", "string", getPackageName())));
+			showLoadingDialog(httpTag,this.getString(getResources().getIdentifier("text_loading", "string", getPackageName())));
 		}
 
 	}
@@ -276,14 +281,14 @@ public abstract class BaseActivity extends FragmentActivity implements ViewInit,
 		return loding_layout.getVisibility() == View.VISIBLE;
 	}
 
-	public void showLoadingDialog(String loadingStrs) {
+	public void showLoadingDialog(Object httpTag,String loadingStrs) {
 		dismissDialog();
 
 		AlertDialog.Builder builder = new Builder(BaseActivity.this);
 		loadingDialog = builder.create();
 		loadingDialog.show();
 		LayoutInflater inflater = LayoutInflater.from(BaseActivity.this);
-		View view = inflater.inflate(getResources().getIdentifier("loading_dialog_view", "layout", getPackageName()),
+		final View view = inflater.inflate(getResources().getIdentifier("loading_dialog_view", "layout", getPackageName()),
 				null);
 		ImageView loading_mark_iv = (ImageView) view.findViewById(getResources().getIdentifier("loading_mark_iv", "id",
 				getPackageName()));
@@ -291,17 +296,51 @@ public abstract class BaseActivity extends FragmentActivity implements ViewInit,
 				getPackageName()));
 		loding_mark_tv.setText(loadingStrs);
 		loading = (AnimationDrawable) loading_mark_iv.getDrawable();
+		
+		if(httpTag != null){
+			view.setTag(httpTag);
+		}
 
 		loadingDialog.setContentView(view);
 		Window dialogWindow = loadingDialog.getWindow();
 		loadingDialog.setCanceledOnTouchOutside(false);
+		loadingDialog.setCancelable(false);
 		dialogWindow.setGravity(Gravity.CENTER);
 		android.view.WindowManager.LayoutParams layoutParams = dialogWindow.getAttributes();
 		layoutParams.height = getWindowManager().getDefaultDisplay().getWidth() * 2 / 3;
 		layoutParams.width = getWindowManager().getDefaultDisplay().getWidth() * 2 / 3;
 		dialogWindow.setAttributes(layoutParams);
 		loading.start();
-		loadingDialog.show();
+		loadingDialog.setOnDismissListener(new OnDismissListener() {
+			
+			@Override
+			public void onDismiss(DialogInterface arg0) {
+				Object oo = view.getTag();
+				if(oo instanceof List){
+					List<String> tmpTag = (List<String>) oo;
+					for(String tag:tmpTag){
+						clearHttpRequest(tag);
+					}
+				}else if(oo instanceof String){
+					clearHttpRequest(oo.toString());
+				}
+			}
+		});
+	}
+	
+	/**
+	 * 根据tag撤销请求
+	 * @param httpTag
+	 */
+	private void clearHttpRequest(String httpTag){
+		if(TextUtils.isEmpty(httpTag)){
+			return;
+		}
+		if(httpFlags.contains(httpTag)){
+			httpFlags.remove(httpTag);
+			PMApplication.getInstance().clearRequest(httpTag);
+		}
+		
 	}
 
 	public void dismissDialog() {
@@ -335,6 +374,11 @@ public abstract class BaseActivity extends FragmentActivity implements ViewInit,
 	protected void onDestroy() {
 		super.onDestroy();
 		ScreenManager.getScreenManager().popActivity(BaseActivity.this);
+		if(httpFlags != null && !httpFlags.isEmpty()){
+			for(String httpFlag:httpFlags){
+				PMApplication.getInstance().clearRequest(httpFlag);
+			}
+		}
 	}
 
 	@Override
