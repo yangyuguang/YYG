@@ -331,4 +331,20 @@ public class FileHelper {
 		outStream.close();
 		inSream.close();
 	}
+	
+	/**
+	 * 清空某个路径下的所有文件 以及文件夹
+	 * @param path
+	 */
+	private static void clearFiles(String path){
+		File file = new File(path);
+		if(file.exists()){
+			File[] files = file.listFiles();
+			if(file.isDirectory()){
+				
+			}else{
+				
+			}
+		}
+	}
 }

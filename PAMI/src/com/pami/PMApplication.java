@@ -19,6 +19,7 @@ public class PMApplication extends Application {
 
 	public boolean isDown;
 	public boolean isRun;
+	
 	private RequestQueue requestQueue;
 	/**
 	 * 全局上下文对象

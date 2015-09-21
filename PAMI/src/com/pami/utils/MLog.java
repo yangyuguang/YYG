@@ -12,7 +12,7 @@ import android.util.Log;
  */
 public class MLog {
 	/**Log Mode **/
-	public static boolean DEBUG = true;
+//	public static boolean DEBUG = true;
 	/**Log priority of none*/
     public final static int PRIORITY_NONE = 0xFFFF;
 	/**Log priority of verbose.*/
@@ -73,7 +73,7 @@ public class MLog {
 	 * 重置打印调试级别
 	 */
 	public static void resetLogPriority() {
-		if(DEBUG){
+		if(PMApplication.getInstance().getDevMode()){
 			msLogPriority = PRIORITY_VERBOSE;
 		}else{
 			msLogPriority = PRIORITY_NONE;
