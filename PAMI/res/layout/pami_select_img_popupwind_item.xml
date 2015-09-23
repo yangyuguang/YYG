@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingTop="5dp"
+    android:paddingBottom="5dp">
+
+    <ImageView
+        android:id="@+id/dirItemImage"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_margin="@null"
+        android:scaleType="fitXY"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="5dp"
+        android:background="@drawable/pami_list_item_dir_bj_img"
+        android:paddingRight="10px"
+        android:paddingBottom="10px"
+        android:paddingTop="4px"
+        android:paddingLeft="4px"/>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginLeft="10dp"
+        android:layout_centerVertical="true"
+        android:layout_toRightOf="@id/dirItemImage">
+
+        <TextView
+            android:id="@+id/dirItemName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="12sp"
+            android:text="名称"/>
+
+        <TextView
+            android:id="@+id/dirItemCount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textSize="10sp"
+            android:textColor="#444"
+            android:text="100张"/>
+
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/dirItemImages"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="20dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/pami_checkbox_no_select"/>
+
+</RelativeLayout>

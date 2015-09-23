@@ -9,5 +9,11 @@
     
     <color name="white">#ffffff</color>
     <color name="common_font_black_two_color">#666666</color>
-
+	<color name="pami_ff">#444</color>
+	
+	<color name="pami_application_backgroupcolor">#f6f6f6</color>
+	
+	<!--  -->
+	<color name="pami_complete_select_location_img_tv_selector_default">#aaffffff</color>
+	<color name="pami_complete_select_location_img_tv_selector">#ffffffff</color>
 </resources>

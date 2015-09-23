@@ -9,7 +9,13 @@ package com.pami;
 
 public final class R {
     public static final class anim {
-        public static final int loading=0x7f040000;
+        public static final int home_push_leftin=0x7f040000;
+        public static final int home_push_leftout=0x7f040001;
+        public static final int home_push_rightin=0x7f040002;
+        public static final int home_push_rightout=0x7f040003;
+        public static final int loading=0x7f040004;
+        public static final int popupwindow_hid_animation=0x7f040005;
+        public static final int popupwindow_show_animation=0x7f040006;
     }
     public static final class attr {
         /**  可以拖动的圆形图片 
@@ -178,6 +184,12 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         /**  The default background of the menu. 
          */
         public static final int md__defaultBackground=0x7f060000;
+        public static final int pami_application_backgroupcolor=0x7f060008;
+        public static final int pami_complete_select_location_img_tv_selector=0x7f06000a;
+        /**   
+         */
+        public static final int pami_complete_select_location_img_tv_selector_default=0x7f060009;
+        public static final int pami_ff=0x7f060007;
         public static final int red=0x7f060003;
         public static final int transparent=0x7f060002;
         public static final int white=0x7f060005;
@@ -284,23 +296,41 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         public static final int locus_line=0x7f020016;
         public static final int locus_round_click=0x7f020017;
         public static final int locus_round_original=0x7f020018;
-        public static final int pm_nitifacation_icon=0x7f020019;
-        public static final int process_drawable=0x7f02001a;
-        public static final int refrash_arrow=0x7f02001b;
-        public static final int tree_close_icon=0x7f02001c;
-        public static final int tree_open_icon=0x7f02001d;
-        public static final int turnclose=0x7f02001e;
-        public static final int turnoff=0x7f02001f;
+        public static final int pami_arrow_left_no_select_img=0x7f020019;
+        public static final int pami_arrow_left_select_img=0x7f02001a;
+        public static final int pami_checkbox_is_select=0x7f02001b;
+        public static final int pami_checkbox_no_select=0x7f02001c;
+        public static final int pami_complete_select_location_img_bj_selector=0x7f02001d;
+        public static final int pami_complete_select_location_img_bj_selector_default=0x7f02001e;
+        public static final int pami_default_load_img=0x7f02001f;
+        public static final int pami_exit_select_img_btn=0x7f020020;
+        public static final int pami_exit_select_img_btn_bj=0x7f020021;
+        public static final int pami_list_item_dir_bj_img=0x7f020022;
+        public static final int pm_nitifacation_icon=0x7f020023;
+        public static final int process_drawable=0x7f020024;
+        public static final int refrash_arrow=0x7f020025;
+        public static final int taking_pictures=0x7f020026;
+        public static final int tree_close_icon=0x7f020027;
+        public static final int tree_open_icon=0x7f020028;
+        public static final int turnclose=0x7f020029;
+        public static final int turnoff=0x7f02002a;
     }
     public static final class id {
-        public static final int action_settings=0x7f05002e;
+        public static final int action_settings=0x7f05003d;
         public static final int activity_base_content=0x7f050011;
         public static final int activity_base_titlebar=0x7f05000f;
         public static final int base_activity_line=0x7f050010;
         public static final int bottom=0x7f050003;
         public static final int childHeadview_content=0x7f05001b;
         public static final int dialog_view=0x7f050024;
+        public static final int dirCount=0x7f05002d;
+        public static final int dirItemCount=0x7f050033;
+        public static final int dirItemImage=0x7f050031;
+        public static final int dirItemImages=0x7f050034;
+        public static final int dirItemName=0x7f050032;
+        public static final int dirName=0x7f05002c;
         public static final int end=0x7f050005;
+        public static final int exitBtn=0x7f050028;
         public static final int footview_img=0x7f050014;
         public static final int footview_text=0x7f050013;
         public static final int head_contentLayout=0x7f050016;
@@ -314,13 +344,19 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         public static final int headview_progressbar=0x7f050018;
         public static final int headview_refreshtext=0x7f050019;
         public static final int headview_updatetime_text=0x7f05001a;
-        public static final int image=0x7f050027;
+        public static final int image=0x7f050036;
+        public static final int itemImage=0x7f05002f;
+        public static final int itemRootView=0x7f05002e;
+        public static final int itemSelect=0x7f050030;
         public static final int left=0x7f050000;
+        public static final int listDir=0x7f050035;
         public static final int list_foot_view_show_msg=0x7f05001d;
         public static final int load_more_progressbar=0x7f05001c;
         public static final int loading_mark_iv=0x7f050025;
         public static final int loding_layout=0x7f050012;
         public static final int loding_mark_tv=0x7f050026;
+        public static final int mBottomLayout=0x7f05002b;
+        public static final int mGridView=0x7f05002a;
         /**  Used with View#setTag(int) to specify a position for the active view. 
          */
         public static final int mdActiveViewPosition=0x7f05000b;
@@ -341,17 +377,19 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         public static final int md__menu=0x7f050009;
         public static final int md__translationX=0x7f05000c;
         public static final int md__translationY=0x7f05000d;
-        public static final int msj_base_titlebar_text=0x7f05002c;
+        public static final int msj_base_titlebar_text=0x7f05003b;
         public static final int my_badge_view=0x7f05000e;
-        public static final int name=0x7f050028;
-        public static final int progressbar=0x7f05002a;
+        public static final int name=0x7f050037;
+        public static final int progressbar=0x7f050039;
         public static final int right=0x7f050002;
+        public static final int selectImageBtn=0x7f050029;
         public static final int start=0x7f050004;
         public static final int text=0x7f050023;
-        public static final int titlebar_back_view=0x7f05002b;
-        public static final int titlebar_right_view=0x7f05002d;
+        public static final int titleLayout=0x7f050027;
+        public static final int titlebar_back_view=0x7f05003a;
+        public static final int titlebar_right_view=0x7f05003c;
         public static final int top=0x7f050001;
-        public static final int tv_progress=0x7f050029;
+        public static final int tv_progress=0x7f050038;
     }
     public static final class layout {
         public static final int activity_main=0x7f030000;
@@ -363,8 +401,12 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         public static final int item=0x7f030006;
         public static final int loading_dialog_view=0x7f030007;
         public static final int menu_layout=0x7f030008;
-        public static final int pm_download_app_notification=0x7f030009;
-        public static final int titlebar_base=0x7f03000a;
+        public static final int pami_select_img_activity_layout=0x7f030009;
+        public static final int pami_select_img_gridview_item=0x7f03000a;
+        public static final int pami_select_img_popupwind_item=0x7f03000b;
+        public static final int pami_select_img_popupwond_layout=0x7f03000c;
+        public static final int pm_download_app_notification=0x7f03000d;
+        public static final int titlebar_base=0x7f03000e;
     }
     public static final class menu {
         public static final int main=0x7f0a0000;
@@ -380,6 +422,8 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         public static final int text_loading=0x7f080007;
     }
     public static final class style {
+        public static final int ActivityAnim=0x7f090006;
+        public static final int Anim_Theme=0x7f090005;
         /** 
         Base application theme, dependent on API level. This theme is replaced
         by AppBaseTheme from res/values-vXX/styles.xml on newer devices.
@@ -402,10 +446,9 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
  API 14 theme customizations can go here. 
          */
         public static final int AppBaseTheme=0x7f090000;
-        /**  Application theme. 
- All customizations that are NOT specific to a particular API-level can go here. 
+        /**  ******************************************************************************************************* 
          */
-        public static final int AppTheme=0x7f090001;
+        public static final int AppTheme=0x7f090004;
         /** 
         Base application theme for API 19+. This theme completely replaces
         AppBaseTheme from BOTH res/values/styles.xml and
@@ -413,11 +456,19 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
     
  API 19 theme customizations can go here. 
          */
-        public static final int FullBleedTheme=0x7f090004;
-        public static final int Widget=0x7f090002;
+        public static final int FullBleedTheme=0x7f090007;
+        /**  Application theme. 
+ <style name="AppTheme" parent="AppBaseTheme">
+       All customizations that are NOT specific to a particular API-level can go here.
+    </style> 
+         */
+        public static final int Widget=0x7f090001;
         /**  Base theme for the menu drawer. 
          */
-        public static final int Widget_MenuDrawer=0x7f090003;
+        public static final int Widget_MenuDrawer=0x7f090002;
+        /**  指定消失的动画xml 
+         */
+        public static final int select_img_popwindow_anim_style=0x7f090003;
     }
     public static final class styleable {
         /**  Styleables used for styling the menu drawer. 
