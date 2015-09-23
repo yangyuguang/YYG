@@ -7,6 +7,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Field;
 import java.util.Date;
 
 import android.content.Context;
@@ -15,6 +16,7 @@ import android.graphics.Bitmap.Config;
 import android.graphics.BitmapFactory;
 import android.graphics.BitmapFactory.Options;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.ColorMatrix;
 import android.graphics.ColorMatrixColorFilter;
 import android.graphics.Matrix;
@@ -22,8 +24,10 @@ import android.graphics.Paint;
 import android.graphics.PorterDuff.Mode;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
+import android.graphics.RectF;
 import android.media.ExifInterface;
-import android.media.ThumbnailUtils;
+import android.view.ViewGroup;
+import android.widget.ImageView;
 
 public class BitmapUtils {
 
@@ -36,7 +40,7 @@ public class BitmapUtils {
 	 */
 	private static Options options;
 
-	public static Bitmap creatBitmap(Context context,int id) {
+	public static Bitmap creatBitmap(Context context,int id) throws Exception{
 		if (options == null) {
 			options = new BitmapFactory.Options();
 			// options.inJustDecodeBounds = false;
@@ -49,9 +53,6 @@ public class BitmapUtils {
 		return BitmapFactory.decodeStream(is, null, options);
 	}
 
-
-	
-
 	/**
 	 * 获得缩略图路径 此方法首先会将图片压缩到指定大小 然后再保存到本地文件 并返回此文件的路径
 	 * @param imagePath 原图路径
@@ -59,7 +60,7 @@ public class BitmapUtils {
 	 * @param maxSize 图片大小的最大值
 	 * @return
 	 */
-	public static String getThumbUploadPath(String imagePath, int maxBorderLenght, long maxSize,String saveFilePath) {
+	public static String getThumbUploadPath(String imagePath, int maxBorderLenght, long maxSize,String saveFilePath)throws Exception {
 		Bitmap bitmap = null;
 		try {
 			BitmapFactory.Options options = new BitmapFactory.Options();
@@ -118,7 +119,7 @@ public class BitmapUtils {
 	 * @param height 图片需要显示的高度值
 	 * @return
 	 */
-	public static Bitmap equalRatioCompressImage(String path,int width,int height){
+	public static Bitmap equalRatioCompressImage(String path,int width,int height)throws Exception{
 		
 		BitmapFactory.Options options = new BitmapFactory.Options();
 		options.inJustDecodeBounds = true;
@@ -136,7 +137,7 @@ public class BitmapUtils {
 	 * @param height
 	 * @return
 	 */
-	public static int getSampleSize(Options options2, int width, int height) {
+	public static int getSampleSize(Options options2, int width, int height)throws Exception {
 		int sampleSize = 1;
 		int outWidth = options2.outWidth;
 		int outHeight = options2.outHeight;
@@ -157,7 +158,7 @@ public class BitmapUtils {
 	 * @param maxSize 最大（200kb）
 	 * @return
 	 */
-	public static Bitmap compressImageSize(Bitmap image, long maxSize) {
+	public static Bitmap compressImageSize(Bitmap image, long maxSize)throws Exception {
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		image.compress(Bitmap.CompressFormat.JPEG, 100, baos);// 质量压缩方法，这里100表示不压缩，把压缩后的数据存放到baos中
 		
@@ -170,7 +171,6 @@ public class BitmapUtils {
 		ByteArrayInputStream isBm = new ByteArrayInputStream(baos.toByteArray());// 把压缩后的数据baos存放到ByteArrayInputStream中
 		Bitmap bitmap = BitmapFactory.decodeStream(isBm, null, null);// 把ByteArrayInputStream数据生成图片
 		
-		
 		return bitmap;
 	}
 	
@@ -182,7 +182,7 @@ public class BitmapUtils {
 	 * @param saveFileName 图片保存的名称
 	 * @return
 	 */
-	public static String saveBitmap(Bitmap bm, String savePath, String saveFileName) {
+	public static String saveBitmap(Bitmap bm, String savePath, String saveFileName)throws Exception {
 		String imageP = "";
 
 		try {
@@ -219,7 +219,7 @@ public class BitmapUtils {
 	 * @param bitmap 原图
 	 * @return Bitmap 旋转后的图
 	 */
-	public static Bitmap rotaingImageView(int angle, Bitmap bitmap) {
+	public static Bitmap rotaingImageView(int angle, Bitmap bitmap)throws Exception {
 		// 旋转图片 动作
 		Matrix matrix = new Matrix();
 		matrix.postRotate(angle);
@@ -241,7 +241,7 @@ public class BitmapUtils {
 	 * @param path 图片绝对路径
 	 * @return degree 旋转的角度
 	 */
-	public static int readPictureDegree(String path) {
+	public static int readPictureDegree(String path)throws Exception {
 		int degree = 0;
 		try {
 			ExifInterface exifInterface = new ExifInterface(path);
@@ -270,7 +270,7 @@ public class BitmapUtils {
 	 * @param bmSrc
 	 * @return
 	 */
-	public static Bitmap bitmap2Gray(Bitmap bmSrc) {
+	public static Bitmap bitmap2Gray(Bitmap bmSrc)throws Exception {
 		int width, height;
 		height = bmSrc.getHeight();
 		width = bmSrc.getWidth();
@@ -292,7 +292,7 @@ public class BitmapUtils {
 	 * @param bitmap
 	 * @return
 	 */
-	public static byte[] getBytes(Bitmap bitmap){  
+	public static byte[] getBytes(Bitmap bitmap)throws Exception{  
 	    ByteArrayOutputStream baos = new ByteArrayOutputStream();
 	    if(bitmap == null){//quality
 	    	return null;
@@ -307,7 +307,7 @@ public class BitmapUtils {
 	 * @param bitmap 传入Bitmap对象
 	 * @return
 	 */
-	public static Bitmap toRoundBitmap(Bitmap bitmap) {
+	public static Bitmap toRoundBitmap(Bitmap bitmap)throws Exception {
 		int width = bitmap.getWidth();
 		int height = bitmap.getHeight();
 		float roundPx;
@@ -360,5 +360,116 @@ public class BitmapUtils {
 
 		return output;
 	}
+	
+	/**
+	 * 获取圆角图片
+	 * @param bitmap 原始图片
+	 * @param cornerRadiusPixels 角度
+	 * @return
+	 */
+	public static Bitmap circularBeadBitmap(Bitmap bitmap,float cornerRadiusPixels)throws Exception{
+		Bitmap tagger = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(tagger);
+        canvas.drawARGB(0, 0, 0, 0);
+
+        Paint mPaint = new Paint();
+        mPaint.setAntiAlias(true);
+        mPaint.setColor(Color.BLACK);
+        final Rect src = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());
+        RectF rectF = new RectF(src);
+        canvas.drawRoundRect(rectF, cornerRadiusPixels * 1.0f, cornerRadiusPixels * 1.0f, mPaint);
+        mPaint.setXfermode(new PorterDuffXfermode(Mode.SRC_IN));
+
+        canvas.drawBitmap(bitmap, 0, 0, mPaint);
+        
+        return tagger;
+	}
+	
+	/**
+	 * 裁剪图片 将图片大小根据ImageView的大小裁剪至合适的大小
+	 * （裁剪是以图片的中心点做为中心点）
+	 * @param imageView
+	 * @param bitmap
+	 * @return
+	 */
+	public static Bitmap tailorBitmap(ImageView imageView,Bitmap bitmap)throws Exception{
+		int ivWidth = imageView.getWidth();
+        int ivHeight = imageView.getHeight();
+        
+        ViewGroup.LayoutParams lp = imageView.getLayoutParams();
+        if(ivWidth <= 0){
+        	ivWidth = lp.width;
+        }
+        
+        if(ivWidth <= 0){
+        	ivWidth = getImagViewFieldValue(imageView, "mMaxWidth");
+        }
+        
+        if(ivWidth <= 0){
+        	throw new Exception("ImageView 的宽度小于等于0。");
+        }
+        
+        if(ivHeight <= 0){
+        	ivHeight = lp.height;
+        }
+        
+        if(ivHeight <= 0){
+        	ivHeight = getImagViewFieldValue(imageView, "mMaxHeight");
+        }
+        
+        if(ivHeight <= 0){
+        	throw new Exception("ImageView 的高度小于等于0。");
+        }
+
+        int bWidth = bitmap.getWidth();
+        int bHeight = bitmap.getHeight();
+
+        int retX = 0;
+        int retY = 0;
+        int width = ivWidth;
+        int height = ivHeight;
+        int widthRatio = bWidth/ivWidth;
+        int heightRatio = bHeight/ivHeight;
+        
+        if (bWidth > ivWidth) {
+            retX = (bWidth - (ivWidth * widthRatio)) / 2;
+            width = ivWidth * widthRatio;
+        }
+
+        if (bHeight > ivHeight) {
+            retY = (bHeight - (ivHeight * heightRatio)) / 2;
+            height = ivHeight * heightRatio;
+        }
+
+        if (retX > 0 || retY > 0) {
+        	return Bitmap.createBitmap(bitmap, retX, retY, width, height, null, false);
+        }else{
+        	//不需要裁剪
+        	return bitmap;
+        }
+	}
+	
+	/**
+     * 通过反射机制获取属性
+     *
+     * @param object 属性对象
+     * @param fieldName 属性名称
+     * @return
+     */
+    private static int getImagViewFieldValue(Object object, String fieldName) throws Exception {
+
+        int value = 0;
+
+        Field field = ImageView.class.getDeclaredField(fieldName);
+        field.setAccessible(true);
+
+        int fieldValue = field.getInt(object);
+
+        if (fieldValue > 0 && fieldValue < Integer.MAX_VALUE) {
+            value = fieldValue;
+        }
+
+        return value;
+    }
 
 }
