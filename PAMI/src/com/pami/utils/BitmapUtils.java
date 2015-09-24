@@ -468,8 +468,43 @@ public class BitmapUtils {
         if (fieldValue > 0 && fieldValue < Integer.MAX_VALUE) {
             value = fieldValue;
         }
-
         return value;
+    }
+    
+    /**
+     * 根据ImageView的大小 缩放Bitmap
+     * @param imageView
+     * @param bitmap
+     * @return
+     */
+    private static Bitmap scaleBitmap(ImageView imageView,Bitmap bitmap){
+    	int ivWidth = imageView.getWidth();
+        int ivHeight = imageView.getHeight();
+        int bWidth = bitmap.getWidth();
+		int bHeight = bitmap.getHeight();
+		
+		if(bWidth >= ivWidth && bHeight >= ivHeight){
+			//将 Bitmap缩小
+			float widthRatio = ivWidth*1.0f/bWidth;//0.3
+			float heightRatio = ivHeight*1.0f/bHeight;//0.6
+			//取最大值  即缩放的比例最小
+			float maxRatio = Math.max(widthRatio, heightRatio);
+			Matrix matrix = new Matrix();
+			matrix.postScale(maxRatio, maxRatio);
+			return Bitmap.createBitmap(bitmap, 0, 0, bWidth, bHeight, matrix, true);
+		}
+		if(bWidth <= ivWidth && bHeight <= ivHeight){
+			//将 Bitmap放大
+			float widthRatio = ivWidth*1.0f/bWidth;//2
+			float heightRatio = ivHeight*1.0f/bHeight;//3
+			
+			float minRatio = Math.min(widthRatio, heightRatio);
+			Matrix matrix = new Matrix();
+			matrix.postScale(minRatio, minRatio);
+			return Bitmap.createBitmap(bitmap, 0, 0, bWidth, bHeight, matrix, true);
+			
+		}
+    	return bitmap;
     }
 
 }
