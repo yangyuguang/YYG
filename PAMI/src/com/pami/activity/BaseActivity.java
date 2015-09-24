@@ -13,6 +13,7 @@ import android.graphics.drawable.AnimationDrawable;
 import android.media.AudioManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.SyncStateContract.Constants;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.SlidingPaneLayout;
 import android.text.TextUtils;
@@ -101,7 +102,7 @@ public abstract class BaseActivity extends FragmentActivity implements ViewInit,
 			fillView();
 			initListener();
 			ScreenManager.getScreenManager().pushActivity(this);
-
+			
 		} catch (Exception e) {
 			MLog.e("yyg", "构建view有错【BaseActivity】:" + e.toString());
 			e.printStackTrace();
