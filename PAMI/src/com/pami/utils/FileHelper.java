@@ -19,8 +19,9 @@ import android.util.Log;
 
 /**
  * 文件操作工具类
+ * 
  * @author Administrator
- *
+ * 
  */
 public class FileHelper {
 
@@ -42,6 +43,7 @@ public class FileHelper {
 
 	/**
 	 * 判断path路径下是否存在文件
+	 * 
 	 * @param path
 	 * @param name
 	 * @return
@@ -57,6 +59,7 @@ public class FileHelper {
 
 	/**
 	 * 创建文件夹( 可以创建多级)
+	 * 
 	 * @param dirName
 	 */
 	public static void creatDir(String dirName) throws Exception {
@@ -68,8 +71,11 @@ public class FileHelper {
 
 	/**
 	 * 获取文件返回的流
-	 * @param filepath 文件路径
-	 * @param fileName 文件名称
+	 * 
+	 * @param filepath
+	 *            文件路径
+	 * @param fileName
+	 *            文件名称
 	 * @return
 	 */
 	public static InputStream getfileInputStream(String filepath, String fileName) throws Exception {
@@ -90,9 +96,13 @@ public class FileHelper {
 
 	/**
 	 * 将字符串写入文件当中
-	 * @param path 文件路径
-	 * @param FileName 文件名
-	 * @param resource 需要写入的字符串
+	 * 
+	 * @param path
+	 *            文件路径
+	 * @param FileName
+	 *            文件名
+	 * @param resource
+	 *            需要写入的字符串
 	 */
 	public static void saveStringToFile(String path, String FileName, String resource) throws Exception {
 		creatDir(path);
@@ -109,12 +119,15 @@ public class FileHelper {
 
 	/**
 	 * 根据文件名读取缓存对象
-	 * @param context 上下文
-	 * @param fileName 文件名 如:userinfo.txt
+	 * 
+	 * @param context
+	 *            上下文
+	 * @param fileName
+	 *            文件名 如:userinfo.txt
 	 * @return
 	 * @throws Exception
 	 */
-	public static Object getEntity(Context context,String fileName) throws Exception {
+	public static Object getEntity(Context context, String fileName) throws Exception {
 		Object object = null;
 		try {
 			FileInputStream fs = context.openFileInput(fileName);
@@ -130,12 +143,16 @@ public class FileHelper {
 	}
 
 	/**
-	 * 保存数据到应用缓存 
-	 * @param context 上下文对象
-	 * @param object 需要保存的对象
-	 * @param fileName 保存的文件名 如:userinfo.txt
+	 * 保存数据到应用缓存
+	 * 
+	 * @param context
+	 *            上下文对象
+	 * @param object
+	 *            需要保存的对象
+	 * @param fileName
+	 *            保存的文件名 如:userinfo.txt
 	 */
-	public static void saveEntity(Context context,Object object, String fileName) throws Exception {
+	public static void saveEntity(Context context, Object object, String fileName) throws Exception {
 		try {
 			FileOutputStream fs;
 			fs = context.openFileOutput(fileName, Context.MODE_PRIVATE);
@@ -150,8 +167,11 @@ public class FileHelper {
 
 	/**
 	 * 读取文件中的字符串
-	 * @param path 文件路径
-	 * @param FileName 文件名
+	 * 
+	 * @param path
+	 *            文件路径
+	 * @param FileName
+	 *            文件名
 	 * @return
 	 */
 	public static String getStringFromFile(String path, String FileName) throws Exception {
@@ -183,9 +203,13 @@ public class FileHelper {
 
 	/**
 	 * 保存bitmap 到文件 （不压缩）
-	 * @param path 文件路径
-	 * @param Filename 文件名
-	 * @param bitmap bitmap对象
+	 * 
+	 * @param path
+	 *            文件路径
+	 * @param Filename
+	 *            文件名
+	 * @param bitmap
+	 *            bitmap对象
 	 */
 	public static void saveBitmap(String path, String Filename, Bitmap bitmap) throws Exception {
 		File file = new File(path, Filename);
@@ -205,9 +229,13 @@ public class FileHelper {
 
 	/**
 	 * 将InputStream 中的数据保存到 文件
-	 * @param is InputStream对象
-	 * @param filepath 文件路径
-	 * @param fileName 文件名
+	 * 
+	 * @param is
+	 *            InputStream对象
+	 * @param filepath
+	 *            文件路径
+	 * @param fileName
+	 *            文件名
 	 */
 	public static void saveInputStreamToFile(InputStream is, String filepath, String fileName) throws Exception {
 		File file = new File(filepath, fileName);
@@ -236,7 +264,9 @@ public class FileHelper {
 
 	/**
 	 * 读取 InputStream 中的数据
-	 * @param inStream InputStream对象
+	 * 
+	 * @param inStream
+	 *            InputStream对象
 	 * @return
 	 */
 	public static String readInStream(InputStream inStream) throws Exception {
@@ -259,7 +289,9 @@ public class FileHelper {
 
 	/**
 	 * 将 InputStream中的数据转换成 byte[]
-	 * @param is InputStream 对象
+	 * 
+	 * @param is
+	 *            InputStream 对象
 	 * @return
 	 * @throws IOException
 	 */
@@ -276,8 +308,11 @@ public class FileHelper {
 
 	/**
 	 * 复制文件
-	 * @param sourePath 源文件path
-	 * @param derPath 目标文件path
+	 * 
+	 * @param sourePath
+	 *            源文件path
+	 * @param derPath
+	 *            目标文件path
 	 * @throws FileNotFoundException
 	 */
 	public static void copyFile(String sourePath, String derPath) throws Exception {
@@ -296,32 +331,36 @@ public class FileHelper {
 
 	/**
 	 * 保存网络图片 到 文件
+	 * 
 	 * @param path
 	 * @param Filename
 	 * @param imagePath
 	 */
-	public static void saveBitmap(String path, String Filename, String imagePath)throws Exception {
+	public static void saveBitmap(String path, String Filename, String imagePath) throws Exception {
 		File file = new File(path, Filename);
 		if (!checkFileExists(path, Filename)) {
-				URL url = new URL(imagePath);
-				HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-				conn.setConnectTimeout(6 * 1000); // 注意要设置超时，设置时间不要超过10秒，避免被android系统回收
-				if (conn.getResponseCode() != 200)
-					throw new RuntimeException("请求url失败");
-				InputStream inSream = conn.getInputStream();
-				// 把图片保存到项目的根目录
-				readAsFile(inSream, file);
-			
+			URL url = new URL(imagePath);
+			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+			conn.setConnectTimeout(6 * 1000); // 注意要设置超时，设置时间不要超过10秒，避免被android系统回收
+			if (conn.getResponseCode() != 200)
+				throw new RuntimeException("请求url失败");
+			InputStream inSream = conn.getInputStream();
+			// 把图片保存到项目的根目录
+			readAsFile(inSream, file);
+
 		}
 	}
 
 	/**
 	 * 保存 InputStream 中的数据 到文件
-	 * @param inSream InputStream对象
-	 * @param file 文件
+	 * 
+	 * @param inSream
+	 *            InputStream对象
+	 * @param file
+	 *            文件
 	 * @throws Exception
 	 */
-	private static void readAsFile(InputStream inSream, File file) throws Exception {
+	public static void readAsFile(InputStream inSream, File file) throws Exception {
 		FileOutputStream outStream = new FileOutputStream(file);
 		byte[] buffer = new byte[1024];
 		int len = -1;
@@ -333,18 +372,25 @@ public class FileHelper {
 	}
 	
 	/**
-	 * 清空某个路径下的所有文件 以及文件夹
-	 * @param path
-	 */
-	private static void clearFiles(String path){
-		File file = new File(path);
-		if(file.exists()){
-			File[] files = file.listFiles();
-			if(file.isDirectory()){
-				
-			}else{
-				
-			}
-		}
-	}
+     * 递归删除目录下的所有文件及子目录下所有文件
+     * @param dir 将要删除的文件目录
+     * @return boolean Returns "true" if all deletions were successful.
+     *                 If a deletion fails, the method stops attempting to
+     *                 delete and returns "false".
+     */
+    public static boolean deleteDir(File dir) {
+        if (dir.isDirectory()) {
+            String[] children = dir.list();
+            //递归删除目录中的子目录下
+            for (int i=0; i<children.length; i++) {
+                boolean success = deleteDir(new File(dir, children[i]));
+                if (!success) {
+                    return false;
+                }
+            }
+        }
+        // 目录此时为空，可以删除
+        return dir.delete();
+    }
+
 }
