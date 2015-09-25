@@ -435,10 +435,19 @@ public class BitmapUtils {
         if (bWidth >= ivWidth && bHeight >= ivHeight) {
         	
         	float minRatio = Math.min(widthRatio, heightRatio);
-        	retX = Math.round((bWidth - (ivWidth * minRatio))/2);
-        	width = bWidth - retX * 2;
+        	if(minRatio > 1){
+        		retX = Math.round((bWidth - (ivWidth * minRatio))/2);
+            	retY = Math.round((bHeight - (ivHeight * minRatio))/2);
+        	}else if(widthRatio <= 1){
+        		retX = 0;
+        		retY = (bHeight - ivHeight)/2;
+        	}else if(heightRatio <= 1){
+        		retX = (bWidth - ivWidth)/2;
+        		retY = 0;
+        	}
         	
-        	retY = Math.round((bHeight - (ivHeight * minRatio))/2);
+        	
+        	width = bWidth - retX * 2;
         	height = bHeight - retY * 2;
         	return Bitmap.createBitmap(bitmap, retX, retY, width, height, null, false);
             
@@ -487,17 +496,12 @@ public class BitmapUtils {
      * @param bitmap
      * @return
      */
-<<<<<<< HEAD
     public static Bitmap scaleBitmap(ImageView imageView,Bitmap bitmap)throws Exception{
-=======
-    private static Bitmap scaleBitmap(ImageView imageView,Bitmap bitmap){
->>>>>>> origin/master
     	int ivWidth = imageView.getWidth();
         int ivHeight = imageView.getHeight();
         int bWidth = bitmap.getWidth();
 		int bHeight = bitmap.getHeight();
 		
-<<<<<<< HEAD
 		ViewGroup.LayoutParams lp = imageView.getLayoutParams();
 		if(ivWidth <= 0){
         	ivWidth = lp.width;
@@ -523,17 +527,11 @@ public class BitmapUtils {
         	throw new Exception("ImageView 的高度小于等于0。");
         }
 		
-=======
->>>>>>> origin/master
 		if(bWidth >= ivWidth && bHeight >= ivHeight){
 			//将 Bitmap缩小
 			float widthRatio = ivWidth*1.0f/bWidth;//0.3
 			float heightRatio = ivHeight*1.0f/bHeight;//0.6
-<<<<<<< HEAD
 			//取最大值  即缩小的比例最小
-=======
-			//取最大值  即缩放的比例最小
->>>>>>> origin/master
 			float maxRatio = Math.max(widthRatio, heightRatio);
 			Matrix matrix = new Matrix();
 			matrix.postScale(maxRatio, maxRatio);
