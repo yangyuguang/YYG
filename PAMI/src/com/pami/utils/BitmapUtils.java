@@ -386,7 +386,7 @@ public class BitmapUtils {
 	}
 	
 	/**
-	 * 裁剪图片 将图片大小根据ImageView的大小裁剪至合适的大小
+	 * 等比例裁剪图片 将图片大小根据ImageView的大小裁剪至合适的大小
 	 * （裁剪是以图片的中心点做为中心点）
 	 * @param imageView
 	 * @param bitmap
@@ -428,25 +428,35 @@ public class BitmapUtils {
         int retY = 0;
         int width = ivWidth;
         int height = ivHeight;
-        int widthRatio = bWidth/ivWidth;
-        int heightRatio = bHeight/ivHeight;
         
-        if (bWidth > ivWidth) {
-            retX = (bWidth - (ivWidth * widthRatio)) / 2;
-            width = ivWidth * widthRatio;
-        }
-
-        if (bHeight > ivHeight) {
-            retY = (bHeight - (ivHeight * heightRatio)) / 2;
-            height = ivHeight * heightRatio;
-        }
-
-        if (retX > 0 || retY > 0) {
+        float widthRatio = bWidth*1.0f/ivWidth;// 2
+        float heightRatio = bHeight*1.0f/ivHeight;// 3
+        
+        if (bWidth >= ivWidth && bHeight >= ivHeight) {
+        	
+        	float minRatio = Math.min(widthRatio, heightRatio);
+        	retX = Math.round((bWidth - (ivWidth * minRatio))/2);
+        	width = bWidth - retX * 2;
+        	
+        	retY = Math.round((bHeight - (ivHeight * minRatio))/2);
+        	height = bHeight - retY * 2;
         	return Bitmap.createBitmap(bitmap, retX, retY, width, height, null, false);
-        }else{
-        	//不需要裁剪
-        	return bitmap;
+            
+        }else if(bWidth >= ivWidth){
+        	
+        	retX = Math.round((bWidth - (ivWidth * widthRatio))/2);
+        	width = bWidth - retX * 2;
+        	height = bHeight;
+        	return Bitmap.createBitmap(bitmap, retX, retY, width, height, null, false);
+        }else if(bHeight >= ivHeight){
+        	width = bWidth;
+        	retY = Math.round((bHeight - (ivHeight * heightRatio))/2);
+        	height = bHeight - retY * 2;
+        	return Bitmap.createBitmap(bitmap, retX, retY, width, height, null, false);
         }
+
+      //不需要裁剪
+    	return bitmap;
 	}
 	
 	/**
@@ -470,6 +480,67 @@ public class BitmapUtils {
         }
 
         return value;
+    }
+    
+    /**
+     * 根据ImageView的大小 缩放Bitmap
+     * @param imageView
+     * @param bitmap
+     * @return
+     */
+    public static Bitmap scaleBitmap(ImageView imageView,Bitmap bitmap)throws Exception{
+    	int ivWidth = imageView.getWidth();
+        int ivHeight = imageView.getHeight();
+        int bWidth = bitmap.getWidth();
+		int bHeight = bitmap.getHeight();
+		
+		ViewGroup.LayoutParams lp = imageView.getLayoutParams();
+		if(ivWidth <= 0){
+        	ivWidth = lp.width;
+        }
+        
+        if(ivWidth <= 0){
+        	ivWidth = getImagViewFieldValue(imageView, "mMaxWidth");
+        }
+        
+        if(ivWidth <= 0){
+        	throw new Exception("ImageView 的宽度小于等于0。");
+        }
+        
+        if(ivHeight <= 0){
+        	ivHeight = lp.height;
+        }
+        
+        if(ivHeight <= 0){
+        	ivHeight = getImagViewFieldValue(imageView, "mMaxHeight");
+        }
+        
+        if(ivHeight <= 0){
+        	throw new Exception("ImageView 的高度小于等于0。");
+        }
+		
+		if(bWidth >= ivWidth && bHeight >= ivHeight){
+			//将 Bitmap缩小
+			float widthRatio = ivWidth*1.0f/bWidth;//0.3
+			float heightRatio = ivHeight*1.0f/bHeight;//0.6
+			//取最大值  即缩小的比例最小
+			float maxRatio = Math.max(widthRatio, heightRatio);
+			Matrix matrix = new Matrix();
+			matrix.postScale(maxRatio, maxRatio);
+			return Bitmap.createBitmap(bitmap, 0, 0, bWidth, bHeight, matrix, true);
+		}
+		if(bWidth <= ivWidth && bHeight <= ivHeight){
+			//将 Bitmap放大
+			float widthRatio = ivWidth*1.0f/bWidth;//2
+			float heightRatio = ivHeight*1.0f/bHeight;//3
+			
+			float minRatio = Math.min(widthRatio, heightRatio);
+			Matrix matrix = new Matrix();
+			matrix.postScale(minRatio, minRatio);
+			return Bitmap.createBitmap(bitmap, 0, 0, bWidth, bHeight, matrix, true);
+			
+		}
+    	return bitmap;
     }
 
 }
