@@ -492,6 +492,7 @@ public class BitmapUtils {
     
     /**
      * 根据ImageView的大小 缩放Bitmap
+     * 注意只有当图片的宽高 同时大于  或者  同时小于ImageView的宽高时才会缩放
      * @param imageView
      * @param bitmap
      * @return
