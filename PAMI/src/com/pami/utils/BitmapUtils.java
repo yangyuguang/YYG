@@ -478,7 +478,6 @@ public class BitmapUtils {
         if (fieldValue > 0 && fieldValue < Integer.MAX_VALUE) {
             value = fieldValue;
         }
-
         return value;
     }
     
@@ -488,12 +487,17 @@ public class BitmapUtils {
      * @param bitmap
      * @return
      */
+<<<<<<< HEAD
     public static Bitmap scaleBitmap(ImageView imageView,Bitmap bitmap)throws Exception{
+=======
+    private static Bitmap scaleBitmap(ImageView imageView,Bitmap bitmap){
+>>>>>>> origin/master
     	int ivWidth = imageView.getWidth();
         int ivHeight = imageView.getHeight();
         int bWidth = bitmap.getWidth();
 		int bHeight = bitmap.getHeight();
 		
+<<<<<<< HEAD
 		ViewGroup.LayoutParams lp = imageView.getLayoutParams();
 		if(ivWidth <= 0){
         	ivWidth = lp.width;
@@ -519,11 +523,17 @@ public class BitmapUtils {
         	throw new Exception("ImageView 的高度小于等于0。");
         }
 		
+=======
+>>>>>>> origin/master
 		if(bWidth >= ivWidth && bHeight >= ivHeight){
 			//将 Bitmap缩小
 			float widthRatio = ivWidth*1.0f/bWidth;//0.3
 			float heightRatio = ivHeight*1.0f/bHeight;//0.6
+<<<<<<< HEAD
 			//取最大值  即缩小的比例最小
+=======
+			//取最大值  即缩放的比例最小
+>>>>>>> origin/master
 			float maxRatio = Math.max(widthRatio, heightRatio);
 			Matrix matrix = new Matrix();
 			matrix.postScale(maxRatio, maxRatio);
