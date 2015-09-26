@@ -378,19 +378,29 @@ public class FileHelper {
      *                 If a deletion fails, the method stops attempting to
      *                 delete and returns "false".
      */
-    public static boolean deleteDir(File dir) {
-        if (dir.isDirectory()) {
-            String[] children = dir.list();
-            //递归删除目录中的子目录下
-            for (int i=0; i<children.length; i++) {
-                boolean success = deleteDir(new File(dir, children[i]));
-                if (!success) {
-                    return false;
-                }
-            }
-        }
-        // 目录此时为空，可以删除
-        return dir.delete();
+    public static void deleteDir(String path) {
+    	
+    	if(TextUtils.isEmpty(path)){
+    		return;
+    	}
+    	File dir = new File(path);
+    	
+    	if(!dir.exists()){
+    		return;
+    	}
+    	if(dir.isDirectory()){
+    		String[] children = dir.list();
+    		for(String c:children){
+    			MLog.e("img", "文件路径："+c);
+    			File cFile = new File(path+"/"+c);
+    			if(cFile.isDirectory()){
+    				deleteDir(cFile.getAbsolutePath());
+    			}else{
+    				MLog.e("img", "删除文件:"+cFile.delete());
+    			}
+    		}
+    	}
+    	dir.delete();
     }
 
 }

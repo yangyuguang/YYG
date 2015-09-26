@@ -164,14 +164,46 @@ public class BitmapUtils {
 		
 		int options = 100;
 		while (baos.toByteArray().length / 1024 > maxSize) { // 循环判断如果压缩后图片是否大于300kb,大于继续压缩
+			MLog.e("img", "图片压缩："+maxSize+" , "+baos.toByteArray().length);
 			options -= 5;// 每次都减少10
 			baos.reset();// 重置baos即清空baos
 			image.compress(Bitmap.CompressFormat.JPEG, options, baos);// 这里压缩options%，把压缩后的数据存放到baos中
 		}
+		MLog.e("img", "图片压缩【最后结果】："+maxSize+" , "+baos.toByteArray().length);
 		ByteArrayInputStream isBm = new ByteArrayInputStream(baos.toByteArray());// 把压缩后的数据baos存放到ByteArrayInputStream中
 		Bitmap bitmap = BitmapFactory.decodeStream(isBm, null, null);// 把ByteArrayInputStream数据生成图片
 		
 		return bitmap;
+	}
+	
+	/**
+	 * 图片大小压缩 如果图片大小超过 maxSize 将压缩到maxSize之内
+	 * 
+	 * @param image 图片
+	 * @param maxSize 最大（200kb）
+	 * @return
+	 */
+	public static File compressImageSizeToFile(Bitmap image, long maxSize)throws Exception {
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		image.compress(Bitmap.CompressFormat.JPEG, 100, baos);// 质量压缩方法，这里100表示不压缩，把压缩后的数据存放到baos中
+		
+		int options = 100;
+		while (baos.toByteArray().length / 1024 > maxSize) { // 循环判断如果压缩后图片是否大于300kb,大于继续压缩
+			MLog.e("img", "图片压缩："+maxSize+" , "+baos.toByteArray().length);
+			options -= 5;// 每次都减少10
+			baos.reset();// 重置baos即清空baos
+			image.compress(Bitmap.CompressFormat.JPEG, options, baos);// 这里压缩options%，把压缩后的数据存放到baos中
+		}
+		MLog.e("img", "图片压缩【最后结果】："+maxSize+" , "+baos.toByteArray().length);
+		
+		File file = new File(System.currentTimeMillis() + ".png");
+		FileOutputStream fos = new FileOutputStream(file);
+		fos.write(baos.toByteArray());
+		fos.flush();  
+        fos.close();
+        
+        return file;
+        
 	}
 	
 	/**

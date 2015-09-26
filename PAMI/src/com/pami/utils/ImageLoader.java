@@ -121,7 +121,7 @@ public class ImageLoader {
         mPoolThread.start();
 
         int maxMemory = (int) Runtime.getRuntime().maxMemory();
-        int cacheMemory = maxMemory / 4;
+        int cacheMemory = maxMemory / 10;
 
         mLruCache = new LruCache<String, Bitmap>(cacheMemory) {
 

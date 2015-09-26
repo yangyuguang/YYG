@@ -122,7 +122,7 @@ public class ImageLoaderUtils {
      * @param url
      */
     public void getRoundedCornerBitmap(ImageView imageView, String url){
-    	getRoundedCornerBitmap(imageView, url, mDefultImageResId,mEmptyImageResId,mErrorImageResId);
+    	getRoundedCornerBitmap(imageView, url, mDefultImageResId,mEmptyImageResId,mErrorImageResId, true);
     }
     
     /**
@@ -131,9 +131,27 @@ public class ImageLoaderUtils {
      * @param url
      * @param defImageResId
      */
-    public void getRoundedCornerBitmap(final ImageView imageView,
-                                       String url, int defImageResId) {
-    	getRoundedCornerBitmap(imageView, url, defImageResId,defImageResId,defImageResId);
+    public void getRoundedCornerBitmap(ImageView imageView, String url, int defImageResId) {
+    	getRoundedCornerBitmap(imageView, url, defImageResId,defImageResId,defImageResId, true);
+    }
+    
+    /**
+     * 获取圆形图片
+     * @param imageView
+     * @param url
+     */
+    public void getRoundedCornerBitmap(ImageView imageView, String url,boolean isCacheInMemory){
+    	getRoundedCornerBitmap(imageView, url, mDefultImageResId,mEmptyImageResId,mErrorImageResId,isCacheInMemory);
+    }
+    
+    /**
+     * 获取圆形图片 并设置默认图片
+     * @param imageView
+     * @param url
+     * @param defImageResId
+     */
+    public void getRoundedCornerBitmap(final ImageView imageView, String url, int defImageResId,boolean isCacheInMemory) {
+    	getRoundedCornerBitmap(imageView, url, defImageResId,defImageResId,defImageResId,isCacheInMemory);
     }
     
     /**
@@ -142,11 +160,12 @@ public class ImageLoaderUtils {
      * @param url
      * @param defImageResId
      */
-    private void getRoundedCornerBitmap(final ImageView imageView, String url, int defultImageResId,int emptyImageResId,int errorImageResId) {
+    private void getRoundedCornerBitmap(final ImageView imageView, String url, int defultImageResId,int emptyImageResId,int errorImageResId,boolean isCacheInMemory) {
         final DisplayImageOptions options = new DisplayImageOptions.Builder()
                 .showImageOnLoading(defultImageResId)
                 .showImageForEmptyUri(emptyImageResId)
-                .showImageOnFail(errorImageResId).cacheInMemory(true)
+                .showImageOnFail(errorImageResId).cacheInMemory(isCacheInMemory)
+                .imageScaleType(ImageScaleType.IN_SAMPLE_INT)
                 .cacheOnDisc(true).considerExifParams(true)
                 .displayer(new BitmapDisplayer() {
 
@@ -175,33 +194,9 @@ public class ImageLoaderUtils {
      * @param cornerRadiusPixels
      */
     public void getImageRoundBitmap(ImageView imageView, String url, int cornerRadiusPixels) {
-    	getImageRoundBitmap(imageView, url, cornerRadiusPixels, mDefultImageResId, mEmptyImageResId, mErrorImageResId);
+    	getImageRoundBitmap(imageView, url, cornerRadiusPixels, mDefultImageResId, mEmptyImageResId, mErrorImageResId, true);
     }
     
-//                .showImageOnLoading(defImageResId)
-//                .showImageForEmptyUri(defImageResId)
-//                .showImageOnFail(defImageResId).cacheInMemory(true)
-//                .imageScaleType(ImageScaleType.IN_SAMPLE_INT)
-//                .cacheOnDisc(true).considerExifParams(true)
-//                .displayer(new BitmapDisplayer() {
-//
-//                    @Override
-//                    public void display(Bitmap bitmap, ImageAware imageAware,
-//                                        LoadedFrom arg2) {
-//                        if (!(imageAware instanceof ImageViewAware)) {
-//                            throw new IllegalArgumentException("ImageAware should wrap ImageView. ImageViewAware is expected.");
-//                        }
-//                        try {
-//                            Bitmap bb = BitmapUtils.scaleBitmap(imageView, bitmap);
-//                            Bitmap tailorBitmap = BitmapUtils.tailorBitmap(imageView, bb);
-//                            imageAware.setImageBitmap(BitmapUtils.circularBeadBitmap(tailorBitmap,cornerRadiusPixels*1.0f));
-//                        } catch (Exception e) {
-//                            e.printStackTrace();
-//                        }
-//                    }
-//                }).build();
-//        imageLoader.displayImage(url, imageView, options);
-//    }
     /**
      * 获取圆角图片 并设置默认图片
      * @param imageView
@@ -210,7 +205,29 @@ public class ImageLoaderUtils {
      * @param cornerRadiusPixels
      */
     public void getImageRoundBitmap( ImageView imageView,  String url, int defImageResId, int cornerRadiusPixels) {
-    	getImageRoundBitmap(imageView, url, cornerRadiusPixels, defImageResId, defImageResId, defImageResId);
+    	getImageRoundBitmap(imageView, url, cornerRadiusPixels, defImageResId, defImageResId, defImageResId,true);
+    }
+    
+    /**
+     * 获取圆角图片
+     *
+     * @param imageView
+     * @param url
+     * @param cornerRadiusPixels
+     */
+    public void getImageRoundBitmap(ImageView imageView, String url, int cornerRadiusPixels, boolean isCacheInMemory) {
+    	getImageRoundBitmap(imageView, url, cornerRadiusPixels, mDefultImageResId, mEmptyImageResId, mErrorImageResId,isCacheInMemory);
+    }
+    
+    /**
+     * 获取圆角图片 并设置默认图片
+     * @param imageView
+     * @param url
+     * @param defImageResId
+     * @param cornerRadiusPixels
+     */
+    public void getImageRoundBitmap( ImageView imageView,  String url, int defImageResId, int cornerRadiusPixels, boolean isCacheInMemory) {
+    	getImageRoundBitmap(imageView, url, cornerRadiusPixels, defImageResId, defImageResId, defImageResId,isCacheInMemory);
     }
     
     
@@ -222,11 +239,11 @@ public class ImageLoaderUtils {
      * @param url
      * @param cornerRadiusPixels
      */
-    private void getImageRoundBitmap(final ImageView imageView, final String url, final int cornerRadiusPixels,int defultImageResId,int emptyImageResId,int errorImageResId) {
+    private void getImageRoundBitmap(final ImageView imageView, final String url, final int cornerRadiusPixels,int defultImageResId,int emptyImageResId,int errorImageResId,boolean isCacheInMemory) {
         final DisplayImageOptions options = new DisplayImageOptions.Builder()
                 .showImageOnLoading(defultImageResId)
                 .showImageForEmptyUri(emptyImageResId)
-                .showImageOnFail(errorImageResId).cacheInMemory(true)
+                .showImageOnFail(errorImageResId).cacheInMemory(isCacheInMemory)
                 .imageScaleType(ImageScaleType.IN_SAMPLE_INT)
                 .cacheOnDisc(true).considerExifParams(true)
                 .displayer(new BitmapDisplayer() {
@@ -240,7 +257,13 @@ public class ImageLoaderUtils {
                         try {
                             Bitmap bb = BitmapUtils.scaleBitmap(imageView, bitmap);
                             Bitmap tailorBitmap = BitmapUtils.tailorBitmap(imageView, bb);
+                            bb.recycle();
+                            bb = null;
+                            
                             imageAware.setImageBitmap(BitmapUtils.circularBeadBitmap(tailorBitmap,cornerRadiusPixels*1.0f));
+                            tailorBitmap.recycle();
+                            tailorBitmap = null;
+                            
                         } catch (Exception e) {
                             e.printStackTrace();
                         }

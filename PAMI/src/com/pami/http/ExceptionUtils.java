@@ -48,6 +48,8 @@ public class ExceptionUtils {
 	
 	public static StringBuffer getExceptionMsg(Exception e){
 		StringBuffer exceptionMsg = new StringBuffer();
+		exceptionMsg.append(e.getMessage());
+		exceptionMsg.append("\n");
 		StackTraceElement[] ees = e.getStackTrace();
 		int index = 0;
 		for(StackTraceElement ee : ees){
