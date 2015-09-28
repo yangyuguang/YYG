@@ -240,6 +240,7 @@ public class ImageLoaderUtils {
      * @param cornerRadiusPixels
      */
     private void getImageRoundBitmap(final ImageView imageView, final String url, final int cornerRadiusPixels,int defultImageResId,int emptyImageResId,int errorImageResId,boolean isCacheInMemory) {
+    	imageView.setTag(url);
         final DisplayImageOptions options = new DisplayImageOptions.Builder()
                 .showImageOnLoading(defultImageResId)
                 .showImageForEmptyUri(emptyImageResId)
@@ -255,15 +256,16 @@ public class ImageLoaderUtils {
                             throw new IllegalArgumentException("ImageAware should wrap ImageView. ImageViewAware is expected.");
                         }
                         try {
-                            Bitmap bb = BitmapUtils.scaleBitmap(imageView, bitmap);
-                            Bitmap tailorBitmap = BitmapUtils.tailorBitmap(imageView, bb);
-                            bb.recycle();
-                            bb = null;
-                            
-                            imageAware.setImageBitmap(BitmapUtils.circularBeadBitmap(tailorBitmap,cornerRadiusPixels*1.0f));
-                            tailorBitmap.recycle();
-                            tailorBitmap = null;
-                            
+                        	if(imageView.getTag().toString().equals(url)){
+                        		Bitmap bb = BitmapUtils.scaleBitmap(imageView, bitmap);
+                                Bitmap tailorBitmap = BitmapUtils.tailorBitmap(imageView, bb);
+                                bb.recycle();
+                                bb = null;
+                                
+                                imageAware.setImageBitmap(BitmapUtils.circularBeadBitmap(tailorBitmap,cornerRadiusPixels*1.0f));
+                                tailorBitmap.recycle();
+                                tailorBitmap = null;
+                        	}
                         } catch (Exception e) {
                             e.printStackTrace();
                         }

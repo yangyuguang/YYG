@@ -176,14 +176,16 @@ public class BitmapUtils {
 		return bitmap;
 	}
 	
+	
 	/**
 	 * 图片大小压缩 如果图片大小超过 maxSize 将压缩到maxSize之内
-	 * 
 	 * @param image 图片
 	 * @param maxSize 最大（200kb）
+	 * @param filePath 存放图片文件的路径
 	 * @return
+	 * @throws Exception
 	 */
-	public static File compressImageSizeToFile(Bitmap image, long maxSize)throws Exception {
+	public static File compressImageSizeToFile(Bitmap image, long maxSize,String filePath)throws Exception {
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		image.compress(Bitmap.CompressFormat.JPEG, 100, baos);// 质量压缩方法，这里100表示不压缩，把压缩后的数据存放到baos中
 		
@@ -196,7 +198,12 @@ public class BitmapUtils {
 		}
 		MLog.e("img", "图片压缩【最后结果】："+maxSize+" , "+baos.toByteArray().length);
 		
-		File file = new File(System.currentTimeMillis() + ".png");
+		File f = new File(filePath);
+		if(!f.exists()){
+			f.mkdirs();
+		}
+		
+		File file = new File(filePath+"/"+System.currentTimeMillis() + ".png");
 		FileOutputStream fos = new FileOutputStream(file);
 		fos.write(baos.toByteArray());
 		fos.flush();  

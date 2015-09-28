@@ -40,7 +40,6 @@ public class DragGridView  extends GridView {
         //长按item开始拖动
         public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
 
-        	Log.e("yyg", "点击位置："+getCount()+"-------------"+position);
         	if(itemNoDrag == position){
         		return false;
         	}

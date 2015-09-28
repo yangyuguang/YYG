@@ -31,6 +31,7 @@ import com.pami.adapter.SelectImageNOPhotographAdapter;
 import com.pami.adapter.SelectImageNOPhotographAdapter.OnSelectOrDeleteImgListener;
 import com.pami.bean.FolderBean;
 import com.pami.utils.ScreenManager;
+import com.pami.utils.ScreenUtils;
 
 /**
  * 选择图片
@@ -81,6 +82,15 @@ public class SelectImgNOPhotographActivity extends BaseActivity implements
 		hideTitleBar();
 		setContent(getResources().getIdentifier("pami_select_img_activity_layout", "layout", getPackageName()));
 
+		View titlebar_tv = (View) findViewById(getResources().getIdentifier("titleHeight", "id", getPackageName()));
+        if(android.os.Build.VERSION.SDK_INT >= 19){
+        	RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) titlebar_tv.getLayoutParams();
+            lp.height = ScreenUtils.getStatusHeight(SelectImgNOPhotographActivity.this);
+            titlebar_tv.setLayoutParams(lp);
+        }else{
+            titlebar_tv.setVisibility(View.GONE);
+        }
+        
 		maxNum = getIntent().getIntExtra("maxNum", 9);
 		
 		mGridView = (GridView) findViewById(getResources().getIdentifier("mGridView", "id", getPackageName()));

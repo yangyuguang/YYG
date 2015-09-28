@@ -3,6 +3,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/background_dark" >
+    
+    <View
+        android:id="@+id/titleHeight"
+        android:layout_width="match_parent"
+        android:layout_height="1px"/>
 
     <LinearLayout
         android:id="@+id/titleLayout"
@@ -10,7 +15,8 @@
         android:layout_height="49dp"
         android:background="#22292c"
         android:gravity="center_vertical"
-        android:orientation="horizontal" >
+        android:orientation="horizontal"
+        android:layout_below="@id/titleHeight" >
 
         <FrameLayout
             android:layout_width="49dp"

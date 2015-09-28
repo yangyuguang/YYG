@@ -38,5 +38,4 @@ public class MenuGridView extends GridView {
 		}
 		return super.dispatchTouchEvent(ev);
 	}
-	
 }
