@@ -198,14 +198,14 @@ public class BitmapUtils {
 	 */
 	public static File compressImageSizeToFile(Bitmap image, long maxSize, String filePath) throws Exception {
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		image.compress(Bitmap.CompressFormat.JPEG, 100, baos);// 质量压缩方法，这里100表示不压缩，把压缩后的数据存放到baos中
+		image.compress(Bitmap.CompressFormat.JPEG, 100, baos);
 
 		int options = 100;
-		while (baos.toByteArray().length / 1024 > maxSize) { // 循环判断如果压缩后图片是否大于300kb,大于继续压缩
+		while (baos.toByteArray().length / 1024 > maxSize) { 
 			MLog.e("img", "图片压缩：" + maxSize + " , " + baos.toByteArray().length);
-			options -= 5;// 每次都减少5
-			baos.reset();// 重置baos即清空baos
-			image.compress(Bitmap.CompressFormat.JPEG, options, baos);// 这里压缩options%，把压缩后的数据存放到baos中
+			options -= 5;
+			baos.reset();
+			image.compress(Bitmap.CompressFormat.JPEG, options, baos);
 		}
 		MLog.e("img", "图片压缩【最后结果】：" + maxSize + " , " + baos.toByteArray().length);
 

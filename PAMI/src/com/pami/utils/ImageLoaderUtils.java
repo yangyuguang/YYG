@@ -257,12 +257,12 @@ public class ImageLoaderUtils {
                         }
                         try {
                         	if(imageView.getTag().toString().equals(url)){
+                        		
                         		Bitmap bb = BitmapUtils.scaleBitmap(imageView, bitmap);
                                 Bitmap tailorBitmap = BitmapUtils.tailorBitmap(imageView, bb);
+                                imageAware.setImageBitmap(BitmapUtils.circularBeadBitmap(tailorBitmap,cornerRadiusPixels*1.0f));
                                 bb.recycle();
                                 bb = null;
-                                
-                                imageAware.setImageBitmap(BitmapUtils.circularBeadBitmap(tailorBitmap,cornerRadiusPixels*1.0f));
                                 tailorBitmap.recycle();
                                 tailorBitmap = null;
                         	}
