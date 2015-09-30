@@ -71,5 +71,5 @@
        <!-- 可以拖动的圆形图片 -->
        <attr name="choose_circle_drawable_id" format="reference"></attr>
     </declare-styleable>
-
+    
 </resources>
