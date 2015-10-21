@@ -15,8 +15,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.pami.PMApplication;
-import com.pami.adapter.SelectImageNOPhotographAdapter.OnSelectOrDeleteImgListener;
-import com.pami.bean.ImageItem;
 import com.pami.utils.ImageLoader;
 
 /**

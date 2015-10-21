@@ -9,6 +9,7 @@ import android.graphics.Paint;
 import android.graphics.PorterDuff.Mode;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
+import android.graphics.RectF;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
@@ -55,12 +56,12 @@ public class RoundImageView extends ImageView {
 
 		int w = getWidth();
 
-		Bitmap roundBitmap = getCroppedBitmap(bitmap, w);
+		Bitmap roundBitmap = getCroppedAngleBitmap(bitmap, w);
 		canvas.drawBitmap(roundBitmap, 0, 0, null);
 
 	}
 
-	public static Bitmap getCroppedBitmap(Bitmap bmp, int radius) {
+	public static Bitmap getCroppedAngleBitmap(Bitmap bmp, int radius) {
 		Bitmap sbmp;
 		if (bmp.getWidth() != radius || bmp.getHeight() != radius)
 			sbmp = Bitmap.createScaledBitmap(bmp, radius, radius, false);
@@ -77,12 +78,19 @@ public class RoundImageView extends ImageView {
 		paint.setDither(true);
 		canvas.drawARGB(0, 0, 0, 0);
 		paint.setColor(Color.parseColor("#BAB399"));
+		
+		
+		
+		
 		canvas.drawCircle(sbmp.getWidth() / 2 + 0.7f, sbmp.getHeight() / 2 + 0.7f,
 				(float) (sbmp.getWidth() / 2 * 0.98), paint);
+		
+		
 		paint.setXfermode(new PorterDuffXfermode(Mode.SRC_IN));
 		canvas.drawBitmap(sbmp, rect, rect, paint);
 
 		return output;
 	}
+	
 
 }

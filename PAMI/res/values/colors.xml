@@ -16,4 +16,5 @@
 	<!--  -->
 	<color name="pami_complete_select_location_img_tv_selector_default">#aaffffff</color>
 	<color name="pami_complete_select_location_img_tv_selector">#ffffffff</color>
+	<color name="back_btn_selector_color">#1383bf</color>
 </resources>

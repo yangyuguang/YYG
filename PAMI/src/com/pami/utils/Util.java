@@ -705,7 +705,7 @@ public class Util {
 
 	/**
 	 * 判断字符串是否超长
-	 * 
+	 * 一个中文算两个字符  字母算一个字符   符号和数字算一个字符
 	 * @param result
 	 *            字符串的长度
 	 * @param max
@@ -754,6 +754,49 @@ public class Util {
 			}
 		}
 		return true;
+	}
+	
+	/**
+	 * 获取字符串的长度
+	 * 一个中文算两个字符  字母算一个字符   符号和数字算一个字符
+	 * @param result
+	 * @return
+	 */
+	public static int getStringLenght(String result){
+		if (!TextUtils.isEmpty(result)) {
+			int length = result.length();
+			int is_beyond = 0;
+			char[] cc = new char[1];
+			int strLength = 0;
+			String str = null;
+			char result_item;
+			for (int i = 0; i < length; i++) {
+				result_item = result.charAt(i);
+				cc[0] = result_item;
+				str = new String(cc);
+				strLength = str.getBytes().length;
+				switch (strLength) {
+				case 3: {// 一个中文
+					is_beyond += 2;
+					break;
+				}
+				case 2: {// 一个字母
+					is_beyond += 1;
+					break;
+				}
+				case 1: {// 一个符号 或者 数字
+					is_beyond += 1;
+					break;
+				}
+
+				default:
+					break;
+				}
+			}
+			return is_beyond;
+		}
+		
+		return 0;
 	}
 
 	/**

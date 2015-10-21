@@ -261,10 +261,6 @@ public class ImageLoaderUtils {
                         		Bitmap bb = BitmapUtils.scaleBitmap(imageView, bitmap);
                                 Bitmap tailorBitmap = BitmapUtils.tailorBitmap(imageView, bb);
                                 imageAware.setImageBitmap(BitmapUtils.circularBeadBitmap(tailorBitmap,cornerRadiusPixels*1.0f));
-                                bb.recycle();
-                                bb = null;
-                                tailorBitmap.recycle();
-                                tailorBitmap = null;
                         	}
                         } catch (Exception e) {
                             e.printStackTrace();

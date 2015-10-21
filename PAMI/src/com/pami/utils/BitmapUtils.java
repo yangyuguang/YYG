@@ -3,9 +3,7 @@ package com.pami.utils;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.util.Date;
@@ -172,12 +170,10 @@ public class BitmapUtils {
 
 		int options = 100;
 		while (baos.toByteArray().length / 1024 > maxSize) { // 循环判断如果压缩后图片是否大于300kb,大于继续压缩
-			MLog.e("img", "图片压缩：" + maxSize + " , " + baos.toByteArray().length);
 			options -= 5;// 每次都减少10
 			baos.reset();// 重置baos即清空baos
 			image.compress(Bitmap.CompressFormat.JPEG, options, baos);// 这里压缩options%，把压缩后的数据存放到baos中
 		}
-		MLog.e("img", "图片压缩【最后结果】：" + maxSize + " , " + baos.toByteArray().length);
 		ByteArrayInputStream isBm = new ByteArrayInputStream(baos.toByteArray());// 把压缩后的数据baos存放到ByteArrayInputStream中
 		Bitmap bitmap = BitmapFactory.decodeStream(isBm, null, null);// 把ByteArrayInputStream数据生成图片
 
@@ -202,12 +198,10 @@ public class BitmapUtils {
 
 		int options = 100;
 		while (baos.toByteArray().length / 1024 > maxSize) { 
-			MLog.e("img", "图片压缩：" + maxSize + " , " + baos.toByteArray().length);
 			options -= 5;
 			baos.reset();
 			image.compress(Bitmap.CompressFormat.JPEG, options, baos);
 		}
-		MLog.e("img", "图片压缩【最后结果】：" + maxSize + " , " + baos.toByteArray().length);
 
 		File f = new File(filePath);
 		if (!f.exists()) {
@@ -415,6 +409,7 @@ public class BitmapUtils {
 	 */
 	public static Bitmap circularBeadBitmap(Bitmap bitmap, float cornerRadiusPixels) throws Exception {
 		Bitmap tagger = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), Bitmap.Config.ARGB_8888);
+		
 		Canvas canvas = new Canvas(tagger);
 		canvas.drawARGB(0, 0, 0, 0);
 
@@ -549,7 +544,7 @@ public class BitmapUtils {
 		int ivHeight = imageView.getHeight();
 		int bWidth = bitmap.getWidth();
 		int bHeight = bitmap.getHeight();
-
+		
 		ViewGroup.LayoutParams lp = imageView.getLayoutParams();
 		if (ivWidth <= 0) {
 			ivWidth = lp.width;

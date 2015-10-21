@@ -13,9 +13,7 @@ import android.graphics.drawable.AnimationDrawable;
 import android.media.AudioManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.SyncStateContract.Constants;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.widget.SlidingPaneLayout;
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -26,6 +24,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,6 +40,7 @@ import com.pami.utils.JsonUtils;
 import com.pami.utils.MLog;
 import com.pami.utils.NetUtils;
 import com.pami.utils.ScreenManager;
+import com.pami.utils.ScreenUtils;
 import com.pami.utils.Util;
 
 public abstract class BaseActivity extends FragmentActivity implements ViewInit, HttpActionListener, OnClickListener,
@@ -61,8 +61,6 @@ public abstract class BaseActivity extends FragmentActivity implements ViewInit,
 	public Context mContext;
 	private Toast mToast;
 
-	private SlidingPaneLayout mSlidingPaneLayout;
-	
 	private List<String> httpFlags = new ArrayList<String>();
 
 	@Override
@@ -91,7 +89,17 @@ public abstract class BaseActivity extends FragmentActivity implements ViewInit,
 			myApplication.addActivity(this);
 			myApplication.setContext(this);
 			myApplication.setFragmentManager(this.getSupportFragmentManager());
-
+			
+			View navigationBarHeight = findViewById(getResources().getIdentifier("navigationBarHeight", "id", getPackageName()));
+			if(PMApplication.getInstance().isHasNavigationBar){
+				navigationBarHeight.setVisibility(View.VISIBLE);
+				LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) navigationBarHeight.getLayoutParams();
+				lp.height = ScreenUtils.getNavigationBarHeight(this);
+				lp.width = PMApplication.getInstance().getDiaplayWidth();
+				navigationBarHeight.setLayoutParams(lp);
+			}else{
+				navigationBarHeight.setVisibility(View.GONE);
+			}
 
 			setTitleBar(getResources().getIdentifier("titlebar_base", "layout", getPackageName()));
 			setBarColor();

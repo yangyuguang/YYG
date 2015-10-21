@@ -4,32 +4,43 @@
     android:layout_height="match_parent"
     android:background="@color/common_gray_one_color" >
 
-    <FrameLayout
-        android:id="@+id/activity_base_titlebar"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:visibility="gone" >
-    </FrameLayout>
-    <TextView 
-        android:id="@+id/base_activity_line"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:background="#a7a7aa"
-        android:layout_below="@id/activity_base_titlebar" />
-    <FrameLayout
-        android:id="@+id/activity_base_content"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_below="@id/base_activity_line" >
-    </FrameLayout>
-    
-    <include 
+        android:layout_height="match_parent"
+        android:orientation="vertical" >
+
+        <FrameLayout
+            android:id="@+id/activity_base_titlebar"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone" >
+        </FrameLayout>
+
+        <TextView
+            android:id="@+id/base_activity_line"
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="#a7a7aa" />
+
+        <FrameLayout
+            android:id="@+id/activity_base_content"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent" >
+        </FrameLayout>
+
+        <View
+            android:id="@+id/navigationBarHeight"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:background="#2b2b2b" />
+    </LinearLayout>
+
+    <include
         android:id="@+id/loding_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:visibility="gone"
         android:layout_centerInParent="true"
-        layout="@layout/loading_dialog_view"/>
+        layout="@layout/loading_dialog_view"
+        android:visibility="gone" />
 
 </RelativeLayout>

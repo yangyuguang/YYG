@@ -47,7 +47,7 @@ public class HttpStringRequest {
 	 * @param listener 请求相应回调
 	 * @param errorListener 请求错误回调
 	 */
-	public StringRequest request(String tag, final int method, String url, final Map<String, String> getParam,
+	public StringRequest request(String tag, int method, String url, Map<String, String> getParam,
 			final Map<String, String> postParam, final Map<String, String> header, Listener<String> listener,
 			ErrorListener errorListener) {
 		try {
@@ -69,7 +69,7 @@ public class HttpStringRequest {
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}
-		MLog.i("ssss", method + "" + url);
+		MLog.e("yyg", method + " -->  " + url);
 		StringRequest stringRequest = new StringRequest(method, url, listener, errorListener) {
 			@Override
 			protected Map<String, String> getParams() throws AuthFailureError {
@@ -99,7 +99,7 @@ public class HttpStringRequest {
 	 * @param listener 请求相应回调
 	 * @param errorListener 请求错误回调
 	 */
-	public StringRequest request(String tag, final int method, String url, final Map<String, String> param,
+	public StringRequest request(String tag, int method, String url, final Map<String, String> param,
 			final Map<String, String> header, Listener<String> listener, ErrorListener errorListener) {
 		try {
 			if (method == Method.GET && param != null) {

@@ -61,6 +61,25 @@ public class ScreenUtils {
 		}
 		return statusHeight;
 	}
+	
+	/**
+	 * 获取navigation bar高度
+	 * @param context
+	 * @return
+	 */
+	public static int getNavigationBarHeight(Context context) {
+
+        int statusHeight = 0;
+        try {
+            Class e = Class.forName("com.android.internal.R$dimen");
+            Object object = e.newInstance();
+            int height = Integer.parseInt(e.getField("navigation_bar_height").get(object).toString());
+            statusHeight = context.getResources().getDimensionPixelSize(height);
+        } catch (Exception var5) {
+            var5.printStackTrace();
+        }
+        return statusHeight;
+    }
 
 	/**
 	 * 获取当前屏幕截图，包含状态栏
