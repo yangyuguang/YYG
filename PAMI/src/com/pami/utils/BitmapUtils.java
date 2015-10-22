@@ -408,15 +408,16 @@ public class BitmapUtils {
 	 * @return
 	 */
 	public static Bitmap circularBeadBitmap(Bitmap bitmap, float cornerRadiusPixels) throws Exception {
+		
 		Bitmap tagger = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), Bitmap.Config.ARGB_8888);
 		
 		Canvas canvas = new Canvas(tagger);
 		canvas.drawARGB(0, 0, 0, 0);
 
-		Paint mPaint = new Paint();
-		mPaint.setAntiAlias(true);
+		Paint mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
 		mPaint.setColor(Color.BLACK);
-		final Rect src = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());
+		
+		Rect src = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());
 		RectF rectF = new RectF(src);
 		canvas.drawRoundRect(rectF, cornerRadiusPixels * 1.0f, cornerRadiusPixels * 1.0f, mPaint);
 		mPaint.setXfermode(new PorterDuffXfermode(Mode.SRC_IN));
@@ -479,12 +480,19 @@ public class BitmapUtils {
 			if (minRatio > 1) {
 				retX = Math.round((bWidth - (ivWidth * minRatio)) / 2);
 				retY = Math.round((bHeight - (ivHeight * minRatio)) / 2);
-			} else if (widthRatio <= 1) {
+			} else if(widthRatio <= 1 && heightRatio <= 1){
+				retX = 0;
+				retY = 0;
+				width = bWidth;
+				height = bHeight;
+			}else if (widthRatio <= 1) {
 				retX = 0;
 				retY = (bHeight - ivHeight) / 2;
+				width = bWidth;
 			} else if (heightRatio <= 1) {
 				retX = (bWidth - ivWidth) / 2;
 				retY = 0;
+				height = bHeight;
 			}
 
 			width = bWidth - retX * 2;

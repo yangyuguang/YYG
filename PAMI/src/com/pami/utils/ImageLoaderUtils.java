@@ -267,6 +267,9 @@ public class ImageLoaderUtils {
                         }
                     }
                 }).build();
+        /**
+         * 
+         */
         imageLoader.displayImage(url, imageView, options);
     }
 }

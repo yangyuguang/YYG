@@ -31,13 +31,15 @@ import com.pami.listener.ViewInit;
 import com.pami.utils.JsonUtils;
 import com.pami.utils.MLog;
 import com.pami.utils.Util;
+import com.pami.widget.LoadingDialog;
+import com.pami.widget.LoadingDialog.OnDesmissListener;
 
 public abstract class BaseFragment extends Fragment implements ViewInit, HttpActionListener,OnClickListener{
 
 	protected FrameLayout titleBar;
 	private boolean isChangeTitleBar = true;
-	private Dialog loadingDialog;
-	private AnimationDrawable loading = null;
+	private LoadingDialog loadingDialog;
+	
 	
 	private List<String> httpFlags = new ArrayList<String>();
 
@@ -146,45 +148,21 @@ public abstract class BaseFragment extends Fragment implements ViewInit, HttpAct
 
 	public void showLoadingDialog(Object httpTag,String loadingStr) {
 		dismissDialog();
-		AlertDialog.Builder builder = new Builder(getActivity());
-		loadingDialog = builder.create();
-		loadingDialog.show();
-		LayoutInflater inflater = LayoutInflater.from(getActivity());
-		final View view = inflater.inflate(getResources().getIdentifier("loading_dialog_view", "layout", getActivity().getPackageName()), null);
-		ImageView loading_mark_iv = (ImageView) view.findViewById(getResources().getIdentifier("loading_mark_iv", "id", getActivity().getPackageName()));
-		loading = (AnimationDrawable) loading_mark_iv.getDrawable();
-
-		if(httpTag != null){
-			view.setTag(httpTag);
+		
+		if(loadingDialog == null){
+			loadingDialog = new LoadingDialog();
 		}
-		
-		loadingDialog.setContentView(view);
-		Window dialogWindow = loadingDialog.getWindow();
-		loadingDialog.setCanceledOnTouchOutside(true);
-		dialogWindow.setGravity(Gravity.CENTER);
-		android.view.WindowManager.LayoutParams layoutParams = dialogWindow.getAttributes();
-		layoutParams.height = getActivity().getWindowManager().getDefaultDisplay().getWidth() * 2 / 3;
-		layoutParams.width = getActivity().getWindowManager().getDefaultDisplay().getWidth() * 2 / 3;
-		dialogWindow.setAttributes(layoutParams);
-		loading.start();
-		
-		loadingDialog.setOnDismissListener(new OnDismissListener() {
+		loadingDialog.setHttpFlag(httpTag.toString());
+		loadingDialog.setOnDesmissListener(new OnDesmissListener() {
 			
 			@Override
-			public void onDismiss(DialogInterface arg0) {
-				Object oo = view.getTag();
-				if(oo instanceof List){
-					List<String> tmpTag = (List<String>) oo;
-					for(String tag:tmpTag){
-						clearHttpRequest(tag);
-					}
-				}else if(oo instanceof String){
-					clearHttpRequest(oo.toString());
+			public void onDismiss(String httpFlag) {
+				if(!TextUtils.isEmpty(httpFlag)){
+					clearHttpRequest(httpFlag);
 				}
-				
 			}
 		});
-		
+		loadingDialog.show(getActivity().getSupportFragmentManager(), "loadingDialog");
 	}
 	
 	/**
@@ -205,7 +183,6 @@ public abstract class BaseFragment extends Fragment implements ViewInit, HttpAct
 	public void dismissDialog() {
 		if (loadingDialog != null) {
 			try {
-				loading.stop();
 				loadingDialog.dismiss();
 				loadingDialog = null;
 			} catch (Exception e) {

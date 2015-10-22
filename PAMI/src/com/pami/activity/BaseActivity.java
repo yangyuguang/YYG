@@ -35,6 +35,7 @@ import com.pami.listener.AppDownLineListener;
 import com.pami.listener.AppLisntenerManager;
 import com.pami.listener.HttpActionListener;
 import com.pami.listener.ViewInit;
+import com.pami.utils.DensityUtils;
 import com.pami.utils.HidenSoftKeyBoard;
 import com.pami.utils.JsonUtils;
 import com.pami.utils.MLog;
@@ -42,15 +43,16 @@ import com.pami.utils.NetUtils;
 import com.pami.utils.ScreenManager;
 import com.pami.utils.ScreenUtils;
 import com.pami.utils.Util;
+import com.pami.widget.LoadingDialog;
+import com.pami.widget.LoadingDialog.OnDesmissListener;
 
 public abstract class BaseActivity extends FragmentActivity implements ViewInit, HttpActionListener, OnClickListener,
 		AppDownLineListener {
 
 	private FrameLayout activity_base_titlebar = null;
 	private FrameLayout activity_base_content = null;
-	private AnimationDrawable loading = null;
 
-	private Dialog loadingDialog;
+	private LoadingDialog loadingDialog;
 	private boolean is_hidKeyDown = true;
 	private TextView base_activity_line = null;
 	private View loding_layout;
@@ -293,48 +295,22 @@ public abstract class BaseActivity extends FragmentActivity implements ViewInit,
 	public void showLoadingDialog(Object httpTag,String loadingStrs) {
 		dismissDialog();
 
-		AlertDialog.Builder builder = new Builder(BaseActivity.this);
-		loadingDialog = builder.create();
-		loadingDialog.show();
-		LayoutInflater inflater = LayoutInflater.from(BaseActivity.this);
-		final View view = inflater.inflate(getResources().getIdentifier("loading_dialog_view", "layout", getPackageName()),
-				null);
-		ImageView loading_mark_iv = (ImageView) view.findViewById(getResources().getIdentifier("loading_mark_iv", "id",
-				getPackageName()));
-		TextView loding_mark_tv = (TextView) view.findViewById(getResources().getIdentifier("loding_mark_tv", "id",
-				getPackageName()));
-		loding_mark_tv.setText(loadingStrs);
-		loading = (AnimationDrawable) loading_mark_iv.getDrawable();
-		
-		if(httpTag != null){
-			view.setTag(httpTag);
+		if(loadingDialog == null){
+			loadingDialog = new LoadingDialog();
 		}
-
-		loadingDialog.setContentView(view);
-		Window dialogWindow = loadingDialog.getWindow();
-		loadingDialog.setCanceledOnTouchOutside(false);
-		loadingDialog.setCancelable(false);
-		dialogWindow.setGravity(Gravity.CENTER);
-		android.view.WindowManager.LayoutParams layoutParams = dialogWindow.getAttributes();
-		layoutParams.height = getWindowManager().getDefaultDisplay().getWidth() * 2 / 3;
-		layoutParams.width = getWindowManager().getDefaultDisplay().getWidth() * 2 / 3;
-		dialogWindow.setAttributes(layoutParams);
-		loading.start();
-		loadingDialog.setOnDismissListener(new OnDismissListener() {
+		loadingDialog.setHttpFlag(httpTag.toString());
+		loadingDialog.setOnDesmissListener(new OnDesmissListener() {
 			
 			@Override
-			public void onDismiss(DialogInterface arg0) {
-				Object oo = view.getTag();
-				if(oo instanceof List){
-					List<String> tmpTag = (List<String>) oo;
-					for(String tag:tmpTag){
-						clearHttpRequest(tag);
-					}
-				}else if(oo instanceof String){
-					clearHttpRequest(oo.toString());
+			public void onDismiss(String httpFlag) {
+				// TODO Auto-generated method stub
+				if(!TextUtils.isEmpty(httpFlag)){
+					clearHttpRequest(httpFlag);
 				}
 			}
 		});
+		loadingDialog.show(getSupportFragmentManager(), "loadingDialog");
+		
 	}
 	
 	/**
@@ -355,7 +331,6 @@ public abstract class BaseActivity extends FragmentActivity implements ViewInit,
 	public void dismissDialog() {
 		if (loadingDialog != null) {
 			try {
-				loading.stop();
 				loadingDialog.dismiss();
 				loadingDialog = null;
 			} catch (Exception e) {
