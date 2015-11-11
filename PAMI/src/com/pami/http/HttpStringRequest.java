@@ -38,38 +38,46 @@ public class HttpStringRequest {
 	}
 
 	/**
-	 * @param context 上下文
-	 * @param method post 或者 get
-	 * @param url 接口url
-	 * @param getparam map 拼接url传递的参数
-	 * @param postparam map post传递的参数
-	 * @param header map 头参数
-	 * @param listener 请求相应回调
-	 * @param errorListener 请求错误回调
+	 * @param context
+	 *            上下文
+	 * @param method
+	 *            post 或者 get
+	 * @param url
+	 *            接口url
+	 * @param getparam
+	 *            map 拼接url传递的参数
+	 * @param postparam
+	 *            map post传递的参数
+	 * @param header
+	 *            map 头参数
+	 * @param listener
+	 *            请求相应回调
+	 * @param errorListener
+	 *            请求错误回调
 	 */
 	public StringRequest request(String tag, int method, String url, Map<String, String> getParam,
 			final Map<String, String> postParam, final Map<String, String> header, Listener<String> listener,
 			ErrorListener errorListener) {
-		try {
-			if (getParam != null) {
-				StringBuilder params = new StringBuilder();
-				params.append("?");
-				Set<Map.Entry<String, String>> set = getParam.entrySet();
-				for (Iterator<Map.Entry<String, String>> it = set.iterator(); it.hasNext();) {
-					Map.Entry<String, String> entry = (Map.Entry<String, String>) it.next();
-					params.append(entry.getKey() + "");
-					params.append("=");
-					params.append(URLEncoder.encode(entry.getValue() + "", "UTF-8"));
-					params.append("&");
-				}
-				if (params.length() > 0) {
-					url += params.substring(0, params.length() - 1);
-				}
+
+		if (getParam != null) {
+			StringBuilder params = new StringBuilder();
+			params.append("?");
+			Set<Map.Entry<String, String>> set = getParam.entrySet();
+			for (Iterator<Map.Entry<String, String>> it = set.iterator(); it.hasNext();) {
+				Map.Entry<String, String> entry = (Map.Entry<String, String>) it.next();
+				params.append(entry.getKey() + "");
+				params.append("=");
+				// params.append(URLEncoder.encode(entry.getValue() + "",
+				// "UTF-8"));
+				params.append(entry.getValue());
+				params.append("&");
 			}
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
+			if (params.length() > 0) {
+				url += params.substring(0, params.length() - 1);
+			}
 		}
-		MLog.e("yyg", method + " -->  " + url);
+
+		MLog.e("yyg", method + " -【2】->  " + url);
 		StringRequest stringRequest = new StringRequest(method, url, listener, errorListener) {
 			@Override
 			protected Map<String, String> getParams() throws AuthFailureError {
@@ -91,13 +99,20 @@ public class HttpStringRequest {
 	}
 
 	/**
-	 * @param context 上下文
-	 * @param method post 或者 get
-	 * @param url 接口url
-	 * @param param map 传递的参数
-	 * @param header map 头参数
-	 * @param listener 请求相应回调
-	 * @param errorListener 请求错误回调
+	 * @param context
+	 *            上下文
+	 * @param method
+	 *            post 或者 get
+	 * @param url
+	 *            接口url
+	 * @param param
+	 *            map 传递的参数
+	 * @param header
+	 *            map 头参数
+	 * @param listener
+	 *            请求相应回调
+	 * @param errorListener
+	 *            请求错误回调
 	 */
 	public StringRequest request(String tag, int method, String url, final Map<String, String> param,
 			final Map<String, String> header, Listener<String> listener, ErrorListener errorListener) {
@@ -120,7 +135,6 @@ public class HttpStringRequest {
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}
-
 
 		StringRequest stringRequest = new StringRequest(method, url, listener, errorListener) {
 

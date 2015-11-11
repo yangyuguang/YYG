@@ -162,7 +162,7 @@ public abstract class BaseFragment extends Fragment implements ViewInit, HttpAct
 				}
 			}
 		});
-		loadingDialog.show(getActivity().getSupportFragmentManager(), "loadingDialog");
+		loadingDialog.show(getActivity().getSupportFragmentManager(), "loadingDialog"+System.currentTimeMillis());
 	}
 	
 	/**

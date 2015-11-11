@@ -186,7 +186,7 @@ public class SelectImgCanPhotographActivity extends BaseActivity implements
 
 		dirCount.setText(mMaxCount + "张");
 		dirName.setText(mCurrentDir.getName());
-
+		
 		mImgs.addAll(Arrays.asList(mCurrentDir.list(new FilenameFilter() {
 			@Override
 			public boolean accept(File dir, String filename) {

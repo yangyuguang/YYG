@@ -145,7 +145,7 @@ public class LoadRefreshListView extends ListView implements OnScrollListener {
 		footView = LayoutInflater.from(context).inflate(MResource.getIdByName(context, "layout", "foot_view"), null);
 		list_foot_view_show_msg = (TextView) footView.findViewById(MResource.getIdByName(context, "id", "list_foot_view_show_msg"));
 		load_more_progressbar = (ProgressBar) footView.findViewById(MResource.getIdByName(context, "id", "load_more_progressbar"));
-		addFooterView(footView);
+		
 	}
 
 	/**
@@ -264,7 +264,7 @@ public class LoadRefreshListView extends ListView implements OnScrollListener {
 				footView.setVisibility(View.GONE);
 			}
 			load_more_progressbar.setVisibility(View.INVISIBLE);
-			list_foot_view_show_msg.setText("不能加载更多···");
+			list_foot_view_show_msg.setText("已显示全部");
 			break;
 		}
 		case HEAD_NORMAL:{
@@ -478,8 +478,8 @@ public class LoadRefreshListView extends ListView implements OnScrollListener {
 	 */
 	public void setDragPermissions(boolean isLoadingMore, boolean isRefresh) {
 		this.isLoadingMore = isLoadingMore;
-		if(!isLoadingMore){
-			footView.setVisibility(View.GONE);
+		if(isLoadingMore){
+			addFooterView(footView);
 		}
 		this.isRefresh = isRefresh;
 		

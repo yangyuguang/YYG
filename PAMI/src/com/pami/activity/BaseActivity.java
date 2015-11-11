@@ -25,6 +25,7 @@ import android.view.Window;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -297,20 +298,18 @@ public abstract class BaseActivity extends FragmentActivity implements ViewInit,
 
 		if(loadingDialog == null){
 			loadingDialog = new LoadingDialog();
+			loadingDialog.setOnDesmissListener(new OnDesmissListener() {
+				
+				@Override
+				public void onDismiss(String httpFlag) {
+					if(!TextUtils.isEmpty(httpFlag)){
+						clearHttpRequest(httpFlag);
+					}
+				}
+			});
 		}
 		loadingDialog.setHttpFlag(httpTag.toString());
-		loadingDialog.setOnDesmissListener(new OnDesmissListener() {
-			
-			@Override
-			public void onDismiss(String httpFlag) {
-				// TODO Auto-generated method stub
-				if(!TextUtils.isEmpty(httpFlag)){
-					clearHttpRequest(httpFlag);
-				}
-			}
-		});
-		loadingDialog.show(getSupportFragmentManager(), "loadingDialog");
-		
+		loadingDialog.show(getSupportFragmentManager(), "loadingDialog"+System.currentTimeMillis());
 	}
 	
 	/**

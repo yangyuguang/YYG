@@ -24,6 +24,7 @@ import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.media.ExifInterface;
+import android.text.TextUtils;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
@@ -193,6 +194,11 @@ public class BitmapUtils {
 	 * @throws Exception
 	 */
 	public static File compressImageSizeToFile(Bitmap image, long maxSize, String filePath) throws Exception {
+		
+		if(TextUtils.isEmpty(filePath)){
+			throw new Exception("filePath is null");
+		}
+		
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		image.compress(Bitmap.CompressFormat.JPEG, 100, baos);
 
@@ -207,9 +213,8 @@ public class BitmapUtils {
 		if (!f.exists()) {
 			f.mkdirs();
 		}
-
-		File file = new File(filePath + "/" + System.currentTimeMillis() + ".jpg");
-
+		
+		File file = new File(filePath +"/"+ System.currentTimeMillis() + ".jpg");
 		FileOutputStream fos = new FileOutputStream(file);
 		baos.writeTo(fos);
 		fos.flush();
