@@ -153,9 +153,6 @@ public class HurlStack implements HttpStack {
     protected HttpURLConnection createConnection(URL url) throws IOException {
     	if(url.toString().contains("https") || url.toString().contains("HTTPS")){
     		HTTPSTrustManager.allowAllSSL();
-    		Log.e("yyg", "请求地址包含https");
-    	}else{
-    		Log.e("yyg", "请求地址不包含https");
     	}
         return (HttpURLConnection) url.openConnection();
     }

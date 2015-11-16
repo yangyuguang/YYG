@@ -404,5 +404,11 @@ public abstract class BaseActivity extends FragmentActivity implements ViewInit,
 	 */
 	public abstract void onAppDownLine();
 
+	/**
+	 * 销毁activity
+	 */
+	public void finishActivity(){
+		ScreenManager.getScreenManager().popActivity(BaseActivity.this);
+	}
 	
 }

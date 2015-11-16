@@ -30,6 +30,7 @@ import com.pami.listener.HttpActionListener;
 import com.pami.listener.ViewInit;
 import com.pami.utils.JsonUtils;
 import com.pami.utils.MLog;
+import com.pami.utils.ScreenManager;
 import com.pami.utils.Util;
 import com.pami.widget.LoadingDialog;
 import com.pami.widget.LoadingDialog.OnDesmissListener;
@@ -231,4 +232,12 @@ public abstract class BaseFragment extends Fragment implements ViewInit, HttpAct
 	 * @param v
 	 */
 	protected void onButtonClick(View v){}
+	
+	/**
+	 * 销毁activity
+	 */
+	public void finishActivity(){
+		ScreenManager.getScreenManager().popActivity(getActivity());
+	}
+	
 }
