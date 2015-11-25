@@ -1,26 +1,22 @@
 package com.pami.http;
 
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
-import org.json.JSONTokener;
 
 import android.content.Context;
+import android.support.v4.util.ArrayMap;
 import android.text.TextUtils;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
-import com.android.volley.RequestQueue;
 import com.android.volley.Response.ErrorListener;
 import com.android.volley.Response.Listener;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
 import com.pami.PMApplication;
 import com.pami.utils.JsonUtils;
 import com.pami.utils.MLog;
@@ -53,7 +49,7 @@ public class HttpJSONRequest {
 	 * @param jsonResult 请求结果
 	 * @param errorListener 请求错误结果
 	 */
-	public void jsonPostRequest(String httpTag,String baseUrl, String method, Map<String, Object> params, Listener jsonResult,
+	public void jsonPostRequest(String httpTag,String baseUrl, String method, ArrayMap<String, Object> params, Listener jsonResult,
 			ErrorListener errorListener) {
 		jsonRequest(httpTag, baseUrl, method,Request.Method.POST, params, jsonResult, errorListener);
 	}
@@ -67,7 +63,7 @@ public class HttpJSONRequest {
 	 * @param jsonResult 请求结果
 	 * @param errorListener 请求错误结果
 	 */
-	public void jsonGetRequest(String httpTag,String baseUrl, String method, Map<String, Object> params, Listener jsonResult,
+	public void jsonGetRequest(String httpTag,String baseUrl, String method, ArrayMap<String, Object> params, Listener jsonResult,
 			ErrorListener errorListener) {
 		jsonRequest(httpTag, baseUrl, method,Request.Method.GET, params, jsonResult, errorListener);
 	}
@@ -80,7 +76,7 @@ public class HttpJSONRequest {
 	 * @param jsonResult 请求结果
 	 * @param errorListener 请求错误结果
 	 */
-	private void jsonRequest(String httpTag,String baseUrl, String methodName,int method, Map<String, Object> params, Listener jsonResult,
+	private void jsonRequest(String httpTag,String baseUrl, String methodName,int method, ArrayMap<String, Object> params, Listener jsonResult,
 			ErrorListener errorListener) {
 		PMApplication.getInstance().getRequestQueue().cancelAll(httpTag);
 		JsonObjectRequest jsonRequest = null;
@@ -129,7 +125,7 @@ public class HttpJSONRequest {
 	 * @param jsonResult 返回的结果
 	 * @param errorListener 返回的错误结果
 	 */
-	public void requestJSONPostByHttps(String httpTag, String methodName, String baseUrl,Map<String, Object> params, Listener jsonResult,
+	public void requestJSONPostByHttps(String httpTag, String methodName, String baseUrl,ArrayMap<String, Object> params, Listener jsonResult,
 			ErrorListener errorListener) {
 		
 		JSONObject jsonParam = null;
@@ -144,7 +140,7 @@ public class HttpJSONRequest {
 			@Override
 			public Map<String, String> getHeaders()
 					throws AuthFailureError {
-				Map<String,String> headers = new HashMap<String, String>();
+				ArrayMap<String,String> headers = new ArrayMap<String, String>();
 				headers.put("Accept", "application/json");
 				headers.put("Content-Type", "application/json; charset=UTF-8");
 //				return super.getHeaders();
@@ -164,7 +160,7 @@ public class HttpJSONRequest {
 	 * @return
 	 * @throws Exception
 	 */
-	private <T> JSONObject getJSONObjectByMap(Map<String,Object> params)throws Exception{
+	private <T> JSONObject getJSONObjectByMap(ArrayMap<String,Object> params)throws Exception{
 		if(params != null && !params.isEmpty()){
 			JSONObject jsonParam = new JSONObject();
 			if (params != null && !params.isEmpty()) {

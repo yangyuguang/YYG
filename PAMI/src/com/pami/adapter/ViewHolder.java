@@ -1,5 +1,7 @@
 package com.pami.adapter;
 
+import com.pami.utils.ImageLoaderUtils;
+
 import android.content.Context;
 import android.text.Spannable;
 import android.util.SparseArray;
@@ -14,11 +16,13 @@ public class ViewHolder {
 	private SparseArray<View> mViews;
 	private static int mPosition;
 	private View mConvertView;
+	private Context mContext = null;
 	
 	private ViewHolder (Context context,ViewGroup parent,int layoutId,int position){
-		mPosition = position;
+		this.mPosition = position;
+		this.mContext = context;
 		this.mViews = new SparseArray<View>();
-		this.mConvertView = LayoutInflater.from(context).inflate(layoutId, parent,false);
+		this.mConvertView = LayoutInflater.from(mContext).inflate(layoutId, parent,false);
 		mConvertView.setTag(this);
 	}
 	
@@ -85,6 +89,18 @@ public class ViewHolder {
 	public ViewHolder setImage(int resId,int imageId){
 		ImageView imageView = getView(resId);
 		imageView.setImageResource(imageId);
+		return this;
+	}
+	/**
+	 * 给ImageView  设置图片
+	 * @param resId ImageView的ID
+	 * @param url 图片地址
+	 * @return
+	 */
+	public ViewHolder setImage(int resId,String url){
+		ImageView imageView = getView(resId);
+		imageView.setTag(url);
+		ImageLoaderUtils.getinstance(mContext).getImage(imageView, url);
 		return this;
 	}
 	

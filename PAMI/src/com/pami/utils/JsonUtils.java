@@ -1,6 +1,5 @@
 package com.pami.utils;
 
-import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -8,6 +7,9 @@ import java.util.Map;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import android.support.v4.util.ArrayMap;
+import android.util.SparseArray;
 
 public class JsonUtils {
 
@@ -85,8 +87,9 @@ public class JsonUtils {
 			return "";
 		}
 	}
-	public static Map<String, Object> getAboutUs(String json){
-		Map<String, Object> map = new HashMap<String, Object>();
+	
+	public static ArrayMap<String, Object> getAboutUs(String json){
+		ArrayMap<String, Object> map = new ArrayMap<String, Object>();
 		try {
 			JSONObject jsonObject = new JSONObject(json);
 			map.put("url", jsonObject.getString("url"));
@@ -96,6 +99,7 @@ public class JsonUtils {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
 		return null;
 	}
 	

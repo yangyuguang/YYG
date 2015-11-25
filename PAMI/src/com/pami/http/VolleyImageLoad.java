@@ -1,14 +1,6 @@
 package com.pami.http;
 
 
-import android.text.TextUtils;
-import android.widget.ImageView;
-
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.ImageLoader;
-import com.android.volley.toolbox.ImageLoader.ImageContainer;
-import com.android.volley.toolbox.ImageLoader.ImageListener;
-import com.pami.PMApplication;
 
 /**
  * Volley加载图片

@@ -7,15 +7,14 @@ import java.util.Map;
 import java.util.Set;
 
 import android.content.Context;
+import android.support.v4.util.ArrayMap;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request.Method;
-import com.android.volley.RequestQueue;
 import com.android.volley.Response.ErrorListener;
 import com.android.volley.Response.Listener;
 import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.pami.PMApplication;
 import com.pami.utils.MLog;
 
@@ -55,20 +54,18 @@ public class HttpStringRequest {
 	 * @param errorListener
 	 *            请求错误回调
 	 */
-	public StringRequest request(String tag, int method, String url, Map<String, String> getParam,
-			final Map<String, String> postParam, final Map<String, String> header, Listener<String> listener,
+	public StringRequest request(String tag, int method, String url, ArrayMap<String, String> getParam,
+			final ArrayMap<String, String> postParam, final ArrayMap<String, String> header, Listener<String> listener,
 			ErrorListener errorListener) {
 
 		if (getParam != null) {
 			StringBuilder params = new StringBuilder();
 			params.append("?");
-			Set<Map.Entry<String, String>> set = getParam.entrySet();
-			for (Iterator<Map.Entry<String, String>> it = set.iterator(); it.hasNext();) {
-				Map.Entry<String, String> entry = (Map.Entry<String, String>) it.next();
+			Set<ArrayMap.Entry<String, String>> set = getParam.entrySet();
+			for (Iterator<ArrayMap.Entry<String, String>> it = set.iterator(); it.hasNext();) {
+				ArrayMap.Entry<String, String> entry = (ArrayMap.Entry<String, String>) it.next();
 				params.append(entry.getKey() + "");
 				params.append("=");
-				// params.append(URLEncoder.encode(entry.getValue() + "",
-				// "UTF-8"));
 				params.append(entry.getValue());
 				params.append("&");
 			}
@@ -114,15 +111,15 @@ public class HttpStringRequest {
 	 * @param errorListener
 	 *            请求错误回调
 	 */
-	public StringRequest request(String tag, int method, String url, final Map<String, String> param,
-			final Map<String, String> header, Listener<String> listener, ErrorListener errorListener) {
+	public StringRequest request(String tag, int method, String url, final ArrayMap<String, String> param,
+			final ArrayMap<String, String> header, Listener<String> listener, ErrorListener errorListener) {
 		try {
 			if (method == Method.GET && param != null) {
 				StringBuilder params = new StringBuilder();
 				params.append("?");
-				Set<Map.Entry<String, String>> set = param.entrySet();
-				for (Iterator<Map.Entry<String, String>> it = set.iterator(); it.hasNext();) {
-					Map.Entry<String, String> entry = (Map.Entry<String, String>) it.next();
+				Set<ArrayMap.Entry<String, String>> set = param.entrySet();
+				for (Iterator<ArrayMap.Entry<String, String>> it = set.iterator(); it.hasNext();) {
+					ArrayMap.Entry<String, String> entry = (ArrayMap.Entry<String, String>) it.next();
 					params.append(entry.getKey() + "");
 					params.append("=");
 					params.append(URLEncoder.encode(entry.getValue() + "", "UTF-8"));

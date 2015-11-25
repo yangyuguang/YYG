@@ -34,6 +34,7 @@ import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Vibrator;
+import android.support.v4.util.ArrayMap;
 import android.text.TextUtils;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
@@ -51,7 +52,7 @@ public class Util {
 	private static Toast sToast = null;
 	
 //	private static Typeface customFont = null;
-	private static HashMap<String, Typeface> customFonts = new HashMap<String, Typeface>();
+	private static ArrayMap<String, Typeface> customFonts = new ArrayMap<String, Typeface>();
 
 	public static int getIsShowLoding() {
 		return isShowLoding;

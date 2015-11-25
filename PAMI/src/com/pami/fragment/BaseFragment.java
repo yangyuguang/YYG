@@ -44,6 +44,13 @@ public abstract class BaseFragment extends Fragment implements ViewInit, HttpAct
 	
 	private List<String> httpFlags = new ArrayList<String>();
 
+	public Handler fragmentHandler = new Handler(){
+		@Override
+		public void handleMessage(android.os.Message msg) {
+			fragmentHandlerMessage(msg);
+		}
+	};
+	
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
@@ -239,5 +246,7 @@ public abstract class BaseFragment extends Fragment implements ViewInit, HttpAct
 	public void finishActivity(){
 		ScreenManager.getScreenManager().popActivity(getActivity());
 	}
+	
+	protected void fragmentHandlerMessage(Message msg){};
 	
 }

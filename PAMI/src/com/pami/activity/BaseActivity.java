@@ -13,6 +13,8 @@ import android.graphics.drawable.AnimationDrawable;
 import android.media.AudioManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
 import android.view.Gravity;
@@ -65,6 +67,13 @@ public abstract class BaseActivity extends FragmentActivity implements ViewInit,
 	private Toast mToast;
 
 	private List<String> httpFlags = new ArrayList<String>();
+	
+	public Handler activityHandler = new Handler(){
+		@Override
+		public void handleMessage(android.os.Message msg) {
+			activityHandlerMessage(msg);
+		}
+	};
 
 	@Override
 	protected void onCreate(Bundle arg0) {
@@ -403,6 +412,8 @@ public abstract class BaseActivity extends FragmentActivity implements ViewInit,
 	 * @param v
 	 */
 	public abstract void onAppDownLine();
+	
+	protected void activityHandlerMessage(Message msg){};
 
 	/**
 	 * 销毁activity

@@ -2,10 +2,9 @@ package com.pami.http;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 import android.content.Context;
+import android.support.v4.util.ArrayMap;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 
@@ -24,7 +23,7 @@ public class ExceptionUtils {
 		HttpJSONRequest request = HttpJSONRequest.getinstance(context);
 		String httpTag = System.currentTimeMillis()+"";
 		
-		Map<String,Object> params = new HashMap<String,Object>();
+		ArrayMap<String,Object> params = new ArrayMap<String,Object>();
 		params.put("device_msg", getDeviceMsg(context).toString());
 		params.put("exception_msg", getExceptionMsg(e).toString());
 		
