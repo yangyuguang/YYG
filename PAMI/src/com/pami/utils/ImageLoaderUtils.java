@@ -170,8 +170,9 @@ public class ImageLoaderUtils {
      * @param url
      * @param defImageResId
      */
-    private void getRoundedCornerBitmap(final ImageView imageView, String url, int defultImageResId,int emptyImageResId,int errorImageResId,boolean isCacheInMemory) {
-        final DisplayImageOptions options = new DisplayImageOptions.Builder()
+    private void getRoundedCornerBitmap(final ImageView imageView, final String url, int defultImageResId,int emptyImageResId,int errorImageResId,boolean isCacheInMemory) {
+    	imageView.setTag(url);
+    	final DisplayImageOptions options = new DisplayImageOptions.Builder()
                 .showImageOnLoading(defultImageResId)
                 .showImageForEmptyUri(emptyImageResId)
                 .showImageOnFail(errorImageResId).cacheInMemory(isCacheInMemory)
@@ -187,7 +188,27 @@ public class ImageLoaderUtils {
                                     "ImageAware should wrap ImageView. ImageViewAware is expected.");
                         }
                         try {
-                            imageAware.setImageBitmap(BitmapUtils.toRoundBitmap(bitmap));
+                        	
+                        	if(imageView.getTag().toString().equals(url)){
+                        	
+                        		Bitmap resultBitmap = mImageLoaderCache.get(url);
+                        		if(resultBitmap == null){
+                        			Bitmap bb = BitmapUtils.scaleBitmap(imageView, bitmap);
+                                    Bitmap tailorBitmap = BitmapUtils.tailorBitmap(imageView, bb);
+                                    resultBitmap = BitmapUtils.toRoundBitmap(tailorBitmap);
+                                    mImageLoaderCache.put(url, resultBitmap);
+                                    bb.recycle();
+                                    tailorBitmap.recycle();
+                                    bb = null;
+                                    tailorBitmap = null;
+                        		}
+                        		
+                        		if(imageView.getTag().toString().equals(url)){
+                                	imageAware.setImageBitmap(resultBitmap);
+                                }
+                        		
+                        	}
+                        	
                         } catch (Exception e) {
                             e.printStackTrace();
                         }

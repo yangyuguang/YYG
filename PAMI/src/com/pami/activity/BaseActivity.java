@@ -3,31 +3,20 @@ package com.pami.activity;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.app.AlertDialog;
-import android.app.AlertDialog.Builder;
-import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.DialogInterface.OnDismissListener;
-import android.graphics.drawable.AnimationDrawable;
 import android.media.AudioManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
-import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -38,7 +27,6 @@ import com.pami.listener.AppDownLineListener;
 import com.pami.listener.AppLisntenerManager;
 import com.pami.listener.HttpActionListener;
 import com.pami.listener.ViewInit;
-import com.pami.utils.DensityUtils;
 import com.pami.utils.HidenSoftKeyBoard;
 import com.pami.utils.JsonUtils;
 import com.pami.utils.MLog;
@@ -68,13 +56,6 @@ public abstract class BaseActivity extends FragmentActivity implements ViewInit,
 
 	private List<String> httpFlags = new ArrayList<String>();
 	
-	public Handler activityHandler = new Handler(){
-		@Override
-		public void handleMessage(android.os.Message msg) {
-			activityHandlerMessage(msg);
-		}
-	};
-
 	@Override
 	protected void onCreate(Bundle arg0) {
 		super.onCreate(arg0);
@@ -254,20 +235,21 @@ public abstract class BaseActivity extends FragmentActivity implements ViewInit,
 				switch (code) {
 				case -1: {
 					MLog.e("yyg", "返回-1");
-					Toast.makeText(this, JsonUtils.getSuccessData(result, "error_text"), 1).show();
+					Toast.makeText(this, JsonUtils.getSuccessData(result, "error_text"), Toast.LENGTH_SHORT).show();
 					break;
 				}
 				case -9: {
 					MLog.e("yyg", "返回-9");
-					Toast.makeText(this, JsonUtils.getSuccessData(result, "error_text"), 1).show();
+					Toast.makeText(this, JsonUtils.getSuccessData(result, "error_text"), Toast.LENGTH_SHORT).show();
 					break;
 				}
 
 				default:
+					Toast.makeText(this, result, Toast.LENGTH_SHORT).show();
 					break;
 				}
 			} else {
-				Toast.makeText(this, result, 1).show();
+				Toast.makeText(this, result, Toast.LENGTH_SHORT).show();
 			}
 
 		} catch (Exception e) {
@@ -413,13 +395,19 @@ public abstract class BaseActivity extends FragmentActivity implements ViewInit,
 	 */
 	public abstract void onAppDownLine();
 	
-	protected void activityHandlerMessage(Message msg){};
-
 	/**
 	 * 销毁activity
 	 */
 	public void finishActivity(){
 		ScreenManager.getScreenManager().popActivity(BaseActivity.this);
+	}
+	
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		if (keyCode == KeyEvent.KEYCODE_BACK) {
+           finishActivity();
+        }
+		return super.onKeyDown(keyCode, event);
 	}
 	
 }

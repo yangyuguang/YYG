@@ -4,24 +4,12 @@ package com.pami.fragment;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.app.AlertDialog;
-import android.app.AlertDialog.Builder;
-import android.app.Dialog;
-import android.content.DialogInterface;
-import android.content.DialogInterface.OnDismissListener;
-import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
-import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.Window;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.pami.PMApplication;
@@ -44,13 +32,6 @@ public abstract class BaseFragment extends Fragment implements ViewInit, HttpAct
 	
 	private List<String> httpFlags = new ArrayList<String>();
 
-	public Handler fragmentHandler = new Handler(){
-		@Override
-		public void handleMessage(android.os.Message msg) {
-			fragmentHandlerMessage(msg);
-		}
-	};
-	
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
@@ -128,20 +109,21 @@ public abstract class BaseFragment extends Fragment implements ViewInit, HttpAct
 				switch (code) {
 				case -1:{
 					MLog.e("yyg", "返回-1");
-					Toast.makeText(getActivity(), JsonUtils.getSuccessData(result, "error_text"), 1).show();
+					Toast.makeText(getActivity(), JsonUtils.getSuccessData(result, "error_text"), Toast.LENGTH_SHORT).show();
 					break;
 				}
 				case -9:{
 					MLog.e("yyg", "返回-9");
-					Toast.makeText(getActivity(), JsonUtils.getSuccessData(result, "error_text"), 1).show();
+					Toast.makeText(getActivity(), JsonUtils.getSuccessData(result, "error_text"), Toast.LENGTH_SHORT).show();
 					break;
 				}
 
 				default:
+					Toast.makeText(getActivity(), result, Toast.LENGTH_SHORT).show();
 					break;
 				}
 			}else{
-				Toast.makeText(getActivity(), result, 1).show();
+				Toast.makeText(getActivity(), result, Toast.LENGTH_SHORT).show();
 			}
 			
 		} catch (Exception e) {
@@ -246,7 +228,5 @@ public abstract class BaseFragment extends Fragment implements ViewInit, HttpAct
 	public void finishActivity(){
 		ScreenManager.getScreenManager().popActivity(getActivity());
 	}
-	
-	protected void fragmentHandlerMessage(Message msg){};
 	
 }
