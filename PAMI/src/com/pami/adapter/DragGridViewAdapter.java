@@ -27,24 +27,34 @@ public abstract class DragGridViewAdapter<T> extends PMBaseAdapter<T>{
     }
 
     public void removeView(int pos) {
+    	if(mData == null || mData.isEmpty()){
+    		return;
+    	}
+    	if(pos >= mData.size()){
+    		return;
+    	}
     	mData.remove(pos);
         notifyDataSetChanged();
     }
 
     //更新拖动时的gridView
     public void swapView(int draggedPos, int destPos) {
-        //从前向后拖动，其他item依次前移
-        if(draggedPos < destPos) {
-        	mData.add(destPos+1, getItem(draggedPos));
-        	mData.remove(draggedPos);
-        }
-        //从后向前拖动，其他item依次后移
-        else if(draggedPos > destPos) {
-        	mData.add(destPos, getItem(draggedPos));
-        	mData.remove(draggedPos+1);
-        }
-        hidePosition = destPos;
-        notifyDataSetChanged();
+    	try {
+    		//从前向后拖动，其他item依次前移
+            if(draggedPos < destPos) {
+            	mData.add(destPos+1, getItem(draggedPos));
+            	mData.remove(draggedPos);
+            }
+            //从后向前拖动，其他item依次后移
+            else if(draggedPos > destPos) {
+            	mData.add(destPos, getItem(draggedPos));
+            	mData.remove(draggedPos+1);
+            }
+            hidePosition = destPos;
+            notifyDataSetChanged();
+		} catch (Exception e) {
+			uploadException(e);
+		}
     }
     
 }

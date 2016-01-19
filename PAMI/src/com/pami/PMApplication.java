@@ -1,44 +1,36 @@
 package com.pami;
 
 import java.lang.reflect.Method;
-import java.util.LinkedList;
-import java.util.List;
 
 import android.app.Application;
 import android.content.Context;
 import android.content.res.Resources;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
+import android.support.v4.util.ArrayMap;
 import android.view.Display;
 import android.view.WindowManager;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 import com.pami.activity.BaseActivity;
-import com.pami.utils.MLog;
 
 public class PMApplication extends Application {
 
 	public boolean isDown;
 	public boolean isRun;
 	
+	/**
+	 * 是否存在 NavigationBar  true 表示存在  false 表示不存在
+	 */
 	public boolean isHasNavigationBar;
 	
+	/**
+	 * 全局的volley请求队列
+	 */
 	private RequestQueue requestQueue;
 	/**
 	 * 全局上下文对象
 	 */
 	private Context mContext;
-
-	/**
-	 * 将所有FragmentActivity存放在链表中，便于管理
-	 */
-	private List<FragmentActivity> activityList;
-
-	/**
-	 * 全局FragmentManager实例
-	 */
-	private FragmentManager mFragmentManager;
 
 	/**
 	 * 全局LApplication唯一实例
@@ -62,22 +54,14 @@ public class PMApplication extends Application {
 	private int mDiaplayHeight;
 
 	/**
-	 * 全局APP服务器主路径
+	 * 上传log的地址
 	 */
-	private String appBaseUrl;
-	
-	/**
-	 * 是否允许销毁所有Activity
-	 * 默认为true
-	 */
-	private boolean destroyActivitys = true;
-	
 	private String exceptionUrl = null;
+	
 
 	@Override
 	public void onCreate() {
 		super.onCreate();
-		MLog.e("yyg", "执行onCreate方法");
 		instance = this;
 		this.requestQueue = Volley.newRequestQueue(getApplicationContext());
 		isHasNavigationBar = checkDeviceHasNavigationBar(this);
@@ -88,7 +72,6 @@ public class PMApplication extends Application {
 	 * @return
 	 */
 	public RequestQueue getRequestQueue(){
-		MLog.e("yyg", "获取请求队列");
 		return requestQueue;
 	}
 	
@@ -148,6 +131,9 @@ public class PMApplication extends Application {
 		return mDiaplayHeight;
 	}
 
+	/**
+	 * 初始化屏幕的宽和高
+	 */
 	private void computeDiaplayWidthAndHeight() {
 		WindowManager mWindowManager = ((BaseActivity) getContext()).getWindowManager();
 		Display display = mWindowManager.getDefaultDisplay();
@@ -176,59 +162,6 @@ public class PMApplication extends Application {
 	}
 
 	/**
-	 * 添加一个Activity到数组里
-	 * 
-	 * @param activity
-	 */
-	public void addActivity(FragmentActivity activity) {
-		if (this.activityList == null) {
-			activityList = new LinkedList<FragmentActivity>();
-		}
-		this.activityList.add(activity);
-	}
-
-	/**
-	 * 删除一个Activity在数组里
-	 * 
-	 * @param activity
-	 */
-	public void delActivity(FragmentActivity activity) {
-		if (activityList != null) {
-			activityList.remove(activity);
-		}
-	}
-
-	/**
-	 * 设置一个 FragmentManager 对象
-	 * 
-	 * @param fm
-	 */
-	public void setFragmentManager(FragmentManager fm) {
-		this.mFragmentManager = fm;
-	}
-
-	/**
-	 * 
-	 * @return 获取一个 FragmentManager 对象
-	 */
-	public FragmentManager getFragmentManager() {
-		return this.mFragmentManager;
-	}
-
-	/**
-	 * 完全退出应用<br />
-	 * 需要设置destroyActivitys为true
-	 */
-	public void exitApp() {
-		if (destroyActivitys) {
-			for (FragmentActivity f : activityList) {
-				f.finish();
-			}
-			System.exit(0);
-		}
-	}
-
-	/**
 	 * 获取是否启用Debug模式
 	 * 
 	 * @return
@@ -247,33 +180,6 @@ public class PMApplication extends Application {
 	}
 
 	/**
-	 * 获取应用主服务器路径
-	 * 
-	 * @return
-	 */
-	public String getAppBaseUrl() {
-		return appBaseUrl;
-	}
-
-	/**
-	 * 设置应用主服务器路径
-	 * 
-	 * @param appServiceUrl
-	 */
-	public void setAppBaseUrl(String appBaseUrl) {
-		this.appBaseUrl = appBaseUrl;
-	}
-
-	/**
-	 * 获取应用是否允许销毁所有Activity
-	 * 
-	 * @return
-	 */
-	public boolean getIsDestroyActivitys() {
-		return destroyActivitys;
-	}
-	
-	/**
 	 * 获取存放异常的路径
 	 * @return
 	 */
@@ -290,14 +196,10 @@ public class PMApplication extends Application {
 	}
 
 	/**
-	 * 设置应用是否允许销毁所有Activity
-	 * 
-	 * @param destroyActivitys
+	 * 获取屏幕是否存在 NavigationBar
+	 * @param context
+	 * @return
 	 */
-	public void setDestroyActivitys(boolean destroyActivitys) {
-		this.destroyActivitys = destroyActivitys;
-	}
-	
 	private boolean checkDeviceHasNavigationBar(Context context) {
         boolean hasNavigationBar = false;
         Resources rs = context.getResources();
@@ -317,9 +219,7 @@ public class PMApplication extends Application {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
         return hasNavigationBar;
-
     }
 	
 }

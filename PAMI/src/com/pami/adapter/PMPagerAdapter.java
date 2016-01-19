@@ -20,6 +20,9 @@ public class PMPagerAdapter extends PagerAdapter {
 	
 	@Override
 	public int getCount() {
+		if(mData == null || mData.isEmpty()){
+			return 0;
+		}
 		return mData.size();
 	}
 

@@ -1,15 +1,12 @@
 package com.pami.utils;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.support.v4.util.ArrayMap;
-import android.util.SparseArray;
 
 public class JsonUtils {
 
@@ -33,7 +30,7 @@ public class JsonUtils {
 			return false;
 		}
 	}
-	public static int getCode (String result){
+	public static int getCode(String result){
 		try {
 			JSONObject jsonObject = new JSONObject(result);
 			int status=jsonObject.optInt("code",1);
@@ -96,7 +93,6 @@ public class JsonUtils {
 			return map;
 			
 		} catch (JSONException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		

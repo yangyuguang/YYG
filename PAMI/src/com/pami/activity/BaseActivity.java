@@ -1,6 +1,5 @@
 package com.pami.activity;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Context;
@@ -28,7 +27,6 @@ import com.pami.listener.AppLisntenerManager;
 import com.pami.listener.HttpActionListener;
 import com.pami.listener.ViewInit;
 import com.pami.utils.HidenSoftKeyBoard;
-import com.pami.utils.JsonUtils;
 import com.pami.utils.MLog;
 import com.pami.utils.NetUtils;
 import com.pami.utils.ScreenManager;
@@ -37,25 +35,23 @@ import com.pami.utils.Util;
 import com.pami.widget.LoadingDialog;
 import com.pami.widget.LoadingDialog.OnDesmissListener;
 
-public abstract class BaseActivity extends FragmentActivity implements ViewInit, HttpActionListener, OnClickListener,
-		AppDownLineListener {
+public abstract class BaseActivity extends FragmentActivity implements ViewInit, HttpActionListener, OnClickListener, AppDownLineListener {
 
 	private FrameLayout activity_base_titlebar = null;
 	private FrameLayout activity_base_content = null;
 
 	private LoadingDialog loadingDialog;
+	/** dialog是否显示 */
+	private boolean loadingDialogIsShow = false;
 	private boolean is_hidKeyDown = true;
 	private TextView base_activity_line = null;
 	private View loding_layout;
 
 	public int barHeight;
-	public PMApplication myApplication;
 
 	public Context mContext;
 	private Toast mToast;
 
-	private List<String> httpFlags = new ArrayList<String>();
-	
 	@Override
 	protected void onCreate(Bundle arg0) {
 		super.onCreate(arg0);
@@ -67,68 +63,71 @@ public abstract class BaseActivity extends FragmentActivity implements ViewInit,
 			mContext = this;
 			setContentView(getResources().getIdentifier("base_activity_layout", "layout", getPackageName()));
 
-			activity_base_titlebar = (FrameLayout) findViewById(getResources().getIdentifier("activity_base_titlebar",
-					"id", getPackageName()));
-			activity_base_content = (FrameLayout) findViewById(getResources().getIdentifier("activity_base_content",
-					"id", getPackageName()));
+			activity_base_titlebar = (FrameLayout) findViewById(getResources().getIdentifier("activity_base_titlebar", "id", getPackageName()));
+			activity_base_content = (FrameLayout) findViewById(getResources().getIdentifier("activity_base_content", "id", getPackageName()));
 
-			base_activity_line = (TextView) findViewById(getResources().getIdentifier("base_activity_line", "id",
-					getPackageName()));
+			base_activity_line = (TextView) findViewById(getResources().getIdentifier("base_activity_line", "id", getPackageName()));
 
 			loding_layout = findViewById(getResources().getIdentifier("loding_layout", "id", getPackageName()));
-			
-			myApplication = PMApplication.getInstance();
-			myApplication.setContext(mContext);
-			myApplication.addActivity(this);
-			myApplication.setContext(this);
-			myApplication.setFragmentManager(this.getSupportFragmentManager());
-			
+
+			PMApplication.getInstance().setContext(mContext);
+
 			View navigationBarHeight = findViewById(getResources().getIdentifier("navigationBarHeight", "id", getPackageName()));
-			if(PMApplication.getInstance().isHasNavigationBar){
+			if (PMApplication.getInstance().isHasNavigationBar) {
 				navigationBarHeight.setVisibility(View.VISIBLE);
 				LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) navigationBarHeight.getLayoutParams();
 				lp.height = ScreenUtils.getNavigationBarHeight(this);
 				lp.width = PMApplication.getInstance().getDiaplayWidth();
 				navigationBarHeight.setLayoutParams(lp);
-			}else{
+			} else {
 				navigationBarHeight.setVisibility(View.GONE);
 			}
 
 			setTitleBar(getResources().getIdentifier("titlebar_base", "layout", getPackageName()));
 			setBarColor();
-//			showTitleBar();
 			initViewFromXML();
 			initData();
 			fillCacheData();
 			fillView();
 			initListener();
 			ScreenManager.getScreenManager().pushActivity(this);
-			
+
 		} catch (Exception e) {
-			MLog.e("yyg", "构建view有错【BaseActivity】:" + e.toString());
-			e.printStackTrace();
-			ExceptionUtils.uploadException(this, e, PMApplication.getInstance().getExceptionUrl(), "exception.action");
+			uploadException(e);
 		}
 	}
 
-	public void loadViewbefore() {
+	/**
+	 * 上传log 日志
+	 * 注意调用此方法 app 必须重写PMApplication 并在 onCreate方法中 调用 setExceptionUrl(url) 将上传log信息的URL注入系统。否则将调用无效 。
+	 * 最后别忘记在清单文件中注册 重写的 PMApplication
+	 * @param e
+	 */
+	protected void uploadException(Exception e) {
+		MLog.e("yyg", "有错误信息 ， 请认真查看log信息");
+		e.printStackTrace();
+		ExceptionUtils.uploadException(this, e, PMApplication.getInstance().getExceptionUrl());
+	}
+
+	public void loadViewbefore() throws Exception {
 
 	}
 
 	/**
-	 * 设置titlebar的颜色
-	 * 颜色值在color.xml文件的 colorPrimaryDark 颜色值
+	 * 设置titlebar的颜色 颜色值在color.xml文件的 colorPrimaryDark 颜色值
 	 */
-	private void setBarColor() {
+	private void setBarColor() throws Exception {
 		setBarColor(getResources().getIdentifier("colorPrimaryDark", "color", getPackageName()));
 	}
-	
+
 	/**
-	 * 指定titlebar的颜色 
-	 * @param colorId 颜色ID
+	 * 指定titlebar的颜色
+	 * 
+	 * @param colorId
+	 *            颜色ID
 	 */
-	private void setBarColor(int colorId) {
-		
+	private void setBarColor(int colorId) throws Exception {
+
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
 			SystemBarTintManager tintManager = new SystemBarTintManager(this);
 			tintManager.setStatusBarTintEnabled(true);
@@ -147,8 +146,7 @@ public abstract class BaseActivity extends FragmentActivity implements ViewInit,
 			Util.setToast(mToast);
 			mToast.show();
 		} catch (Exception e) {
-			MLog.e("yyg", "Toast有错");
-			e.printStackTrace();
+			uploadException(e);
 		}
 	}
 
@@ -227,119 +225,168 @@ public abstract class BaseActivity extends FragmentActivity implements ViewInit,
 	}
 
 	@Override
-	public void handleActionError(String actionName, Object object) {
-		try {
-			String result = object.toString();
-			if (result.indexOf("code") >= 0) {
-				int code = JsonUtils.getCode(result);
-				switch (code) {
-				case -1: {
-					MLog.e("yyg", "返回-1");
-					Toast.makeText(this, JsonUtils.getSuccessData(result, "error_text"), Toast.LENGTH_SHORT).show();
-					break;
-				}
-				case -9: {
-					MLog.e("yyg", "返回-9");
-					Toast.makeText(this, JsonUtils.getSuccessData(result, "error_text"), Toast.LENGTH_SHORT).show();
-					break;
-				}
-
-				default:
-					Toast.makeText(this, result, Toast.LENGTH_SHORT).show();
-					break;
-				}
-			} else {
-				Toast.makeText(this, result, Toast.LENGTH_SHORT).show();
-			}
-
-		} catch (Exception e) {
-			MLog.e("yyg", "BaseActivity 【handleActionError】 错误回调有错");
-			e.printStackTrace();
-		}
-	}
-
-	@Override
-	public void handleActionSuccess(String actionName, Object object) {
-		MLog.i("ssss", actionName);
-	}
-
-	@Override
 	public void handleActionStart(String actionName, Object object) {
-		httpFlags.add(actionName);
+		// TODO Auto-generated method stub
+
 	}
 
 	@Override
 	public void handleActionFinish(String actionName, Object object) {
-		httpFlags.remove(actionName);
+		// TODO Auto-generated method stub
+
 	}
 
-	public void showLoadingDialog(Object httpTag) {
+	@Override
+	public void handleActionSuccess(String actionName, Object object) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void handleActionError(String actionName, Object object) {
+		// try {
+		// String result = object.toString();
+		// if (result.indexOf("code") >= 0) {
+		// int code = JsonUtils.getCode(result);
+		// switch (code) {
+		// case -1: {
+		// MLog.e("yyg", "返回-1");
+		// Toast.makeText(this, JsonUtils.getSuccessData(result, "error_text"),
+		// Toast.LENGTH_SHORT).show();
+		// break;
+		// }
+		// case -9: {
+		// MLog.e("yyg", "返回-9");
+		// Toast.makeText(this, JsonUtils.getSuccessData(result, "error_text"),
+		// Toast.LENGTH_SHORT).show();
+		// break;
+		// }
+		//
+		// default:
+		// Toast.makeText(this, result, Toast.LENGTH_SHORT).show();
+		// break;
+		// }
+		// } else {
+		// Toast.makeText(this, result, Toast.LENGTH_SHORT).show();
+		// }
+		//
+		// } catch (Exception e) {
+		// MLog.e("yyg", "BaseActivity 【handleActionError】 错误回调有错");
+		// e.printStackTrace();
+		// }
+	}
+
+	/**
+	 * 显示加载中的踢提示框 使用默认的提示文字
+	 * 
+	 * @param httpTags
+	 * @throws Exception
+	 */
+	public void showLoadingDialog(String... httpTags) throws Exception {
 		if (NetUtils.isNetworkConnected(BaseActivity.this)) {
-			showLoadingDialog(httpTag,this.getString(getResources().getIdentifier("text_loading", "string", getPackageName())));
+			setLoadingDialogHintMessage(this.getString(getResources().getIdentifier("text_loading", "string", getPackageName())));
+			showLoadingDialogByhttpTags(httpTags);
 		}
-
 	}
 
-	public boolean loadingIdVisible() {
-		return loding_layout.getVisibility() == View.VISIBLE;
+	/**
+	 * 显示加载中的踢提示框 使用默认的提示文字
+	 * 
+	 * @param httpTags
+	 * @throws Exception
+	 */
+	public void showLoadingDialogAndHint(String hintMessage, String... httpTags) throws Exception {
+		if (NetUtils.isNetworkConnected(BaseActivity.this)) {
+			setLoadingDialogHintMessage(hintMessage);
+			showLoadingDialogByhttpTags(httpTags);
+		}
 	}
 
-	public void showLoadingDialog(Object httpTag,String loadingStrs) {
-		dismissDialog();
-
-		if(loadingDialog == null){
-			loadingDialog = new LoadingDialog();
+	/**
+	 * 设置dialog的提示信息
+	 * 
+	 * @param str
+	 */
+	private void setLoadingDialogHintMessage(String str) throws Exception {
+		if (loadingDialog == null) {
+			loadingDialog = new LoadingDialog(str);
 			loadingDialog.setOnDesmissListener(new OnDesmissListener() {
-				
+
 				@Override
-				public void onDismiss(String httpFlag) {
-					if(!TextUtils.isEmpty(httpFlag)){
-						clearHttpRequest(httpFlag);
+				public void onDismiss(List<String> httpFlag) {
+					try {
+						loadingDialogIsShow = false;
+						if (httpFlag != null && !httpFlag.isEmpty()) {
+							clearHttpRequest(httpFlag);
+						}
+					} catch (Exception e) {
+						e.printStackTrace();
 					}
 				}
 			});
+		} else {
+			this.loadingDialog.setHintMessage(str);
 		}
-		loadingDialog.setHttpFlag(httpTag.toString());
-		loadingDialog.show(getSupportFragmentManager(), "loadingDialog"+System.currentTimeMillis());
-	}
-	
-	/**
-	 * 根据tag撤销请求
-	 * @param httpTag
-	 */
-	private void clearHttpRequest(String httpTag){
-		if(TextUtils.isEmpty(httpTag)){
-			return;
-		}
-		if(httpFlags.contains(httpTag)){
-			httpFlags.remove(httpTag);
-			PMApplication.getInstance().clearRequest(httpTag);
-		}
-		
 	}
 
-	public void dismissDialog() {
-		if (loadingDialog != null) {
-			try {
+	/**
+	 * 显示加载的dialog
+	 * 
+	 * @param httpTags
+	 * @throws Exception
+	 */
+	private void showLoadingDialogByhttpTags(String... httpTags) throws Exception {
+		dismissDialog();
+		loadingDialog.setHttpFlags(httpTags);
+		loadingDialog.show(getSupportFragmentManager(), "loadingDialog" + System.currentTimeMillis());
+		loadingDialogIsShow = true;
+	}
+
+	/**
+	 * 根据tag撤销请求
+	 * 
+	 * @param httpTag
+	 */
+	private void clearHttpRequest(String httpTag) throws Exception {
+		if (TextUtils.isEmpty(httpTag)) {
+			return;
+		}
+		PMApplication.getInstance().clearRequest(httpTag);
+	}
+
+	/**
+	 * 根据tag撤销请求
+	 * 
+	 * @param httpTag
+	 */
+	private void clearHttpRequest(List<String> httpTags) throws Exception {
+		for (String httpTag : httpTags) {
+			clearHttpRequest(httpTag);
+		}
+	}
+
+	public void dismissDialog() throws Exception {
+		if (loadingDialog != null && loadingDialogIsShow) {
 				loadingDialog.dismiss();
 				loadingDialog = null;
-			} catch (Exception e) {
-				e.printStackTrace();
-				MLog.e("yyg", "去掉加载框有错。");
-			}
 		}
 	}
 
 	@Override
 	public boolean dispatchTouchEvent(MotionEvent ev) {
-		if (is_hidKeyDown) {
-			if (ev.getAction() == MotionEvent.ACTION_DOWN) {
-				dismissDialog();
-				View v = getCurrentFocus();
-				if (HidenSoftKeyBoard.isShouldHideInput(v, ev)) {
-					HidenSoftKeyBoard.hideSoftInput(v.getWindowToken(), getApplication());
+		try {
+
+			if (is_hidKeyDown) {
+				if (ev.getAction() == MotionEvent.ACTION_DOWN) {
+					dismissDialog();
+					View v = getCurrentFocus();
+					if (HidenSoftKeyBoard.isShouldHideInput(v, ev)) {
+						HidenSoftKeyBoard.hideSoftInput(v.getWindowToken(), getApplication());
+					}
 				}
 			}
+		} catch (Exception e) {
+			uploadException(e);
 		}
 		return super.dispatchTouchEvent(ev);
 	}
@@ -347,22 +394,37 @@ public abstract class BaseActivity extends FragmentActivity implements ViewInit,
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
-		ScreenManager.getScreenManager().popActivity(BaseActivity.this);
-		if(httpFlags != null && !httpFlags.isEmpty()){
-			for(String httpFlag:httpFlags){
-				PMApplication.getInstance().clearRequest(httpFlag);
+
+		try {
+			ScreenManager.getScreenManager().popActivity(BaseActivity.this);
+			dismissDialog();
+			activity_base_titlebar = null;
+			activity_base_content = null;
+			base_activity_line = null;
+			loding_layout = null;
+			mContext = null;
+			if(mToast != null){
+				mToast.cancel();
+				mToast = null;
 			}
+		} catch (Exception e) {
+			uploadException(e);
 		}
 	}
 
 	@Override
 	public void onClick(View v) {
-		// 如果所有按钮都需要校验的操作可以放在此处
-		if (Util.isFastClick()) {
-			// 默认是连续点击
-			return;
+		try {
+
+			// 如果所有按钮都需要校验的操作可以放在此处
+			if (Util.isFastClick()) {
+				// 默认是连续点击
+				return;
+			}
+			onButtonClick(v);
+		} catch (Exception e) {
+			uploadException(e);
 		}
-		onButtonClick(v);
 	}
 
 	/**
@@ -380,12 +442,16 @@ public abstract class BaseActivity extends FragmentActivity implements ViewInit,
 	 * 
 	 * @param v
 	 */
-	protected void onButtonClick(View v) {
+	protected void onButtonClick(View v) throws Exception {
 	}
 
 	@Override
 	public void onDowLine() {
-		onAppDownLine();
+		try {
+			onAppDownLine();
+		} catch (Exception e) {
+			uploadException(e);
+		}
 	}
 
 	/**
@@ -393,21 +459,26 @@ public abstract class BaseActivity extends FragmentActivity implements ViewInit,
 	 * 
 	 * @param v
 	 */
-	public abstract void onAppDownLine();
-	
+	public abstract void onAppDownLine() throws Exception;
+
 	/**
 	 * 销毁activity
 	 */
-	public void finishActivity(){
-		ScreenManager.getScreenManager().popActivity(BaseActivity.this);
+	public void finishActivity() {
+		try {
+
+			ScreenManager.getScreenManager().popActivity(BaseActivity.this);
+		} catch (Exception e) {
+			uploadException(e);
+		}
 	}
-	
+
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if (keyCode == KeyEvent.KEYCODE_BACK) {
-           finishActivity();
-        }
+			finishActivity();
+		}
 		return super.onKeyDown(keyCode, event);
 	}
-	
+
 }

@@ -12,10 +12,23 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.pami.utils.MLog;
 
+/**
+ * 异常信息上传工具类
+ * @author 杨裕光
+ *
+ */
 public class ExceptionUtils {
-	public static void uploadException(Context context,Exception e,String baseUrl,String method){
+	
+	/**
+	 * 上传log 信息
+	 * @param context
+	 * @param e
+	 * @param baseUrl
+	 * @param method
+	 */
+	public static void uploadException(Context context,Exception e,String baseUrl){
 		if(context == null || TextUtils.isEmpty(baseUrl)){
-			MLog.e("yyg", "无法上传异常信息");
+			MLog.e("yyg", "无法上传异常信息  请求地址是空");
 			return;
 		}
 		
@@ -27,7 +40,7 @@ public class ExceptionUtils {
 		params.put("device_msg", getDeviceMsg(context).toString());
 		params.put("exception_msg", getExceptionMsg(e).toString());
 		
-		request.jsonPostRequest(httpTag, baseUrl, method, params, new Response.Listener<Object>() {
+		request.jsonPostRequest(httpTag, baseUrl, null, params, new Response.Listener<Object>() {
 
 			@Override
 			public void onResponse(Object response) {
@@ -44,7 +57,11 @@ public class ExceptionUtils {
 		});
 		
 	}
-	
+	/**
+	 * 获取异常信息
+	 * @param e
+	 * @return
+	 */
 	public static StringBuffer getExceptionMsg(Exception e){
 		StringBuffer exceptionMsg = new StringBuffer();
 		exceptionMsg.append(e.getMessage());
@@ -61,6 +78,11 @@ public class ExceptionUtils {
 		return exceptionMsg;
 	}
 	
+	/**
+	 * 获取设备信息
+	 * @param context
+	 * @return
+	 */
 	public static StringBuffer getDeviceMsg(Context context){
 		StringBuffer deviceMsg = new StringBuffer();
 		TelephonyManager mTm = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);

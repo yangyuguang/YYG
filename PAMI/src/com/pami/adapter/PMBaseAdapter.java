@@ -2,6 +2,8 @@ package com.pami.adapter;
 
 import java.util.List;
 
+import com.pami.PMApplication;
+import com.pami.http.ExceptionUtils;
 import com.pami.utils.MLog;
 
 import android.content.Context;
@@ -12,7 +14,7 @@ import android.widget.BaseAdapter;
 public abstract class PMBaseAdapter<T> extends BaseAdapter {
 
 	protected List<T> mData = null;
-	protected Context context = null;
+	protected Context mContext = null;
 	private int layoutId;
 	
 	/**
@@ -22,7 +24,7 @@ public abstract class PMBaseAdapter<T> extends BaseAdapter {
 	 * @param layoutId  View的Id
 	 */
 	public PMBaseAdapter(Context context,List<T> mData,int layoutId){
-		this.context = context;
+		this.mContext = context;
 		this.mData = mData;
 		this.layoutId = layoutId;
 	}
@@ -48,16 +50,37 @@ public abstract class PMBaseAdapter<T> extends BaseAdapter {
 	
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		ViewHolder holder = ViewHolder.get(context, convertView, parent, layoutId, position);
-		getViews(holder,getItem(position),position);
-		return holder.getConvertView();
+		try {
+			ViewHolder holder = ViewHolder.get(mContext, convertView, parent, layoutId, position);
+			getViews(holder,getItem(position),position);
+			return holder.getConvertView();
+		} catch (Exception e) {
+			uploadException(e);
+		}
+		return convertView;
 	}
 	
-	public abstract void getViews(ViewHolder holder,T t,int position);
+	public abstract void getViews(ViewHolder holder,T t,int position)throws Exception;
 
+	/**
+	 * 重新绑定数据集  并刷新ListView
+	 * @param mData
+	 */
 	public void bindData(List<T> mData){
 		this.mData = mData; 
 		notifyDataSetChanged();
+	}
+	
+	/**
+	 * 上传log 日志
+	 * 注意调用此方法 app 必须重写PMApplication 并在 onCreate方法中 调用 setExceptionUrl(url) 将上传log信息的URL注入系统。否则将调用无效 。
+	 * 最后别忘记在清单文件中注册 重写的 PMApplication
+	 * @param e
+	 */
+	protected void uploadException(Exception e) {
+		MLog.e("yyg", "有错误信息 ， 请认真查看log信息");
+		e.printStackTrace();
+		ExceptionUtils.uploadException(mContext, e, PMApplication.getInstance().getExceptionUrl());
 	}
 
 }

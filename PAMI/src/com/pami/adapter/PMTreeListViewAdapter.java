@@ -2,6 +2,9 @@ package com.pami.adapter;
 
 import java.util.List;
 
+import com.pami.PMApplication;
+import com.pami.http.ExceptionUtils;
+import com.pami.utils.MLog;
 import com.pami.utils.Node;
 import com.pami.utils.TreeHelper;
 
@@ -55,10 +58,14 @@ public abstract class PMTreeListViewAdapter<T> extends BaseAdapter {
 
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				// TODO Auto-generated method stub
-				expandOrCollapse(position);
-				if(mListener != null){
-					mListener.onTreeItemClick(mVisibleNodes.get(position) , position);
+				try {
+					
+					expandOrCollapse(position);
+					if(mListener != null){
+						mListener.onTreeItemClick(mVisibleNodes.get(position) , position);
+					}
+				} catch (Exception e) {
+					uploadException(e);
 				}
 			}
 		});
@@ -69,8 +76,7 @@ public abstract class PMTreeListViewAdapter<T> extends BaseAdapter {
 	 * 点击收缩或者展开
 	 * @param position
 	 */
-	protected void expandOrCollapse(int position) {
-		// TODO Auto-generated method stub
+	protected void expandOrCollapse(int position) throws Exception{
 		Node n = mVisibleNodes.get(position);
 		if(n != null){
 			if(n.isLeaf())return;
@@ -100,23 +106,38 @@ public abstract class PMTreeListViewAdapter<T> extends BaseAdapter {
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		// TODO Auto-generated method stub
-		Node node = mVisibleNodes.get(position);
-		//设置内边距
-		convertView = getConvertView(node, position, convertView, parent);
-		convertView.setPadding(node.getLevel() * 30, 3, 3, 3);
+		try {
+			
+			Node node = mVisibleNodes.get(position);
+			//设置内边距
+			convertView = getConvertView(node, position, convertView, parent);
+			convertView.setPadding(node.getLevel() * 30, 3, 3, 3);
+		} catch (Exception e) {
+			uploadException(e);
+		}
 		return convertView;
 	}
 	
-	public abstract View getConvertView(Node node,int position,View convertView,ViewGroup parent);
+	/**
+	 * 上传log 日志
+	 * 注意调用此方法 app 必须重写PMApplication 并在 onCreate方法中 调用 setExceptionUrl(url) 将上传log信息的URL注入系统。否则将调用无效 。
+	 * 最后别忘记在清单文件中注册 重写的 PMApplication
+	 * @param e
+	 */
+	public void uploadException(Exception e) {
+		MLog.e("yyg", "有错误信息 ， 请认真查看log信息");
+		e.printStackTrace();
+		ExceptionUtils.uploadException(mContext, e, PMApplication.getInstance().getExceptionUrl());
+	}
+	
+	public abstract View getConvertView(Node node,int position,View convertView,ViewGroup parent)throws Exception;
 
 	/**
 	 * 动态插入节点
 	 * @param position
 	 * @param string
 	 */
-	public void addExtraNode(int position, String string) {
-		// TODO Auto-generated method stub
+	public void addExtraNode(int position, String string) throws Exception{
 		if(TextUtils.isEmpty(string)){
 			return;
 		}

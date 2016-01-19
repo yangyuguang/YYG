@@ -17,106 +17,151 @@ public class ViewHolder {
 	private static int mPosition;
 	private View mConvertView;
 	private Context mContext = null;
-	
-	private ViewHolder (Context context,ViewGroup parent,int layoutId,int position){
+
+	private ViewHolder(Context context, ViewGroup parent, int layoutId, int position) {
 		this.mPosition = position;
 		this.mContext = context;
 		this.mViews = new SparseArray<View>();
-		this.mConvertView = LayoutInflater.from(mContext).inflate(layoutId, parent,false);
+		this.mConvertView = LayoutInflater.from(mContext).inflate(layoutId, parent, false);
 		mConvertView.setTag(this);
 	}
-	
-	public static ViewHolder get(Context context,View convertView,ViewGroup parent,int layoutId,int position){
-		if(convertView == null){
+
+	public static ViewHolder get(Context context, View convertView, ViewGroup parent, int layoutId, int position) {
+		if (convertView == null) {
 			return new ViewHolder(context, parent, layoutId, position);
-		}else{
+		} else {
 			ViewHolder holder = (ViewHolder) convertView.getTag();
 			mPosition = position;
 			return holder;
 		}
 	}
-	
-	
-	public View getConvertView(){
+
+	/**
+	 * 获取Item的View 对象
+	 * 
+	 * @return
+	 */
+	public View getConvertView() {
 		return this.mConvertView;
 	}
-	
+
 	/**
 	 * 通过resId 获取控件
+	 * 
 	 * @param resId
 	 * @return
 	 */
-	public <T extends View> T getView(int resId){
+	public <T extends View> T getView(int resId) {
 		View view = mViews.get(resId);
-		if(view == null){
+		if (view == null) {
 			view = mConvertView.findViewById(resId);
 			mViews.put(resId, view);
 		}
-		
-		return (T)view;
+
+		if (view == null) {
+			return null;
+		}
+		return (T) view;
 	}
-	
+
 	/**
 	 * 给TextView 设置文本
-	 * @param resId TextView的ID 
+	 * 
+	 * @param resId TextView的ID
 	 * @param text 文本信息
 	 * @return
 	 */
-	public ViewHolder setText(int resId,String text){
+	public ViewHolder setText(int resId, String text) throws Exception {
 		TextView textView = getView(resId);
 		textView.setText(text);
 		return this;
 	}
-	
-	public ViewHolder setText(int resId,CharSequence text){
+
+	/**
+	 * 给TextView 设置文本
+	 * 
+	 * @param resId TextView的ID
+	 * @param text 文本信息
+	 * @return
+	 * @throws Exception
+	 */
+	public ViewHolder setText(int resId, CharSequence text) throws Exception {
 		TextView textView = getView(resId);
 		textView.setText(text);
 		return this;
 	}
-	
-	public ViewHolder setText(int resId,Spannable span){
+
+	/**
+	 * 给TextView 设置文本
+	 * @param resId TextView的ID
+	 * @param span 文本信息
+	 * @return
+	 * @throws Exception
+	 */
+	public ViewHolder setText(int resId, Spannable span) throws Exception {
 		TextView textView = getView(resId);
 		textView.setText(span);
 		return this;
 	}
-	
+
 	/**
-	 * 给ImageView  设置图片  目前只支持本地图片
+	 * 给ImageView 设置图片 目前只支持本地图片
+	 * 
 	 * @param resId ImageView ID
-	 * @param imageId  图片ID
+	 * @param imageId 图片ID
 	 * @return
 	 */
-	public ViewHolder setImage(int resId,int imageId){
+	public ViewHolder setImage(int resId, int imageId) throws Exception {
 		ImageView imageView = getView(resId);
 		imageView.setImageResource(imageId);
 		return this;
 	}
+
 	/**
-	 * 给ImageView  设置图片
+	 * 给ImageView 设置图片
+	 * 
 	 * @param resId ImageView的ID
 	 * @param url 图片地址
 	 * @return
 	 */
-	public ViewHolder setImage(int resId,String url){
+	public ViewHolder setImage(int resId, String url) throws Exception {
 		ImageView imageView = getView(resId);
 		imageView.setTag(url);
 		ImageLoaderUtils.getinstance(mContext).getImage(imageView, url);
 		return this;
 	}
-	
-	public ViewHolder setGone(int resId){
+
+	/**
+	 * 设置View 为GONE
+	 * @param resId view的ID
+	 * @return
+	 * @throws Exception
+	 */
+	public ViewHolder setGone(int resId) throws Exception {
 		this.getView(resId).setVisibility(View.GONE);
 		return this;
 	}
-	
-	public ViewHolder setInvisible(int resId){
+
+	/**
+	 * 设置View 为INVISIBLE
+	 * @param resId view的ID
+	 * @return
+	 * @throws Exception
+	 */
+	public ViewHolder setInvisible(int resId) throws Exception {
 		this.getView(resId).setVisibility(View.INVISIBLE);
 		return this;
 	}
-	
-	public ViewHolder setVisible(int resId){
+
+	/**
+	 * 设置View 为VISIBLE
+	 * @param resId view的ID
+	 * @return
+	 * @throws Exception
+	 */
+	public ViewHolder setVisible(int resId) throws Exception {
 		this.getView(resId).setVisibility(View.VISIBLE);
 		return this;
 	}
-	
+
 }
