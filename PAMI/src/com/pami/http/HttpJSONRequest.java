@@ -19,7 +19,6 @@ import com.android.volley.Response.Listener;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.pami.PMApplication;
 import com.pami.utils.JsonUtils;
-import com.pami.utils.MLog;
 
 public class HttpJSONRequest {
 
@@ -39,7 +38,6 @@ public class HttpJSONRequest {
 		return httpStringRequest;
 	}
 
-
 	/**
 	 * 以post的方式 发送http 请求
 	 * @param httpTag 请求标示符
@@ -50,7 +48,7 @@ public class HttpJSONRequest {
 	 * @param errorListener 请求错误结果
 	 */
 	public void jsonPostRequest(String httpTag,String baseUrl, String method, ArrayMap<String, Object> params, Listener jsonResult,
-			ErrorListener errorListener) {
+			ErrorListener errorListener) throws Exception{
 		jsonRequest(httpTag, baseUrl, method,Request.Method.POST, params, jsonResult, errorListener);
 	}
 	
@@ -64,7 +62,7 @@ public class HttpJSONRequest {
 	 * @param errorListener 请求错误结果
 	 */
 	public void jsonGetRequest(String httpTag,String baseUrl, String method, ArrayMap<String, Object> params, Listener jsonResult,
-			ErrorListener errorListener) {
+			ErrorListener errorListener) throws Exception{
 		jsonRequest(httpTag, baseUrl, method,Request.Method.GET, params, jsonResult, errorListener);
 	}
 	/**
@@ -77,7 +75,7 @@ public class HttpJSONRequest {
 	 * @param errorListener 请求错误结果
 	 */
 	private void jsonRequest(String httpTag,String baseUrl, String methodName,int method, ArrayMap<String, Object> params, Listener jsonResult,
-			ErrorListener errorListener) {
+			ErrorListener errorListener) throws Exception{
 		PMApplication.getInstance().getRequestQueue().cancelAll(httpTag);
 		JsonObjectRequest jsonRequest = null;
 		if(method == Request.Method.POST){
@@ -109,6 +107,92 @@ public class HttpJSONRequest {
 					null, jsonResult, errorListener);
 		}
 		
+		jsonRequest.setTag(httpTag);
+		jsonRequest.setRetryPolicy(new DefaultRetryPolicy(TIMEOUT_MS, DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+				DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+		PMApplication.getInstance().getRequestQueue().add(jsonRequest);
+	}
+	
+	/**
+	 * 发送https POST请求
+	 * @param httpTag 请求标示符
+	 * @param baseUrl 请求URL 如:https://www.xxx.com/api
+	 * @param methodName 请求方法名
+	 * @param params 请求参数 此参数最后会以JSONObject的方式发送
+	 * @param jsonResult 返回的结果
+	 * @param errorListener 返回的错误结果
+	 * @throws Exception
+	 */
+	public void jsonPostRequestHttps(String httpTag, String baseUrl, String methodName, ArrayMap<String, Object> params, ArrayMap<String, String> headers, Listener jsonResult,
+			ErrorListener errorListener)throws Exception{
+		this.jsonRequestHttps(httpTag, baseUrl, methodName, Request.Method.POST, params, headers, jsonResult, errorListener);
+	}
+	
+	/**
+	 * 发送https GET请求
+	 * @param httpTag 请求标示符
+	 * @param baseUrl 请求URL 如:https://www.xxx.com/api
+	 * @param methodName 请求方法名
+	 * @param params 请求参数 
+	 * @param jsonResult 返回的结果
+	 * @param errorListener 返回的错误结果
+	 * @throws Exception
+	 */
+	public void jsonGetRequestHttps(String httpTag, String baseUrl, String methodName, ArrayMap<String, Object> params, ArrayMap<String, String> headers, Listener jsonResult,
+			ErrorListener errorListener)throws Exception{
+		this.jsonRequestHttps(httpTag, baseUrl, methodName, Request.Method.GET, params, headers, jsonResult, errorListener);
+	}
+	
+	/**
+	 * 发送https 请求
+	 * @param httpTag 请求标示符
+	 * @param baseUrl 请求URL 如:https://www.xxx.com/api
+	 * @param methodName 请求方法名
+	 * @param method POST 或者  GET请求
+	 * @param params 请求参数  此参数最后会以JSONObject的方式发送
+	 * @param jsonResult 返回的结果
+	 * @param errorListener 返回的错误结果
+	 * @throws Exception
+	 */
+	private void jsonRequestHttps(String httpTag, String baseUrl, String methodName, int method, ArrayMap<String, Object> params, final ArrayMap<String, String> headers,Listener jsonResult,
+			ErrorListener errorListener)throws Exception {
+		
+		PMApplication.getInstance().getRequestQueue().cancelAll(httpTag);
+		JsonObjectRequest jsonRequest = null;
+		if(method == Request.Method.POST){
+			JSONObject jsonParam = null;
+				jsonParam = getJSONObjectByMap(params);
+			jsonRequest = new JsonObjectRequest(method, TextUtils.isEmpty(methodName) ? baseUrl : baseUrl + "/" + methodName,
+					jsonParam, jsonResult, errorListener){
+				@Override
+				public Map<String, String> getHeaders() throws AuthFailureError {
+					return getHttpsHeaders(headers);
+				}
+			};
+		}else{
+			StringBuffer sb = new StringBuffer();
+			int index = 0;
+			Set<String> set = params.keySet();
+			Iterator<String> ii = set.iterator();
+			while(ii.hasNext()){
+				String key = ii.next();
+				String value = params.get(key).toString();
+				if(index > 0){
+					sb.append("&");
+				}
+				sb.append(key);
+				sb.append("=");
+				sb.append(value);
+				index++;
+			}
+			jsonRequest = new JsonObjectRequest(method, TextUtils.isEmpty(methodName) ? baseUrl : baseUrl + "/" + methodName+"?"+sb.toString(),
+					null, jsonResult, errorListener){
+				@Override
+				public Map<String, String> getHeaders() throws AuthFailureError {
+					return getHttpsHeaders(headers);
+				}
+			};
+		}
 		
 		jsonRequest.setTag(httpTag);
 		jsonRequest.setRetryPolicy(new DefaultRetryPolicy(TIMEOUT_MS, DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
@@ -117,41 +201,24 @@ public class HttpJSONRequest {
 	}
 	
 	/**
-	 * 以post的方式 发送https 请求
-	 * @param httpTag 请求标示符
-	 * @param method 请求方法名
-	 * @param baseUrl 请求URL 如:https://www.xxx.com/api/
-	 * @param params  请求参数  此参数最后会以JSONObject的方式发送
-	 * @param jsonResult 返回的结果
-	 * @param errorListener 返回的错误结果
+	 * 获取header
+	 * @param headers
+	 * @return
 	 */
-	public void requestJSONPostByHttps(String httpTag, String methodName, String baseUrl,ArrayMap<String, Object> params, Listener jsonResult,
-			ErrorListener errorListener) {
-		
-		JSONObject jsonParam = null;
-		try {
-			jsonParam = getJSONObjectByMap(params);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		MLog.w("yyg", "请求URL【" + (TextUtils.isEmpty(methodName) ? baseUrl : baseUrl + "/" + methodName) + "】");
-		JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.POST, baseUrl+methodName,
-				jsonParam, jsonResult, errorListener){
-			@Override
-			public Map<String, String> getHeaders()
-					throws AuthFailureError {
-				ArrayMap<String,String> headers = new ArrayMap<String, String>();
-				headers.put("Accept", "application/json");
-				headers.put("Content-Type", "application/json; charset=UTF-8");
-//				return super.getHeaders();
-				return headers;
+	private ArrayMap<String,String> getHttpsHeaders(ArrayMap<String,String> headers){
+		ArrayMap<String,String> header = new ArrayMap<String, String>();
+		if(headers != null && !headers.isEmpty()){
+			Set<String> set = headers.keySet();
+			Iterator<String> ii = set.iterator();
+			while(ii.hasNext()){
+				String key = ii.next();
+				String value = headers.get(key);
+				header.put(key, value);
 			}
-		};
-		jsonRequest.setTag(httpTag);
-		jsonRequest.setRetryPolicy(new DefaultRetryPolicy(TIMEOUT_MS, DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-				DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-		PMApplication.getInstance().getRequestQueue().add(jsonRequest);
-		
+		}
+		header.put("Accept", "application/json");
+		header.put("Content-Type", "application/json; charset=UTF-8");
+		return header;
 	}
 	
 	/**

@@ -66,6 +66,7 @@ public class SelectImgCanPhotographActivity extends BaseActivity implements
 	private int selectNum = 0;
 	private String appImgCacheDir = null;
 	private String phoneImgPath = null;
+	private boolean isHidTitlebar = false;
 
 	private Handler mHandler = new Handler() {
 		@Override
@@ -86,14 +87,22 @@ public class SelectImgCanPhotographActivity extends BaseActivity implements
 		hideTitleBar();
 		setContent(getResources().getIdentifier("pami_select_img_activity_layout", "layout", getPackageName()));
 
+		isHidTitlebar = getIntent().getBooleanExtra("isHidTitlebar", false);
+		
 		View titlebar_tv = (View) findViewById(getResources().getIdentifier("titleHeight", "id", getPackageName()));
-        if(android.os.Build.VERSION.SDK_INT >= 19){
-        	RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) titlebar_tv.getLayoutParams();
-            lp.height = ScreenUtils.getStatusHeight(SelectImgCanPhotographActivity.this);
-            titlebar_tv.setLayoutParams(lp);
-        }else{
-            titlebar_tv.setVisibility(View.GONE);
-        }
+		if(isHidTitlebar){
+			
+	        if(android.os.Build.VERSION.SDK_INT >= 19){
+	        	RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) titlebar_tv.getLayoutParams();
+	            lp.height = ScreenUtils.getStatusHeight(SelectImgCanPhotographActivity.this);
+	            titlebar_tv.setLayoutParams(lp);
+	        }else{
+	            titlebar_tv.setVisibility(View.GONE);
+	        }
+		}else{
+			titlebar_tv.setVisibility(View.GONE);
+		}
+		
         
 		maxNum = getIntent().getIntExtra("maxNum", 9);
 		appImgCacheDir = getIntent().getStringExtra("appImgCacheDir");
@@ -204,8 +213,9 @@ public class SelectImgCanPhotographActivity extends BaseActivity implements
 	}
 
 	private void lightOff() {
+		
 		WindowManager.LayoutParams lp = getWindow().getAttributes();
-		lp.alpha = 0.3f;
+		lp.alpha = 0.7f;
 		getWindow().setAttributes(lp);
 
 	}

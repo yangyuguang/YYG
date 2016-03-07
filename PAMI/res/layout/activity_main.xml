@@ -9,12 +9,22 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".MainActivity" >
     
+    <TextView 
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="fjdskafjlskdjflksadfjlsakjflsakdjflkdsjfldsjlfjdsljfldsjflkdsjflkjdslgkjkjgajsgkdsjgkldjsalgjlasjglajkgl"/>
+    
+    <Button 
+        android:id="@+id/mButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="跳转到第二个页面"/>
     <!--   xmlns:myattrs="http://schemas.android.com/apk/res/com.pami" -->
-  <com.pami.widget.BadgeView
+  <!-- <com.pami.widget.BadgeView
         android:id="@+id/my_badge_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="40" />
+        android:text="40" /> -->
         
         <!-- <android.support.v7.widget.RecyclerView
             android:id="@+id/rv_my_patient_recyclerview"

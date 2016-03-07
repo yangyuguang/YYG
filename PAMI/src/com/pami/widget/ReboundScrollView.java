@@ -99,7 +99,6 @@ public class ReboundScrollView extends ScrollView {
                 break;
             }
              
-            //������ָ�ƶ��ľ���
             float nowY = ev.getY();
             int deltaY = (int) (nowY - startY);
              

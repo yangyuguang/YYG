@@ -16,6 +16,7 @@ public final class R {
         public static final int loading=0x7f040004;
         public static final int popupwindow_hid_animation=0x7f040005;
         public static final int popupwindow_show_animation=0x7f040006;
+        public static final int sliding_out_right=0x7f040007;
     }
     public static final class attr {
         /**  可以拖动的圆形图片 
@@ -360,6 +361,7 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         public static final int loding_layout=0x7f050014;
         public static final int loding_mark_tv=0x7f050028;
         public static final int mBottomLayout=0x7f05002e;
+        public static final int mButton=0x7f05000e;
         public static final int mGridView=0x7f05002d;
         /**  Used with View#setTag(int) to specify a position for the active view. 
          */
@@ -382,7 +384,6 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         public static final int md__translationX=0x7f05000c;
         public static final int md__translationY=0x7f05000d;
         public static final int msj_base_titlebar_text=0x7f05003e;
-        public static final int my_badge_view=0x7f05000e;
         public static final int name=0x7f05003a;
         public static final int navigationBarHeight=0x7f050013;
         public static final int progressbar=0x7f05003c;
