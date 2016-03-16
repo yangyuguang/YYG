@@ -30,5 +30,11 @@ public class TestAdapter extends PMBaseAdapter<String> {
 		
 	}
 
+	@Override
+	protected void uploadException(Exception e) {
+		// TODO Auto-generated method stub
+		
+	}
+
 
 }

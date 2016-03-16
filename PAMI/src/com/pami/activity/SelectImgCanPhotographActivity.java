@@ -393,4 +393,10 @@ public class SelectImgCanPhotographActivity extends BaseActivity implements
         }
     }
 
+	@Override
+	protected void uploadException(Exception e) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

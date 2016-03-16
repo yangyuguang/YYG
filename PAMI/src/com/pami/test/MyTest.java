@@ -62,5 +62,12 @@ public class MyTest extends BaseActivity {
 		
 	}
 
+
+	@Override
+	protected void uploadException(Exception e) {
+		// TODO Auto-generated method stub
+		
+	}
+
 	
 }

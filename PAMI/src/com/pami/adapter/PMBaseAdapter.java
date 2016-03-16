@@ -77,10 +77,6 @@ public abstract class PMBaseAdapter<T> extends BaseAdapter {
 	 * 最后别忘记在清单文件中注册 重写的 PMApplication
 	 * @param e
 	 */
-	protected void uploadException(Exception e) {
-		MLog.e("yyg", "有错误信息 ， 请认真查看log信息");
-		e.printStackTrace();
-		ExceptionUtils.uploadException(mContext, e, PMApplication.getInstance().getExceptionUrl());
-	}
+	protected void uploadException(Exception e){};
 
 }

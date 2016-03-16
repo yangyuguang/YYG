@@ -1,0 +1,20 @@
+<resources>
+
+    <!-- The default background of the menu. -->
+    <color name="md__defaultBackground">#FF555555</color>
+    <color name="common_gray_one_color">#f0f0f0</color>
+    <color name="transparent">#00000000</color>
+    <color name="red">#ff0000</color>
+    <color name="common_font_black_one_color">#ff333333</color>
+    
+    <color name="white">#ffffff</color>
+    <color name="common_font_black_two_color">#666666</color>
+	<color name="pami_ff">#444</color>
+	
+	<color name="pami_application_backgroupcolor">#f6f6f6</color>
+	
+	<!--  -->
+	<color name="pami_complete_select_location_img_tv_selector_default">#aaffffff</color>
+	<color name="pami_complete_select_location_img_tv_selector">#ffffffff</color>
+	<color name="back_btn_selector_color">#1383bf</color>
+</resources>

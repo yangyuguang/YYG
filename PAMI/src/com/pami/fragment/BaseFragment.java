@@ -12,10 +12,8 @@ import android.widget.Toast;
 
 import com.pami.PMApplication;
 import com.pami.activity.BaseActivity;
-import com.pami.http.ExceptionUtils;
 import com.pami.listener.HttpActionListener;
 import com.pami.listener.ViewInit;
-import com.pami.utils.JsonUtils;
 import com.pami.utils.MLog;
 import com.pami.utils.NetUtils;
 import com.pami.utils.ScreenManager;
@@ -51,11 +49,7 @@ public abstract class BaseFragment extends Fragment implements ViewInit, HttpAct
 	 * 
 	 * @param e
 	 */
-	public void uploadException(Exception e) {
-		MLog.e("yyg", "有错误信息 ， 请认真查看log信息");
-		e.printStackTrace();
-		ExceptionUtils.uploadException(getActivity(), e, PMApplication.getInstance().getExceptionUrl());
-	}
+	protected void uploadException(Exception e){};
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {

@@ -319,4 +319,10 @@ public class SelectImgNOPhotographActivity extends BaseActivity implements
 		selectImageBtn.setText("完成");
 	}
 
+	@Override
+	protected void uploadException(Exception e) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

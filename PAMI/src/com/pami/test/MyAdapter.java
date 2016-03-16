@@ -23,6 +23,12 @@ public class MyAdapter extends DragGridViewAdapter<String> {
 		
 	}
 
+	@Override
+	protected void uploadException(Exception e) {
+		// TODO Auto-generated method stub
+		
+	}
+
 
 
 

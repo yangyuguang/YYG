@@ -1,0 +1,28 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    
+    <Button 
+        android:id="@+id/sendHttp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="发送Http请求"/>
+    <Button 
+        android:id="@+id/sendHttps"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="发送Https请求"/>
+    <Button 
+        android:id="@+id/uploadOneImage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="上传一张图片"/>
+    <Button 
+        android:id="@+id/uploadMoreImage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="上传多张图片"/>
+     
+</LinearLayout>

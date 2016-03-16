@@ -101,13 +101,13 @@ public abstract class BaseActivity extends FragmentActivity implements ViewInit,
 	 * 上传log 日志
 	 * 注意调用此方法 app 必须重写PMApplication 并在 onCreate方法中 调用 setExceptionUrl(url) 将上传log信息的URL注入系统。否则将调用无效 。
 	 * 最后别忘记在清单文件中注册 重写的 PMApplication
-	 * @param e
-	 */
-	protected void uploadException(Exception e) {
-		MLog.e("yyg", "有错误信息 ， 请认真查看log信息");
+	 * 
+	 * MLog.e("yyg", "有错误信息 ， 请认真查看log信息");
 		e.printStackTrace();
 		ExceptionUtils.uploadException(this, e, PMApplication.getInstance().getExceptionUrl());
-	}
+	 * @param e
+	 */
+	protected void uploadException(Exception e){};
 
 	public void loadViewbefore() throws Exception {
 
@@ -320,7 +320,7 @@ public abstract class BaseActivity extends FragmentActivity implements ViewInit,
 							clearHttpRequest(httpFlag);
 						}
 					} catch (Exception e) {
-						e.printStackTrace();
+						uploadException(e);
 					}
 				}
 			});
