@@ -235,46 +235,6 @@ public abstract class BaseActivity extends FragmentActivity implements ViewInit,
 
 	}
 
-	@Override
-	public void handleActionSuccess(String actionName, Object object) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void handleActionError(String actionName, Object object) {
-		// try {
-		// String result = object.toString();
-		// if (result.indexOf("code") >= 0) {
-		// int code = JsonUtils.getCode(result);
-		// switch (code) {
-		// case -1: {
-		// MLog.e("yyg", "返回-1");
-		// Toast.makeText(this, JsonUtils.getSuccessData(result, "error_text"),
-		// Toast.LENGTH_SHORT).show();
-		// break;
-		// }
-		// case -9: {
-		// MLog.e("yyg", "返回-9");
-		// Toast.makeText(this, JsonUtils.getSuccessData(result, "error_text"),
-		// Toast.LENGTH_SHORT).show();
-		// break;
-		// }
-		//
-		// default:
-		// Toast.makeText(this, result, Toast.LENGTH_SHORT).show();
-		// break;
-		// }
-		// } else {
-		// Toast.makeText(this, result, Toast.LENGTH_SHORT).show();
-		// }
-		//
-		// } catch (Exception e) {
-		// MLog.e("yyg", "BaseActivity 【handleActionError】 错误回调有错");
-		// e.printStackTrace();
-		// }
-	}
-
 	/**
 	 * 显示加载中的踢提示框 使用默认的提示文字
 	 * 

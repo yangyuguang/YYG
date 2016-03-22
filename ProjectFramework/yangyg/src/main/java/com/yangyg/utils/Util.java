@@ -1,45 +1,29 @@
 package com.yangyg.utils;
 
-import java.math.BigDecimal;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Random;
-import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
-import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
 import android.graphics.Typeface;
-import android.graphics.PorterDuff.Mode;
-import android.graphics.PorterDuffXfermode;
-import android.graphics.RectF;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Vibrator;
 import android.support.v4.util.ArrayMap;
 import android.text.TextUtils;
-import android.view.WindowManager;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Random;
+import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * 工具类
@@ -51,7 +35,6 @@ public class Util {
 	public static int isShowLoding = 0;
 	private static Toast sToast = null;
 	
-//	private static Typeface customFont = null;
 	private static ArrayMap<String, Typeface> customFonts = new ArrayMap<String, Typeface>();
 
 	public static int getIsShowLoding() {
@@ -78,50 +61,9 @@ public class Util {
 		return s;
 	}
 
-	static Drawable drawable = null;
 	private static final String TAG = "Util";
 
-	/**
-	 * 拨打电话
-	 * 
-	 * @param phone
-	 */
-	public static void call(String phone, Context context) {
-		Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + phone));
-		intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-		context.startActivity(intent);
-	}
 
-	/**
-	 * md5转换
-	 * 
-	 * @param plainText
-	 * @return
-	 */
-	public static String Md5(String plainText) {
-		StringBuffer buf = new StringBuffer("");
-		try {
-			MessageDigest md = MessageDigest.getInstance("MD5");
-			md.update(plainText.getBytes());
-			byte b[] = md.digest();
-
-			int i;
-
-			for (int offset = 0; offset < b.length; offset++) {
-				i = b[offset];
-				if (i < 0)
-					i += 256;
-				if (i < 16)
-					buf.append("0");
-				buf.append(Integer.toHexString(i));
-			}
-
-		} catch (NoSuchAlgorithmException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return buf.toString();
-	}
 
 	/**
 	 * 是否是手机号
@@ -130,26 +72,18 @@ public class Util {
 	 * @return
 	 */
 	public static boolean isPhone(String phoneNumber) {
-//		return regularVerify(phoneNumber, "^[1][2-9]\\d{9}");
 		return regularVerify(phoneNumber, "^1[3|4|5|7|8][0-9]\\d{8}$");
 	}
 
 	/**
 	 * 是否是邮箱
 	 * 
-	 * @param phoneNumber
 	 * @return
 	 */
 	public static boolean isEmail(String email) {
-//		return regularVerify(email, "^\\w+([-+.]\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*$");
 		return regularVerify(email, "^([a-zA-Z0-9]*[-_]?[a-zA-Z0-9]+)*@([a-zA-Z0-9]*[-_]?[a-zA-Z0-9]+)+[\\.][A-Za-z]{2,3}([\\.][A-Za-z]{2})?$");
 	}
 
-	public static boolean isPhoneTwo(String phoneNumber) {
-		return regularVerify(
-				phoneNumber,
-				"^((\\d{11})|^((\\d{7,8})|(\\d{4}|\\d{3})-(\\d{7,8})|(\\d{4}|\\d{3})-(\\d{7,8})-(\\d{4}|\\d{3}|\\d{2}|\\d{1})|(\\d{7,8})-(\\d{4}|\\d{3}|\\d{2}|\\d{1}))$)");
-	}
 
 	public static boolean regularVerify(String value, String match) {
 		Pattern p = Pattern.compile(match);
@@ -189,7 +123,7 @@ public class Util {
 	 * @param s
 	 * @return
 	 */
-	public static boolean test1(String s) {
+	public static boolean isPureChinese(String s) {
 
 		for (int i = 0; i < s.length(); i++) {
 			char c = s.charAt(i);
@@ -235,21 +169,7 @@ public class Util {
 		return regularVerify(str, "[0-9]*");
 	}
 
-	/**
-	 * 是否是空
-	 * 
-	 * @param str
-	 * @return
-	 */
-	public static Boolean isNull(String str) {
-		String regStartSpace = "^[　 ]*";
-		String regEndSpace = "[　 ]*$";
-		String strDelSpace = str.replaceAll(regStartSpace, "").replaceAll(regEndSpace, "");
-		if (strDelSpace.length() == 0) {
-			return true;
-		}
-		return false;
-	}
+
 
 	/**
 	 * 匹配分行信息 1-10 汉字
@@ -262,17 +182,7 @@ public class Util {
 
 	}
 
-	public static boolean isQQ(String QQNumber) {
-		Pattern p = Pattern.compile("^[1-9]\\d{4,9}$");
-		Matcher m = p.matcher(QQNumber);
-		return m.matches();
-	}
 
-	public static boolean isPassword(String password) {
-		Pattern p = Pattern.compile("[0-9]{6,10}");
-		Matcher m = p.matcher(password);
-		return m.matches();
-	}
 
 	private static final String ID_CARD_PATTERN = "[0-9]{6}(1[9]|2[0])\\d{2}(0[1-9]|1[0-2])(0[1-9]|[1-2][0-9]|3[0-1])\\d{3}(\\d|\\w)";
 
@@ -297,45 +207,6 @@ public class Util {
 	}
 
 	/**
-	 * 图片加载优化
-	 * 
-	 * @param options
-	 * @param minSideLength
-	 * @param maxNumOfPixels
-	 * @return
-	 */
-	public static int computeInitialSampleSize(BitmapFactory.Options options, int minSideLength, int maxNumOfPixels) {
-		double w = options.outWidth;
-		double h = options.outHeight;
-
-		int lowerBound = (maxNumOfPixels == -1) ? 1 : (int) Math.ceil(Math.sqrt(w * h / maxNumOfPixels));
-		int upperBound = (minSideLength == -1) ? 128 : (int) Math.min(Math.floor(w / minSideLength),
-				Math.floor(h / minSideLength));
-
-		if (upperBound < lowerBound) {
-			return lowerBound;
-		}
-
-		if ((maxNumOfPixels == -1) && (minSideLength == -1)) {
-			return 1;
-		} else if (minSideLength == -1) {
-			return lowerBound;
-		} else {
-			return upperBound;
-		}
-	}
-
-	/**
-	 * 微信唯一标识
-	 * 
-	 * @param type
-	 * @return
-	 */
-	public static String buildTransaction(final String type) {
-		return (type == null) ? String.valueOf(System.currentTimeMillis()) : type + System.currentTimeMillis();
-	}
-
-	/**
 	 * 去除所有空格制表符 换行
 	 * 
 	 * @param str
@@ -351,52 +222,7 @@ public class Util {
 		return dest;
 	}
 
-	/**
-	 * 圆角矩形
-	 * 
-	 * @param x
-	 *            图像的宽度
-	 * @param y
-	 *            图像的高度
-	 * @param image
-	 *            源图片
-	 * @param outerRadiusRat
-	 *            圆角的大小
-	 * @return 圆角图片
-	 */
-	public static Bitmap createFramedPhoto(Bitmap image, int rat) {
-		int x = image.getWidth();
-		int y = image.getHeight();
-		float outerRadiusRat;
-		if (rat == 0)
-			outerRadiusRat = 20;
-		else
-			outerRadiusRat = rat;
 
-		// 根据源文件新建一个darwable对象
-		Drawable imageDrawable = new BitmapDrawable(image);
-
-		// 新建一个新的输出图片
-		Bitmap output = Bitmap.createBitmap(x, y, Bitmap.Config.ARGB_8888);
-		Canvas canvas = new Canvas(output);
-
-		// 新建一个矩形
-		RectF outerRect = new RectF(0, 0, x, y);
-
-		// 产生一个红色的圆角矩形
-		Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-		paint.setColor(Color.RED);
-		canvas.drawRoundRect(outerRect, outerRadiusRat, outerRadiusRat, paint);
-
-		// 将源图片绘制到这个圆角矩形上
-		paint.setXfermode(new PorterDuffXfermode(Mode.SRC_IN));
-		imageDrawable.setBounds(0, 0, x, y);
-		canvas.saveLayer(outerRect, paint, Canvas.ALL_SAVE_FLAG);
-		imageDrawable.draw(canvas);
-		canvas.restore();
-
-		return output;
-	}
 
 	/***
 	 * 计算百分比
@@ -468,63 +294,7 @@ public class Util {
 
 	public static BitmapFactory.Options options;
 
-	/**
-	 * 计算剩余时间 小时天
-	 * 
-	 * @param time
-	 * @return
-	 */
-	public static String getQuot(long time) {
-		long dd = 0;
-		long hh = 0;
-		long mm = 0;
-		long ss = 0;
-		dd = time / 1000 / (60 * 60 * 24);
-		hh = time / 1000 / (60 * 60);
-		mm = time / 1000 / 60;
-		ss = time / 1000;
-		if (dd != 0) {
-			return dd + "天";
-		} else if (hh != 0) {
-			return hh + "小时";
-		} else if (mm != 0) {
-			return mm + "分钟";
-		} else if (ss != 0) {
-			return 1 + "分钟";
-		}
-		String strTime = dd + "天" + hh + "时" + mm + "分" + ss + "秒";
-		return strTime;
 
-	}
-
-	/**
-	 * 计算剩余时间 小时
-	 * 
-	 * @param time
-	 * @return
-	 */
-	public static String getHour(long time) {
-		long dd = 0;
-		long hh = 0;
-		long mm = 0;
-		long ss = 0;
-		// dd = time / 1000 / (60 * 60 * 24);
-		hh = time / 1000 / (60 * 60);
-		mm = time / 1000 / 60;
-		ss = time / 1000;
-		if (dd != 0) {
-			return dd + "天";
-		} else if (hh != 0) {
-			return hh + "小时";
-		} else if (mm != 0) {
-			return mm + "分钟";
-		} else if (ss != 0) {
-			return 1 + "分钟";
-		}
-		String strTime = dd + "天" + hh + "时" + mm + "分" + ss + "秒";
-		return strTime;
-
-	}
 
 	// 四舍五入
 	public static int StringToRounding(String value) {
@@ -535,7 +305,7 @@ public class Util {
 			temp1 = Double.parseDouble(value);
 			temp2 = (int) Math.ceil(temp1);
 		} catch (Exception e) {
-			// TODO: handle exception
+			e.printStackTrace();
 		}
 
 		return temp2;

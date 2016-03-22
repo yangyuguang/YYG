@@ -1,25 +1,22 @@
 package com.yangyg.fragment;
 
-import java.util.List;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.FrameLayout;
+import android.widget.Toast;
 
-import com.yangyg.YYGApplication;
 import com.yangyg.activity.BaseActivity;
 import com.yangyg.listener.HttpActionListener;
 import com.yangyg.listener.ViewInit;
-import com.yangyg.utils.MLog;
 import com.yangyg.utils.NetUtils;
 import com.yangyg.utils.ScreenManager;
 import com.yangyg.utils.Util;
 import com.yangyg.widget.LoadingDialog;
 import com.yangyg.widget.LoadingDialog.OnDesmissListener;
 
-import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.text.TextUtils;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.FrameLayout;
-import android.widget.Toast;
+import java.util.List;
 
 
 public abstract class BaseFragment extends Fragment implements ViewInit, HttpActionListener, OnClickListener {
@@ -97,11 +94,6 @@ public abstract class BaseFragment extends Fragment implements ViewInit, HttpAct
 	}
 
 	@Override
-	public void handleActionError(String actionName, Object object) {
-		
-	}
-
-	@Override
 	public void handleActionStart(String actionName, Object object) {
 		// TODO Auto-generated method stub
 
@@ -109,12 +101,6 @@ public abstract class BaseFragment extends Fragment implements ViewInit, HttpAct
 
 	@Override
 	public void handleActionFinish(String actionName, Object object) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void handleActionSuccess(String actionName, Object object) {
 		// TODO Auto-generated method stub
 
 	}

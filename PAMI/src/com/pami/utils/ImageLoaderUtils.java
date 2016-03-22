@@ -28,12 +28,10 @@ public class ImageLoaderUtils {
     private static int mEmptyImageResId = 0;
     private static ImageLoader imageLoader = ImageLoader.getInstance();
     private DisplayImageOptions options;
-    private static Context mContext = null;
     private LruCache<String, Bitmap> mImageLoaderCache = null;
 
     private ImageLoaderUtils(Context context) {
         imageLoader = ImageLoader.getInstance();
-        ImageLoaderConfiguration iff = ImageLoaderConfiguration.createDefault(context);
         imageLoader.init(ImageLoaderConfiguration.createDefault(context));
         options = new DisplayImageOptions.Builder()
                 .showImageOnLoading(mDefultImageResId)
@@ -53,7 +51,6 @@ public class ImageLoaderUtils {
     }
     
     public static ImageLoaderUtils getinstance(Context context,int defultImageResId,int errorImageResId,int emptyImageResId) {
-        mContext = context;
         mDefultImageResId = defultImageResId;
         mErrorImageResId = errorImageResId;
         mEmptyImageResId = emptyImageResId;
@@ -68,7 +65,6 @@ public class ImageLoaderUtils {
     }
 
     public static ImageLoaderUtils getinstance(Context context) {
-        mContext = context;
         if (mImageLoaderUtil == null) {
             synchronized (ImageLoaderUtils.class) {
                 if (mImageLoaderUtil == null) {
@@ -85,7 +81,7 @@ public class ImageLoaderUtils {
      * @param imageView
      * @param url
      */
-    public void getImage(final ImageView imageView, String url){
+    public void getImage(ImageView imageView, String url){
         imageLoader.displayImage(url, imageView, options);
     }
 
@@ -96,15 +92,42 @@ public class ImageLoaderUtils {
      * @param url
      * @param defImageResId
      */
-    public void getImage(final ImageView imageView, String url,
-                         final int defImageResId) {
-        final DisplayImageOptions optionsT = new DisplayImageOptions.Builder()
+    public void getImage(ImageView imageView, String url, int defImageResId) {
+         DisplayImageOptions optionsT = new DisplayImageOptions.Builder()
                 .showImageOnLoading(defImageResId)
                 .showImageForEmptyUri(defImageResId)
                 .showImageOnFail(defImageResId).cacheInMemory(true)
                 .cacheOnDisc(true).considerExifParams(true)
                 .bitmapConfig(Bitmap.Config.RGB_565).build();
         imageLoader.displayImage(url, imageView, optionsT);
+    }
+    /**
+     * 获取图片
+     * 并设置图片缓存到内存和本地
+     * @param imageView
+     * @param url
+     * @param defImageResId
+     */
+    public void getImage(ImageView imageView, String url, int defImageResId, final String key) {
+    	Bitmap resultBitmap = mImageLoaderCache.get(key);
+    	if(resultBitmap != null){
+    		imageView.setImageBitmap(resultBitmap);
+    		return;
+    	}
+    	DisplayImageOptions optionsT = new DisplayImageOptions.Builder()
+        .showImageOnLoading(defImageResId)
+        .showImageForEmptyUri(defImageResId)
+        .showImageOnFail(defImageResId).cacheInMemory(true)
+        .cacheOnDisc(true).considerExifParams(true)
+        .bitmapConfig(Bitmap.Config.RGB_565).displayer(new BitmapDisplayer() {
+			
+			@Override
+			public void display(Bitmap bitmap, ImageAware imageAware, LoadedFrom loadedFrom) {
+				mImageLoaderCache.put(key, bitmap);
+				imageAware.setImageBitmap(bitmap);
+			}
+		}).build();
+    	imageLoader.displayImage(url, imageView, optionsT);
     }
 
 
@@ -117,6 +140,11 @@ public class ImageLoaderUtils {
      */
     public void getImageNoDisc(final ImageView imageView, String url,
                                final int defImageResId) {
+    	Bitmap resultBitmap = mImageLoaderCache.get(url);
+    	if(resultBitmap != null){
+    		imageView.setImageBitmap(resultBitmap);
+    		return;
+    	}
         final DisplayImageOptions optionsT = new DisplayImageOptions.Builder()
                 .showImageOnLoading(defImageResId)
                 .showImageForEmptyUri(defImageResId)
@@ -172,6 +200,11 @@ public class ImageLoaderUtils {
      */
     private void getRoundedCornerBitmap(final ImageView imageView, final String url, int defultImageResId,int emptyImageResId,int errorImageResId,boolean isCacheInMemory) {
     	imageView.setTag(url);
+    	Bitmap resultBitmap = mImageLoaderCache.get(url);
+    	if(resultBitmap != null){
+    		imageView.setImageBitmap(resultBitmap);
+    		return;
+    	}
     	final DisplayImageOptions options = new DisplayImageOptions.Builder()
                 .showImageOnLoading(defultImageResId)
                 .showImageForEmptyUri(emptyImageResId)
@@ -272,6 +305,11 @@ public class ImageLoaderUtils {
      */
     private void getImageRoundBitmap(final ImageView imageView, final String url, final int cornerRadiusPixels,int defultImageResId,int emptyImageResId,int errorImageResId,boolean isCacheInMemory) {
     	imageView.setTag(url);
+    	Bitmap resultBitmap = mImageLoaderCache.get(url);
+    	if(resultBitmap != null){
+    		imageView.setImageBitmap(resultBitmap);
+    		return;
+    	}
         final DisplayImageOptions options = new DisplayImageOptions.Builder()
                 .showImageOnLoading(defultImageResId)
                 .showImageForEmptyUri(emptyImageResId)
