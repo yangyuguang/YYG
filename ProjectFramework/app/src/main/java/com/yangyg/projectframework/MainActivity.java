@@ -1,6 +1,9 @@
 package com.yangyg.projectframework;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.IntentFilter;
+import android.net.wifi.p2p.WifiP2pManager;
 import android.os.Bundle;
 import android.support.v4.util.ArrayMap;
 import android.util.Log;
@@ -12,16 +15,81 @@ import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
 import com.yangyg.http.HttpJSONRequest;
 import com.yangyg.test.MD5;
+import com.yangyg.utils.MLog;
 
 import java.io.IOException;
 
 public class MainActivity extends Activity {
+
+    private IntentFilter mIntentFilter = null;
+    private WiFiDirectBroadcastReceiver mReceiver = null;
+
+    private WifiP2pManager mManager = null;
+    private WifiP2pManager.Channel mChannel = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        testConnection();
+        textWifiP2P();
+    }
+
+    /**
+     * 测试 wifi p2p
+     */
+    private void textWifiP2P() {
+        mManager = (WifiP2pManager) getSystemService(Context.WIFI_P2P_SERVICE);
+        mChannel = mManager.initialize(this, getMainLooper(), new WifiP2pManager.ChannelListener() {
+            @Override
+            public void onChannelDisconnected() {
+                MLog.e("wifip2pyyg", "onChannelDisconnected");
+            }
+        });
+
+        mReceiver = new WiFiDirectBroadcastReceiver(mManager, mChannel, this);
+
+
+        //注册广播
+        mIntentFilter = new IntentFilter();
+        mIntentFilter.addAction(WifiP2pManager.WIFI_P2P_STATE_CHANGED_ACTION);
+        mIntentFilter.addAction(WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION);
+        mIntentFilter.addAction(WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION);
+        mIntentFilter.addAction(WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION);
+
+        mManager.discoverPeers(mChannel, new WifiP2pManager.ActionListener() {
+
+            @Override
+            public void onSuccess() {
+                MLog.e("wifip2pyyg", "discoverPeers  onSuccess");
+            }
+
+            @Override
+            public void onFailure(int reasonCode) {
+                MLog.e("wifip2pyyg", "discoverPeers  onFailure:" + reasonCode);
+            }
+        });
+    }
+
+    /* register the broadcast receiver with the intent values to be matched */
+    @Override
+    protected void onResume() {
+        super.onResume();
+        registerReceiver(mReceiver, mIntentFilter);
+    }
+
+    /* unregister the broadcast receiver */
+    @Override
+    protected void onPause() {
+        super.onPause();
+        unregisterReceiver(mReceiver);
+    }
+
+    /**
+     * 测试用okhttp发送请求
+     */
+    private void testConnection() {
         findViewById(R.id.sendHttp).setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -134,9 +202,5 @@ public class MainActivity extends Activity {
 
             }
         });
-
-
     }
-
-
 }

@@ -4,12 +4,3 @@
     android:fromXDelta="0%p"
     android:interpolator="@android:anim/accelerate_decelerate_interpolator"
     android:toXDelta="0" />
-
-<!--
-<set xmlns:android="http://schemas.android.com/apk/res/android">
-	<translate android:fromXDelta="-15%p" android:toXDelta="0"
-		android:duration="400"  android:interpolator="@android:anim/overshoot_interpolator"/>
-
- 
-</set>
--->

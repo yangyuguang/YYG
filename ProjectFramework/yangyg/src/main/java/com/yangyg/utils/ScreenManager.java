@@ -77,6 +77,22 @@ public class ScreenManager {
 		}
 		return activity;
 	}
+
+	public int getActivitySize(){
+		if (activityStack != null && !activityStack.isEmpty()) {
+			return activityStack.size();
+		}else{
+			return 0;
+		}
+	}
+
+	public Activity getActivityByIndex(int index){
+		Activity activity = null;
+		if (activityStack != null && !activityStack.isEmpty()) {
+			activity = activityStack.get(index);
+		}
+		return activity;
+	}
 	
 	/**
 	 * 添加Activity到管理队列

@@ -1,21 +1,5 @@
 package com.yangyg.activity;
 
-import java.io.File;
-import java.io.FilenameFilter;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import com.yangyg.adapter.SelectImageCanPhotographAdapter;
-import com.yangyg.adapter.SelectImageCanPhotographAdapter.OnSelectOrDeleteImgListener;
-import com.yangyg.bean.FolderBean;
-import com.yangyg.popupwindow.SelectImageDirPopupWindow;
-import com.yangyg.utils.FileHelper;
-import com.yangyg.utils.ScreenManager;
-import com.yangyg.utils.ScreenUtils;
-
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.Intent;
@@ -34,6 +18,22 @@ import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.yangyg.adapter.SelectImageCanPhotographAdapter;
+import com.yangyg.adapter.SelectImageCanPhotographAdapter.OnSelectOrDeleteImgListener;
+import com.yangyg.bean.FolderBean;
+import com.yangyg.popupwindow.SelectImageDirPopupWindow;
+import com.yangyg.utils.FileHelper;
+import com.yangyg.utils.ScreenManager;
+import com.yangyg.utils.ScreenUtils;
+
+import java.io.File;
+import java.io.FilenameFilter;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 
 /**
@@ -400,4 +400,13 @@ public class SelectImgCanPhotographActivity extends BaseActivity implements
 		
 	}
 
+	@Override
+	public void handleActionError(String actionName, Object object) {
+
+	}
+
+	@Override
+	public void handleActionSuccess(String actionName, Object object) {
+
+	}
 }

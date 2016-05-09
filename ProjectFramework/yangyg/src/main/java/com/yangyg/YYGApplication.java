@@ -27,7 +27,7 @@ import javax.net.ssl.TrustManagerFactory;
 
 public class YYGApplication extends Application {
 
-	public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+//	public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 
 	public OkHttpClient okHttpClient = null;
 
@@ -35,8 +35,8 @@ public class YYGApplication extends Application {
 	protected long writeTimeout = 10;
 	protected long readTimeOut = 30;
 
-	public boolean isDown;
-	public boolean isRun;
+//	public boolean isDown;
+//	public boolean isRun;
 
 	/**
 	 * 是否存在 NavigationBar true 表示存在 false 表示不存在

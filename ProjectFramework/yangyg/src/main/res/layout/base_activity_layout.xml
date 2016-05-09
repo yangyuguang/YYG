@@ -2,7 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/common_gray_one_color" >
+    android:background="@color/common_gray_one_color"
+    android:id="@+id/app_root_layout">
     
     <View
         android:id="@+id/action_bar_height"
@@ -10,6 +11,7 @@
         android:layout_height="@dimen/distance_1px"/>
 
     <LinearLayout
+        android:id="@+id/app_context_root_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"

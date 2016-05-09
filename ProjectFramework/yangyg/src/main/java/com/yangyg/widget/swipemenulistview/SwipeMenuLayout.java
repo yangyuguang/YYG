@@ -106,8 +106,6 @@ public class SwipeMenuLayout extends FrameLayout {
 		mGestureDetector = new GestureDetectorCompat(getContext(),
 				mGestureListener);
 
-		// mScroller = ScrollerCompat.create(getContext(), new
-		// BounceInterpolator());
 		if (mCloseInterpolator != null) {
 			mCloseScroller = ScrollerCompat.create(getContext(),
 					mCloseInterpolator);

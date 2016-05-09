@@ -4,7 +4,7 @@
         Base application theme, dependent on API level. This theme is replaced
         by AppBaseTheme from res/values-vXX/styles.xml on newer devices.
     -->
-    <style name="AppBaseTheme" parent="android:Theme.Light">
+    <style name="AppBaseTheme" parent="android:Theme.Holo.Light.NoActionBar">
         <!--
             Theme customizations available in newer API levels can go in
             res/values-vXX/styles.xml, while customizations related to
@@ -13,9 +13,9 @@
     </style>
 
     <!-- Application theme. -->
-     <!-- <style name="AppTheme" parent="AppBaseTheme">
-       All customizations that are NOT specific to a particular API-level can go here.
-    </style> -->
+    <!-- <style name="AppTheme" parent="AppBaseTheme">
+      All customizations that are NOT specific to a particular API-level can go here.
+   </style> -->
     <style name="Widget" />
 
     <!-- Base theme for the menu drawer. -->
@@ -25,7 +25,7 @@
         <item name="mdDrawerOpenUpContentDescription">@string/md__drawerOpenIndicatorDesc</item>
         <item name="mdDrawerClosedUpContentDescription">@string/md__drawerClosedIndicatorDesc</item>
     </style>
-    
+
     <style name="select_img_popwindow_anim_style">
         <item name="android:windowEnterAnimation">@anim/popupwindow_show_animation</item>
         <!-- 指定显示的动画xml -->
@@ -33,23 +33,35 @@
         <item name="android:windowExitAnimation">@anim/popupwindow_hid_animation</item>
         <!-- 指定消失的动画xml -->
     </style>
-    
-    
+
+
     <!-- ******************************************************************************************************* -->
-   <style name="AppTheme" parent="Anim_Theme">
+
+    <style name="AppTheme" parent="Animation_Theme">
         <item name="android:windowNoTitle">true</item>
+        <item name="android:windowIsTranslucent">true</item>
     </style>
-    
-   <style name="Anim_Theme" parent="ActivityAnim">
-        <item name="android:windowAnimationStyle">@style/ActivityAnim</item>
-        <item name="android:windowBackground">@color/pami_application_backgroupcolor</item>
+
+    <style name="Animation_Theme" parent="AppBaseTheme">
+        <item name="android:windowAnimationStyle">@style/AnimationActivity</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
     </style>
-    
-   <style name="ActivityAnim" parent="AppBaseTheme">
-        <item name="@android:activityOpenEnterAnimation">@anim/home_push_leftin</item>
-        <item name="@android:activityOpenExitAnimation">@anim/home_push_leftout</item>
-        <item name="@android:activityCloseEnterAnimation">@anim/home_push_rightin</item>
-        <item name="@android:activityCloseExitAnimation">@anim/home_push_rightout</item>
+
+    <style name="AnimationActivity" parent="@android:style/Animation.Activity">
+        <item name="android:activityOpenEnterAnimation">@anim/home_push_leftin</item>
+        <item name="android:activityOpenExitAnimation">@anim/home_push_leftout</item>
+        <item name="android:activityCloseEnterAnimation">@anim/home_push_rightin</item>
+        <item name="android:activityCloseExitAnimation">@anim/home_push_rightout</item>
+
+        <item name="android:wallpaperOpenEnterAnimation">@anim/home_push_leftin</item>
+        <item name="android:wallpaperOpenExitAnimation">@anim/home_push_leftout</item>
+        <item name="android:wallpaperCloseEnterAnimation">@anim/home_push_rightin</item>
+        <item name="android:wallpaperCloseExitAnimation">@anim/home_push_rightout</item>
+
+        <item name="android:wallpaperIntraOpenEnterAnimation">@anim/home_push_leftin</item>
+        <item name="android:wallpaperIntraOpenExitAnimation">@anim/home_push_leftout</item>
+        <item name="android:wallpaperIntraCloseEnterAnimation">@anim/home_push_rightin</item>
+        <item name="android:wallpaperIntraCloseExitAnimation">@anim/home_push_rightout</item>
     </style>
 
 </resources>

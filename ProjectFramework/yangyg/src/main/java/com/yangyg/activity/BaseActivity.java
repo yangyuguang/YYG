@@ -1,24 +1,33 @@
 package com.yangyg.activity;
 
+import java.lang.reflect.Field;
 import java.util.List;
 
+import android.app.Activity;
 import android.content.Context;
 import android.media.AudioManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
+import android.view.animation.TranslateAnimation;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.yangyg.R;
 import com.yangyg.YYGApplication;
 import com.yangyg.SystemBarTintManager;
 import com.yangyg.listener.AppDownLineListener;
@@ -26,15 +35,17 @@ import com.yangyg.listener.AppLisntenerManager;
 import com.yangyg.listener.HttpActionListener;
 import com.yangyg.listener.ViewInit;
 import com.yangyg.utils.HidenSoftKeyBoard;
+import com.yangyg.utils.MLog;
 import com.yangyg.utils.NetUtils;
 import com.yangyg.utils.ScreenManager;
 import com.yangyg.utils.ScreenUtils;
 import com.yangyg.utils.Util;
 import com.yangyg.widget.LoadingDialog;
 import com.yangyg.widget.LoadingDialog.OnDesmissListener;
+import com.yangyg.widget.switchback.SlidingPaneLayout;
 
 
-public abstract class BaseActivity extends FragmentActivity implements ViewInit, HttpActionListener, OnClickListener, AppDownLineListener {
+public abstract class BaseActivity extends FragmentActivity implements ViewInit, HttpActionListener, OnClickListener, AppDownLineListener, SlidingPaneLayout.PanelSlideListener{
 
 	private FrameLayout activity_base_titlebar = null;
 	private FrameLayout activity_base_content = null;
@@ -44,19 +55,19 @@ public abstract class BaseActivity extends FragmentActivity implements ViewInit,
 	private boolean loadingDialogIsShow = false;
 	private boolean is_hidKeyDown = true;
 	private TextView base_activity_line = null;
-	private View loding_layout;
-
-	public int barHeight;
+	private View leftView;
 
 	public Context mContext;
 	private Toast mToast;
 
+	public LinearLayout app_context_root_layout = null;
+
 	@Override
 	protected void onCreate(Bundle arg0) {
+		initSwipeBackFinish();
 		super.onCreate(arg0);
 
 		try {
-
 			loadViewbefore();
 			setVolumeControlStream(AudioManager.STREAM_MUSIC);// 使得音量键控制媒体声音
 			mContext = this;
@@ -64,10 +75,9 @@ public abstract class BaseActivity extends FragmentActivity implements ViewInit,
 
 			activity_base_titlebar = (FrameLayout) findViewById(getResources().getIdentifier("activity_base_titlebar", "id", getPackageName()));
 			activity_base_content = (FrameLayout) findViewById(getResources().getIdentifier("activity_base_content", "id", getPackageName()));
+			app_context_root_layout = (LinearLayout) findViewById(getResources().getIdentifier("app_context_root_layout", "id", getPackageName()));
 
 			base_activity_line = (TextView) findViewById(getResources().getIdentifier("base_activity_line", "id", getPackageName()));
-
-			loding_layout = findViewById(getResources().getIdentifier("loding_layout", "id", getPackageName()));
 
 			YYGApplication.getInstance().setContext(mContext);
 
@@ -96,6 +106,57 @@ public abstract class BaseActivity extends FragmentActivity implements ViewInit,
 		}
 	}
 
+	/**
+	 * 初始化滑动返回
+	 */
+	private void initSwipeBackFinish() {
+
+		if (isSupportSwipeBack()) {
+			SlidingPaneLayout slidingPaneLayout = new SlidingPaneLayout(this);
+			slidingPaneLayout.setmTouchSwitchBackSize(setMTouchSwitchBack());
+			//通过反射改变mOverhangSize的值为0，这个mOverhangSize值为菜单到右边屏幕的最短距离，默认
+			//是32dp，现在给它改成0
+			try {
+				//属性
+				Field f_overHang = SlidingPaneLayout.class.getDeclaredField("mOverhangSize");
+				f_overHang.setAccessible(true);
+				f_overHang.set(slidingPaneLayout, 0);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			slidingPaneLayout.setPanelSlideListener(this);
+			slidingPaneLayout.setSliderFadeColor(getResources().getColor(android.R.color.transparent));
+
+			leftView = new View(this);
+			leftView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+			slidingPaneLayout.addView(leftView, 0);
+
+			ViewGroup decor = (ViewGroup) getWindow().getDecorView();
+			ViewGroup decorChild = (ViewGroup) decor.getChildAt(0);
+			decorChild.setBackgroundColor(getResources().getColor(android.R.color.white));
+			decor.removeView(decorChild);
+			decor.addView(slidingPaneLayout);
+			slidingPaneLayout.addView(decorChild, 1);
+
+		}
+	}
+
+	/**
+	 * 是否支持滑动返回
+	 *
+	 * @return
+	 */
+	protected boolean isSupportSwipeBack() {
+		return true;
+	}
+
+	/**
+	 * 设置滑动返回 点击的x区域
+	 * @return
+     */
+	protected float setMTouchSwitchBack(){
+		return 100f;
+	}
 	/**
 	 * 上传log 日志
 	 * 注意调用此方法 app 必须重写PMApplication 并在 onCreate方法中 调用 setExceptionUrl(url) 将上传log信息的URL注入系统。否则将调用无效 。
@@ -360,7 +421,6 @@ public abstract class BaseActivity extends FragmentActivity implements ViewInit,
 			activity_base_titlebar = null;
 			activity_base_content = null;
 			base_activity_line = null;
-			loding_layout = null;
 			mContext = null;
 			if(mToast != null){
 				mToast.cancel();
@@ -416,7 +476,7 @@ public abstract class BaseActivity extends FragmentActivity implements ViewInit,
 	/**
 	 * app下线
 	 * 
-	 * @param v
+	 * @param
 	 */
 	public abstract void onAppDownLine() throws Exception;
 
@@ -425,7 +485,6 @@ public abstract class BaseActivity extends FragmentActivity implements ViewInit,
 	 */
 	public void finishActivity() {
 		try {
-
 			ScreenManager.getScreenManager().popActivity(BaseActivity.this);
 		} catch (Exception e) {
 			uploadException(e);
@@ -438,6 +497,31 @@ public abstract class BaseActivity extends FragmentActivity implements ViewInit,
 			finishActivity();
 		}
 		return super.onKeyDown(keyCode, event);
+	}
+
+	@Override
+	public void onPanelClosed(View view) {
+
+	}
+
+	@Override
+	public void onPanelOpened(View view) {
+		finishActivity();
+		this.overridePendingTransition(0, R.anim.slide_out_right);
+	}
+
+	private BaseActivity reciprocalSecondActivity = null;
+	@Override
+	public void onPanelSlide(View view, float v) {
+		if(reciprocalSecondActivity == null){
+			int activitySize = ScreenManager.getScreenManager().getActivitySize();
+			reciprocalSecondActivity = (BaseActivity) ScreenManager.getScreenManager().getActivityByIndex(activitySize - 2);
+		}
+
+		RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) reciprocalSecondActivity.app_context_root_layout.getLayoutParams();
+		int leftMargin = (int) ((1-v) * 300f);
+		lp.leftMargin = -leftMargin;
+		reciprocalSecondActivity.app_context_root_layout.setLayoutParams(lp);
 	}
 
 }

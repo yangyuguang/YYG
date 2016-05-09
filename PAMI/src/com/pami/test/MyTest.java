@@ -1,11 +1,10 @@
 package com.pami.test;
 
+import android.content.Intent;
 import android.view.View;
 
 import com.pami.R;
 import com.pami.activity.BaseActivity;
-import com.pami.utils.MLog;
-import com.pami.widget.BadgeView;
 
 public class MyTest extends BaseActivity {
 
@@ -13,10 +12,19 @@ public class MyTest extends BaseActivity {
 	@Override
 	public void initViewFromXML() throws Exception {
 		setContent(R.layout.activity_main);
-		showLoadingDialogAndHint("提示信息", "sdfsd");
+		hideTitleBar();
+//		showLoadingDialogAndHint("提示信息", "sdfsd");
 //		BadgeView bv = (BadgeView) findViewById(R.id.my_badge_view);
 //		bv.setBadgeCount(42);
 		
+		findViewById(R.id.mButton).setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent(MyTest.this,NextActivity.class);
+				startActivity(intent);
+			}
+		});
 		
 	}
 	
@@ -38,6 +46,11 @@ public class MyTest extends BaseActivity {
 		// TODO Auto-generated method stub
 		
 	}
+	
+	@Override
+		protected boolean isSupportSwipeBack() {
+			return false;
+		}
 	
 //	@Override
 //	public void onButtonClick(View v) {
@@ -69,5 +82,4 @@ public class MyTest extends BaseActivity {
 		
 	}
 
-	
 }

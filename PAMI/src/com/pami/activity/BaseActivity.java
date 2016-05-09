@@ -1,7 +1,9 @@
 package com.pami.activity;
 
+import java.lang.reflect.Field;
 import java.util.List;
 
+import android.app.Activity;
 import android.content.Context;
 import android.media.AudioManager;
 import android.os.Build;
@@ -20,22 +22,22 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.pami.PMApplication;
+import com.pami.R;
 import com.pami.SystemBarTintManager;
-import com.pami.http.ExceptionUtils;
 import com.pami.listener.AppDownLineListener;
 import com.pami.listener.AppLisntenerManager;
 import com.pami.listener.HttpActionListener;
 import com.pami.listener.ViewInit;
 import com.pami.utils.HidenSoftKeyBoard;
-import com.pami.utils.MLog;
 import com.pami.utils.NetUtils;
 import com.pami.utils.ScreenManager;
 import com.pami.utils.ScreenUtils;
 import com.pami.utils.Util;
 import com.pami.widget.LoadingDialog;
 import com.pami.widget.LoadingDialog.OnDesmissListener;
+import com.pami.widget.switchback.SlidingPaneLayout;
 
-public abstract class BaseActivity extends FragmentActivity implements ViewInit, HttpActionListener, OnClickListener, AppDownLineListener {
+public abstract class BaseActivity extends FragmentActivity implements ViewInit, HttpActionListener, OnClickListener, AppDownLineListener, SlidingPaneLayout.PanelSlideListener{
 
 	private FrameLayout activity_base_titlebar = null;
 	private FrameLayout activity_base_content = null;
@@ -54,6 +56,7 @@ public abstract class BaseActivity extends FragmentActivity implements ViewInit,
 
 	@Override
 	protected void onCreate(Bundle arg0) {
+		initSwipeBackFinish();
 		super.onCreate(arg0);
 
 		try {
@@ -97,6 +100,58 @@ public abstract class BaseActivity extends FragmentActivity implements ViewInit,
 		}
 	}
 
+	/**
+	 * 初始化滑动返回
+	 */
+	private void initSwipeBackFinish() {
+
+		if (isSupportSwipeBack()) {
+			SlidingPaneLayout slidingPaneLayout = new SlidingPaneLayout(this);
+			slidingPaneLayout.setmTouchSwitchBackSize(setMTouchSwitchBack());
+			//通过反射改变mOverhangSize的值为0，这个mOverhangSize值为菜单到右边屏幕的最短距离，默认
+			//是32dp，现在给它改成0
+			try {
+				//属性
+				Field f_overHang = SlidingPaneLayout.class.getDeclaredField("mOverhangSize");
+				f_overHang.setAccessible(true);
+				f_overHang.set(slidingPaneLayout, 0);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			slidingPaneLayout.setPanelSlideListener(this);
+			slidingPaneLayout.setSliderFadeColor(getResources().getColor(android.R.color.transparent));
+
+			View leftView = new View(this);
+			leftView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+			slidingPaneLayout.addView(leftView, 0);
+
+			ViewGroup decor = (ViewGroup) getWindow().getDecorView();
+			ViewGroup decorChild = (ViewGroup) decor.getChildAt(0);
+			decorChild.setBackgroundColor(getResources().getColor(android.R.color.white));
+			decor.removeView(decorChild);
+			decor.addView(slidingPaneLayout);
+			slidingPaneLayout.addView(decorChild, 1);
+
+		}
+	}
+
+	/**
+	 * 是否支持滑动返回
+	 *
+	 * @return
+	 */
+	protected boolean isSupportSwipeBack() {
+		return false;
+	}
+
+	/**
+	 * 设置滑动返回 点击的x区域
+	 * @return
+     */
+	protected float setMTouchSwitchBack(){
+		return 100f;
+	}
+	
 	/**
 	 * 上传log 日志
 	 * 注意调用此方法 app 必须重写PMApplication 并在 onCreate方法中 调用 setExceptionUrl(url) 将上传log信息的URL注入系统。否则将调用无效 。
@@ -479,6 +534,31 @@ public abstract class BaseActivity extends FragmentActivity implements ViewInit,
 			finishActivity();
 		}
 		return super.onKeyDown(keyCode, event);
+	}
+	
+	@Override
+	public void onPanelClosed(View view) {
+
+	}
+
+	@Override
+	public void onPanelOpened(View view) {
+		finishActivity();
+		this.overridePendingTransition(0, R.anim.slide_out_right);
+	}
+
+	private int activitySize = 0;
+	private Activity reciprocalSecondActivity = null;
+	private ViewGroup exitDecorChild = null;
+	@Override
+	public void onPanelSlide(View view, float v) {
+//		if(reciprocalSecondActivity == null){
+//			activitySize = ScreenManager.getScreenManager().getActivitySize();
+//			reciprocalSecondActivity = ScreenManager.getScreenManager().getActivityByIndex(activitySize - 2);
+//			ViewGroup decor = (ViewGroup) reciprocalSecondActivity.getWindow().getDecorView();
+//			exitDecorChild = (ViewGroup) decor.getChildAt(0);
+//		}
+//		exitDecorChild.setAlpha(v);
 	}
 
 }

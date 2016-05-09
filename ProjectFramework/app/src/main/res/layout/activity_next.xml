@@ -1,0 +1,31 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!--<ImageView-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:src="@mipmap/welcom3"-->
+        <!--android:scaleType="centerCrop"/>-->
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/size_20sp"
+        android:text="反馈撒旦法放家里舒服老师发酒疯撒娇反馈撒旦法放家里舒服老师发酒疯撒娇反馈撒旦法放家里舒服老师发酒疯撒娇反馈撒旦法放家里舒服老师发酒疯撒娇反馈撒旦法放家里舒服老师发酒疯撒娇反馈撒旦法放家里舒服老师发酒疯撒娇反馈撒旦法放家里舒服老师发酒疯撒娇反馈撒旦法放家里舒服老师发酒疯撒娇反馈撒旦法放家里舒服老师发酒疯撒娇反馈撒旦法放家里舒服老师发酒疯撒娇反馈撒旦法放家里舒服老师发酒疯撒娇反馈撒旦法放家里舒服老师发酒疯撒娇反馈撒旦法放家里舒服老师发酒疯撒娇反馈撒旦法放家里舒服老师发酒疯撒娇反馈撒旦法放家里舒服老师发酒疯撒娇反馈撒旦法放家里舒服老师发酒疯撒娇反馈撒旦法放家里舒服老师发酒疯撒娇反馈撒旦法放家里舒服老师发酒疯撒娇反馈撒旦法放家里舒服老师发酒疯撒娇反馈撒旦法放家里舒服老师发酒疯撒娇反馈撒旦法放家里舒服老师发酒疯撒娇反馈撒旦法放家里舒服老师发酒疯撒娇反馈撒旦法放家里舒服老师发酒疯撒娇反馈撒旦法放家里舒服老师发酒疯撒娇反馈撒旦法放家里舒服老师发酒疯撒娇反馈撒旦法放家里舒服老师发酒疯撒娇反馈撒旦法放家里舒服老师发酒疯撒娇反馈撒旦法放家里舒服老师发酒疯撒娇反馈撒旦法放家里舒服老师发酒疯撒娇反馈撒旦法放家里舒服老师发酒疯撒娇反馈撒旦法放家里舒服老师发酒疯撒娇反馈撒旦法放家里舒服老师发酒疯撒娇"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:onClick="nextPage"
+        android:background="@android:color/holo_red_dark"
+        android:text="下一页" />
+
+    <RelativeLayout
+        android:id="@+id/container"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_alignParentBottom="true"/>
+
+</RelativeLayout>
