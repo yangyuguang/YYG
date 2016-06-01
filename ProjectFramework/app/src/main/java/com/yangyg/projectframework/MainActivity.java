@@ -1,13 +1,18 @@
 package com.yangyg.projectframework;
 
 import android.app.Activity;
+import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.IntentFilter;
 import android.net.wifi.p2p.WifiP2pManager;
 import android.os.Bundle;
 import android.support.v4.util.ArrayMap;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.DatePicker;
+import android.widget.FrameLayout;
+import android.widget.ScrollView;
 import android.widget.Toast;
 
 import com.squareup.okhttp.Callback;
@@ -27,6 +32,7 @@ public class MainActivity extends Activity {
     private WifiP2pManager mManager = null;
     private WifiP2pManager.Channel mChannel = null;
 
+    private AppCompatActivity dpd = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

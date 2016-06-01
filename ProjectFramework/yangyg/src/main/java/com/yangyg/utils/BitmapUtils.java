@@ -9,6 +9,7 @@ import java.lang.reflect.Field;
 import java.util.Date;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
 import android.graphics.BitmapFactory;
@@ -29,28 +30,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 public class BitmapUtils {
-
-	/**
-	 * 软引用创建，必要时释放
-	 * 
-	 * @param id
-	 * @param b
-	 * @return
-	 */
-	private static Options options;
-
-	public static Bitmap creatBitmap(Context context, int id) throws Exception {
-		if (options == null) {
-			options = new BitmapFactory.Options();
-			// options.inJustDecodeBounds = false;
-			options.inPreferredConfig = Bitmap.Config.RGB_565;
-			options.inPurgeable = true;
-			options.inInputShareable = true;
-		}
-
-		InputStream is = context.getResources().openRawResource(id);
-		return BitmapFactory.decodeStream(is, null, options);
-	}
 
 	/**
 	 * 获得缩略图路径 此方法首先会将图片压缩到指定大小 然后再保存到本地文件 并返回此文件的路径
@@ -134,6 +113,65 @@ public class BitmapUtils {
 		options.inJustDecodeBounds = false;
 		return BitmapFactory.decodeFile(path, options);
 
+	}
+
+	/**
+	 * 等比例压缩图片
+	 * @param resources Resources对象
+	 * @param resId 资源图片ID
+	 * @param width 图片需要显示的宽度值
+	 * @param height 图片需要显示的高度值
+	 * @return
+	 * @throws Exception
+	 */
+	public static Bitmap equalRatioCompressImage(Resources resources, int resId, int width, int height) throws Exception {
+
+		BitmapFactory.Options options = new BitmapFactory.Options();
+		options.inJustDecodeBounds = true;
+		BitmapFactory.decodeResource(resources, resId, options);
+		options.inSampleSize = getSampleSize(options, width, height);
+		options.inJustDecodeBounds = false;
+		return BitmapFactory.decodeResource(resources, resId, options);
+	}
+
+	/**
+	 * 等比例压缩图片
+	 * @param data 图片字节数组
+	 * @param width 图片需要显示的宽度值
+	 * @param height 图片需要显示的高度值
+	 * @return
+	 * @throws Exception
+	 */
+	public static Bitmap equalRatioCompressImage(byte[] data, int width, int height) throws Exception {
+		if(data == null || data.length <= 0){
+			return null;
+		}
+		BitmapFactory.Options options = new BitmapFactory.Options();
+		options.inJustDecodeBounds = true;
+		BitmapFactory.decodeByteArray(data, 0, data.length, options);
+		options.inSampleSize = getSampleSize(options, width, height);
+		options.inJustDecodeBounds = false;
+		return BitmapFactory.decodeByteArray(data, 0, data.length, options);
+	}
+
+	/**
+	 * 等比例压缩图片
+	 * @param is 图片数据的输入流
+	 * @param width 图片需要显示的宽度值
+	 * @param height 图片需要显示的高度值
+	 * @return
+	 * @throws Exception
+	 */
+	public static Bitmap equalRatioCompressImage(InputStream is, int width, int height) throws Exception {
+		if(is == null){
+			return null;
+		}
+		BitmapFactory.Options options = new BitmapFactory.Options();
+		options.inJustDecodeBounds = true;
+		BitmapFactory.decodeStream(is, null, options);
+		options.inSampleSize = getSampleSize(options, width, height);
+		options.inJustDecodeBounds = false;
+		return BitmapFactory.decodeStream(is, null, options);
 	}
 
 	/**

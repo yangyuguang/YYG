@@ -19,12 +19,18 @@
             android:layout_gravity="center"
             android:orientation="vertical" >
 
-            <ImageView
+            <!-- <ImageView
                 android:id="@+id/loading_mark_iv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:contentDescription="@string/null_value"
-                android:src="@drawable/loading_mark" />
+                android:src="@drawable/loading_mark" /> -->
+                
+                <ProgressBar 
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/loadingProgessBarStyle"
+                    android:gravity="center" />
 
             <TextView
                 android:id="@+id/loding_mark_tv"

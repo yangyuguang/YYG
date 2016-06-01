@@ -2,7 +2,6 @@ package com.pami.utils;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.util.LruCache;
 import android.widget.ImageView;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
@@ -13,6 +12,7 @@ import com.nostra13.universalimageloader.core.assist.LoadedFrom;
 import com.nostra13.universalimageloader.core.display.BitmapDisplayer;
 import com.nostra13.universalimageloader.core.imageaware.ImageAware;
 import com.nostra13.universalimageloader.core.imageaware.ImageViewAware;
+import com.pami.PMApplication;
 import com.pami.utils.BitmapUtils;
 
 /**
@@ -28,7 +28,6 @@ public class ImageLoaderUtils {
     private static int mEmptyImageResId = 0;
     private static ImageLoader imageLoader = ImageLoader.getInstance();
     private DisplayImageOptions options;
-    private LruCache<String, Bitmap> mImageLoaderCache = null;
 
     private ImageLoaderUtils(Context context) {
         imageLoader = ImageLoader.getInstance();
@@ -39,15 +38,6 @@ public class ImageLoaderUtils {
                 .showImageOnFail(mErrorImageResId).cacheInMemory(true)
                 .cacheOnDisc(true).considerExifParams(true)
                 .bitmapConfig(Bitmap.Config.RGB_565).build();
-        int maxMemory = (int) Runtime.getRuntime().maxMemory();
-        int cacheMemory = maxMemory / 8;
-        mImageLoaderCache = new LruCache<String, Bitmap>(cacheMemory){
-        	@Override
-        	protected int sizeOf(String key, Bitmap value) {
-        		return value.getRowBytes() * value.getHeight();
-        	}
-        };
-        
     }
     
     public static ImageLoaderUtils getinstance(Context context,int defultImageResId,int errorImageResId,int emptyImageResId) {
@@ -109,7 +99,7 @@ public class ImageLoaderUtils {
      * @param defImageResId
      */
     public void getImage(ImageView imageView, String url, int defImageResId, final String key) {
-    	Bitmap resultBitmap = mImageLoaderCache.get(key);
+    	Bitmap resultBitmap = PMApplication.getInstance().getmImageLoaderCache().get(key);
     	if(resultBitmap != null){
     		imageView.setImageBitmap(resultBitmap);
     		return;
@@ -123,7 +113,7 @@ public class ImageLoaderUtils {
 			
 			@Override
 			public void display(Bitmap bitmap, ImageAware imageAware, LoadedFrom loadedFrom) {
-				mImageLoaderCache.put(key, bitmap);
+				PMApplication.getInstance().getmImageLoaderCache().put(key, bitmap);
 				imageAware.setImageBitmap(bitmap);
 			}
 		}).build();
@@ -140,7 +130,7 @@ public class ImageLoaderUtils {
      */
     public void getImageNoDisc(final ImageView imageView, String url,
                                final int defImageResId) {
-    	Bitmap resultBitmap = mImageLoaderCache.get(url);
+    	Bitmap resultBitmap = PMApplication.getInstance().getmImageLoaderCache().get(url);
     	if(resultBitmap != null){
     		imageView.setImageBitmap(resultBitmap);
     		return;
@@ -200,7 +190,7 @@ public class ImageLoaderUtils {
      */
     private void getRoundedCornerBitmap(final ImageView imageView, final String url, int defultImageResId,int emptyImageResId,int errorImageResId,boolean isCacheInMemory) {
     	imageView.setTag(url);
-    	Bitmap resultBitmap = mImageLoaderCache.get(url);
+    	Bitmap resultBitmap = PMApplication.getInstance().getmImageLoaderCache().get(url);
     	if(resultBitmap != null){
     		imageView.setImageBitmap(resultBitmap);
     		return;
@@ -224,12 +214,12 @@ public class ImageLoaderUtils {
                         	
                         	if(imageView.getTag().toString().equals(url)){
                         	
-                        		Bitmap resultBitmap = mImageLoaderCache.get(url);
+                        		Bitmap resultBitmap = PMApplication.getInstance().getmImageLoaderCache().get(url);
                         		if(resultBitmap == null){
                         			Bitmap bb = BitmapUtils.scaleBitmap(imageView, bitmap);
                                     Bitmap tailorBitmap = BitmapUtils.tailorBitmap(imageView, bb);
                                     resultBitmap = BitmapUtils.toRoundBitmap(tailorBitmap);
-                                    mImageLoaderCache.put(url, resultBitmap);
+                                    PMApplication.getInstance().getmImageLoaderCache().put(url, resultBitmap);
                                     bb.recycle();
                                     tailorBitmap.recycle();
                                     bb = null;
@@ -305,7 +295,7 @@ public class ImageLoaderUtils {
      */
     private void getImageRoundBitmap(final ImageView imageView, final String url, final int cornerRadiusPixels,int defultImageResId,int emptyImageResId,int errorImageResId,boolean isCacheInMemory) {
     	imageView.setTag(url);
-    	Bitmap resultBitmap = mImageLoaderCache.get(url);
+    	Bitmap resultBitmap = PMApplication.getInstance().getmImageLoaderCache().get(url);
     	if(resultBitmap != null){
     		imageView.setImageBitmap(resultBitmap);
     		return;
@@ -326,12 +316,12 @@ public class ImageLoaderUtils {
                         }
                         try {
                         	if(imageView.getTag().toString().equals(url)){
-                        		Bitmap resultBitmap = mImageLoaderCache.get(url);
+                        		Bitmap resultBitmap = PMApplication.getInstance().getmImageLoaderCache().get(url);
                         		if(resultBitmap == null){
                         			Bitmap bb = BitmapUtils.scaleBitmap(imageView, bitmap);
                                     Bitmap tailorBitmap = BitmapUtils.tailorBitmap(imageView, bb);
                                     resultBitmap = BitmapUtils.circularBeadBitmap(tailorBitmap,cornerRadiusPixels*1.0f);
-                                    mImageLoaderCache.put(url, resultBitmap);
+                                    PMApplication.getInstance().getmImageLoaderCache().put(url, resultBitmap);
                                     bb.recycle();
                                     tailorBitmap.recycle();
                                     bb = null;

@@ -40,24 +40,24 @@ public class ExceptionUtils {
 		params.put("device_msg", getDeviceMsg(context).toString());
 		params.put("exception_msg", getExceptionMsg(e).toString());
 		
-		try {
-			request.jsonPostRequest(httpTag, baseUrl, null, params, new Response.Listener<Object>() {
-
-				@Override
-				public void onResponse(Object response) {
-					// TODO Auto-generated method stub
-					
-				}
-			}, new Response.ErrorListener() {
-
-				@Override
-				public void onErrorResponse(VolleyError error) {
-					// TODO Auto-generated method stub
-					
-				}
-			});
-		} catch (Exception e1) {
-		}
+//		try {
+//			request.jsonPostRequest(httpTag, baseUrl, null, params, new Response.Listener<Object>() {
+//
+//				@Override
+//				public void onResponse(Object response) {
+//					// TODO Auto-generated method stub
+//					
+//				}
+//			}, new Response.ErrorListener() {
+//
+//				@Override
+//				public void onErrorResponse(VolleyError error) {
+//					// TODO Auto-generated method stub
+//					
+//				}
+//			});
+//		} catch (Exception e1) {
+//		}
 	}
 	
 	

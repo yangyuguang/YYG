@@ -3,12 +3,12 @@ package com.pami.activity;
 import java.lang.reflect.Field;
 import java.util.List;
 
-import android.app.Activity;
-import android.content.Context;
-import android.media.AudioManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -45,13 +45,11 @@ public abstract class BaseActivity extends FragmentActivity implements ViewInit,
 	private LoadingDialog loadingDialog;
 	/** dialog是否显示 */
 	private boolean loadingDialogIsShow = false;
+	/** 点击屏幕区域是否隐藏键盘 */
 	private boolean is_hidKeyDown = true;
 	private TextView base_activity_line = null;
-	private View loding_layout;
 
 	public int barHeight;
-
-	public Context mContext;
 	private Toast mToast;
 
 	@Override
@@ -60,20 +58,14 @@ public abstract class BaseActivity extends FragmentActivity implements ViewInit,
 		super.onCreate(arg0);
 
 		try {
-
 			loadViewbefore();
-			setVolumeControlStream(AudioManager.STREAM_MUSIC);// 使得音量键控制媒体声音
-			mContext = this;
+			
 			setContentView(getResources().getIdentifier("base_activity_layout", "layout", getPackageName()));
 
 			activity_base_titlebar = (FrameLayout) findViewById(getResources().getIdentifier("activity_base_titlebar", "id", getPackageName()));
 			activity_base_content = (FrameLayout) findViewById(getResources().getIdentifier("activity_base_content", "id", getPackageName()));
 
 			base_activity_line = (TextView) findViewById(getResources().getIdentifier("base_activity_line", "id", getPackageName()));
-
-			loding_layout = findViewById(getResources().getIdentifier("loding_layout", "id", getPackageName()));
-
-			PMApplication.getInstance().setContext(mContext);
 
 			View navigationBarHeight = findViewById(getResources().getIdentifier("navigationBarHeight", "id", getPackageName()));
 			if (PMApplication.getInstance().isHasNavigationBar) {
@@ -90,7 +82,6 @@ public abstract class BaseActivity extends FragmentActivity implements ViewInit,
 			setBarColor();
 			initViewFromXML();
 			initData();
-			fillCacheData();
 			fillView();
 			initListener();
 			ScreenManager.getScreenManager().pushActivity(this);
@@ -131,13 +122,12 @@ public abstract class BaseActivity extends FragmentActivity implements ViewInit,
 			decor.removeView(decorChild);
 			decor.addView(slidingPaneLayout);
 			slidingPaneLayout.addView(decorChild, 1);
-
 		}
 	}
 
 	/**
 	 * 是否支持滑动返回
-	 *
+	 * true 表示支持   false 表示不支持
 	 * @return
 	 */
 	protected boolean isSupportSwipeBack() {
@@ -164,6 +154,10 @@ public abstract class BaseActivity extends FragmentActivity implements ViewInit,
 	 */
 	protected void uploadException(Exception e){};
 
+	/**
+	 * 在设置布局文件之前调用的方法
+	 * @throws Exception
+	 */
 	public void loadViewbefore() throws Exception {
 
 	}
@@ -263,13 +257,6 @@ public abstract class BaseActivity extends FragmentActivity implements ViewInit,
 	}
 
 	/**
-	 * 填充缓存数据
-	 */
-	protected void fillCacheData() throws Exception {
-
-	}
-
-	/**
 	 * 设置内容布局
 	 * 
 	 * @param layoutResID
@@ -281,54 +268,22 @@ public abstract class BaseActivity extends FragmentActivity implements ViewInit,
 
 	@Override
 	public void handleActionStart(String actionName, Object object) {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void handleActionFinish(String actionName, Object object) {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void handleActionSuccess(String actionName, Object object) {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void handleActionError(String actionName, Object object) {
-		// try {
-		// String result = object.toString();
-		// if (result.indexOf("code") >= 0) {
-		// int code = JsonUtils.getCode(result);
-		// switch (code) {
-		// case -1: {
-		// MLog.e("yyg", "返回-1");
-		// Toast.makeText(this, JsonUtils.getSuccessData(result, "error_text"),
-		// Toast.LENGTH_SHORT).show();
-		// break;
-		// }
-		// case -9: {
-		// MLog.e("yyg", "返回-9");
-		// Toast.makeText(this, JsonUtils.getSuccessData(result, "error_text"),
-		// Toast.LENGTH_SHORT).show();
-		// break;
-		// }
-		//
-		// default:
-		// Toast.makeText(this, result, Toast.LENGTH_SHORT).show();
-		// break;
-		// }
-		// } else {
-		// Toast.makeText(this, result, Toast.LENGTH_SHORT).show();
-		// }
-		//
-		// } catch (Exception e) {
-		// MLog.e("yyg", "BaseActivity 【handleActionError】 错误回调有错");
-		// e.printStackTrace();
-		// }
+		
 	}
 
 	/**
@@ -449,15 +404,11 @@ public abstract class BaseActivity extends FragmentActivity implements ViewInit,
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
-
 		try {
-			ScreenManager.getScreenManager().popActivity(BaseActivity.this);
 			dismissDialog();
 			activity_base_titlebar = null;
 			activity_base_content = null;
 			base_activity_line = null;
-			loding_layout = null;
-			mContext = null;
 			if(mToast != null){
 				mToast.cancel();
 				mToast = null;
@@ -531,10 +482,59 @@ public abstract class BaseActivity extends FragmentActivity implements ViewInit,
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if (keyCode == KeyEvent.KEYCODE_BACK) {
-			finishActivity();
+			if(getSupportFragmentManager().getBackStackEntryCount() <= 1){
+				finishActivity();
+			}else{
+				getSupportFragmentManager().popBackStack();
+				return true;
+			}
+			
 		}
 		return super.onKeyDown(keyCode, event);
 	}
+	
+	/**
+	 * 添加Fragment
+	 * @param fragment
+	 */
+	protected void addFragment(Fragment fragment)throws Exception{
+		if(fragment != null){
+			if(getFragmentLayoutId() == -100){
+				showToast("");
+				return;
+			}
+			FragmentManager manager = getSupportFragmentManager();
+			Fragment oldFragment = manager.findFragmentByTag(fragment.getClass().getSimpleName());
+			FragmentTransaction ft = manager.beginTransaction();
+			if(manager.getFragments() != null && !manager.getFragments().isEmpty()){
+				ft.setCustomAnimations(R.anim.home_push_leftin, R.anim.home_push_leftout,R.anim.home_push_rightin,R.anim.home_push_rightout);
+			}
+			if(oldFragment == null){
+				ft.add(getFragmentLayoutId(), fragment, fragment.getClass().getSimpleName()).addToBackStack(fragment.getClass().getSimpleName()).commitAllowingStateLoss();
+			}else{
+				ft.replace(getFragmentLayoutId(), oldFragment, oldFragment.getClass().getSimpleName()).addToBackStack(oldFragment.getClass().getSimpleName()).commitAllowingStateLoss();
+			}
+		}
+	}
+	
+	/**
+	 * 移除当前Fragment
+	 */
+	protected void removeFragment()throws Exception{
+		if(getSupportFragmentManager().getBackStackEntryCount() > 1){
+			getSupportFragmentManager().popBackStack();
+		}else{
+			finishActivity();
+		}
+	}
+	
+	/**
+	 * 获取布局中Fragment的ID
+	 * @return
+	 */
+	protected int getFragmentLayoutId()throws Exception{
+		return -100;
+	};
 	
 	@Override
 	public void onPanelClosed(View view) {
@@ -547,9 +547,9 @@ public abstract class BaseActivity extends FragmentActivity implements ViewInit,
 		this.overridePendingTransition(0, R.anim.slide_out_right);
 	}
 
-	private int activitySize = 0;
-	private Activity reciprocalSecondActivity = null;
-	private ViewGroup exitDecorChild = null;
+//	private int activitySize = 0;
+//	private Activity reciprocalSecondActivity = null;
+//	private ViewGroup exitDecorChild = null;
 	@Override
 	public void onPanelSlide(View view, float v) {
 //		if(reciprocalSecondActivity == null){

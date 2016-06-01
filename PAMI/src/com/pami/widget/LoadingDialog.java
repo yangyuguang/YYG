@@ -21,7 +21,7 @@ public class LoadingDialog extends DialogFragment {
 
 	private List<String> httpFlags;
 	private OnDesmissListener onDesmissListener = null;
-	private AnimationDrawable loading = null;
+//	private AnimationDrawable loading = null;
 	
 	private TextView loding_mark_tv = null;
 	private String hintMessage = null;
@@ -60,12 +60,8 @@ public class LoadingDialog extends DialogFragment {
         getDialog().requestWindowFeature(Window.FEATURE_NO_TITLE);
         getDialog().getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
-        ImageView loading_mark_iv = (ImageView) view.findViewById(getResources().getIdentifier("loading_mark_iv", "id", getActivity().getPackageName()));
         loding_mark_tv = (TextView) view.findViewById(getResources().getIdentifier("loding_mark_tv", "id", getActivity().getPackageName()));
         loding_mark_tv.setText(hintMessage);
-		loading = (AnimationDrawable) loading_mark_iv.getDrawable();
-		loading.start();
-//        setCancelable(false);
         return view;
 	}
 	

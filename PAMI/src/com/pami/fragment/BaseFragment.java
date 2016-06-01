@@ -2,10 +2,13 @@ package com.pami.fragment;
 
 import java.util.List;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.widget.FrameLayout;
 import android.widget.Toast;
@@ -28,6 +31,7 @@ public abstract class BaseFragment extends Fragment implements ViewInit, HttpAct
 	private LoadingDialog loadingDialog;
 	private boolean loadingDialogIsShow = false;
 	private Toast mToast;
+	private BaseActivity mActivity = null;
 
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
@@ -41,6 +45,22 @@ public abstract class BaseFragment extends Fragment implements ViewInit, HttpAct
 			uploadException(e);
 		}
 	}
+	
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		if(getLayoutId() <= 0){
+			return null;
+		}
+		return inflater.inflate(getLayoutId(), container, false);
+	}
+	
+	@Override
+	public void onAttach(Activity activity) {
+		super.onAttach(activity);
+		if(activity instanceof BaseActivity){
+			this.mActivity = (BaseActivity) activity;
+		}
+	}
 
 	/**
 	 * 上传log 日志 注意调用此方法 app 必须重写PMApplication 并在 onCreate方法中
@@ -49,7 +69,8 @@ public abstract class BaseFragment extends Fragment implements ViewInit, HttpAct
 	 * 
 	 * @param e
 	 */
-	protected void uploadException(Exception e){};
+	protected void uploadException(Exception e) {
+	};
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -98,35 +119,6 @@ public abstract class BaseFragment extends Fragment implements ViewInit, HttpAct
 	@Override
 	public void handleActionError(String actionName, Object object) {
 		MLog.e("yyg", "BaseFragment:handleActionError【" + actionName + "】");
-		// try {
-		// String result = object.toString();
-		// if(result.indexOf("code") >= 0){
-		// int code = JsonUtils.getCode(result);
-		// switch (code) {
-		// case -1:{
-		// MLog.e("yyg", "返回-1");
-		// Toast.makeText(getActivity(), JsonUtils.getSuccessData(result,
-		// "error_text"), Toast.LENGTH_SHORT).show();
-		// break;
-		// }
-		// case -9:{
-		// MLog.e("yyg", "返回-9");
-		// Toast.makeText(getActivity(), JsonUtils.getSuccessData(result,
-		// "error_text"), Toast.LENGTH_SHORT).show();
-		// break;
-		// }
-		//
-		// default:
-		// Toast.makeText(getActivity(), result, Toast.LENGTH_SHORT).show();
-		// break;
-		// }
-		// }else{
-		// Toast.makeText(getActivity(), result, Toast.LENGTH_SHORT).show();
-		// }
-		//
-		// } catch (Exception e) {
-		// uploadException(e);
-		// }
 	}
 
 	@Override
@@ -137,8 +129,11 @@ public abstract class BaseFragment extends Fragment implements ViewInit, HttpAct
 
 	@Override
 	public void handleActionFinish(String actionName, Object object) {
-		// TODO Auto-generated method stub
-
+		try {
+			dismissDialog();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override
@@ -301,5 +296,7 @@ public abstract class BaseFragment extends Fragment implements ViewInit, HttpAct
 			uploadException(e);
 		}
 	}
+	
+	protected abstract int getLayoutId();
 
 }

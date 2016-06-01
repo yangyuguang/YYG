@@ -51,5 +51,13 @@
         <item name="@android:activityCloseEnterAnimation">@anim/home_push_rightin</item>
         <item name="@android:activityCloseExitAnimation">@anim/home_push_rightout</item>
     </style>
+    
+   <style name="loadingProgessBarStyle">
+       <item name="android:indeterminateDrawable">@drawable/loading_mark</item> 
+       <item name="android:minWidth">50dp</item>  
+        <item name="android:maxWidth">50dp</item>  
+        <item name="android:minHeight">50dp</item>  
+        <item name="android:maxHeight">50dp</item> 
+   </style>
 
 </resources>

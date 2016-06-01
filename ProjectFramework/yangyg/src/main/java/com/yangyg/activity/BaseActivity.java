@@ -1,41 +1,31 @@
 package com.yangyg.activity;
 
-import java.lang.reflect.Field;
-import java.util.List;
-
-import android.app.Activity;
-import android.content.Context;
-import android.media.AudioManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
-import android.support.v7.app.AppCompatActivity;
-import android.text.TextUtils;
-import android.util.Log;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
-import android.view.animation.TranslateAnimation;
 import android.widget.FrameLayout;
+import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.yangyg.R;
-import com.yangyg.YYGApplication;
 import com.yangyg.SystemBarTintManager;
+import com.yangyg.YYGApplication;
 import com.yangyg.listener.AppDownLineListener;
 import com.yangyg.listener.AppLisntenerManager;
 import com.yangyg.listener.HttpActionListener;
 import com.yangyg.listener.ViewInit;
 import com.yangyg.utils.HidenSoftKeyBoard;
-import com.yangyg.utils.MLog;
 import com.yangyg.utils.NetUtils;
 import com.yangyg.utils.ScreenManager;
 import com.yangyg.utils.ScreenUtils;
@@ -43,6 +33,9 @@ import com.yangyg.utils.Util;
 import com.yangyg.widget.LoadingDialog;
 import com.yangyg.widget.LoadingDialog.OnDesmissListener;
 import com.yangyg.widget.switchback.SlidingPaneLayout;
+
+import java.lang.reflect.Field;
+import java.util.List;
 
 
 public abstract class BaseActivity extends FragmentActivity implements ViewInit, HttpActionListener, OnClickListener, AppDownLineListener, SlidingPaneLayout.PanelSlideListener{
@@ -57,10 +50,9 @@ public abstract class BaseActivity extends FragmentActivity implements ViewInit,
 	private TextView base_activity_line = null;
 	private View leftView;
 
-	public Context mContext;
 	private Toast mToast;
 
-	public LinearLayout app_context_root_layout = null;
+//	public LinearLayout app_context_root_layout = null;
 
 	@Override
 	protected void onCreate(Bundle arg0) {
@@ -69,17 +61,14 @@ public abstract class BaseActivity extends FragmentActivity implements ViewInit,
 
 		try {
 			loadViewbefore();
-			setVolumeControlStream(AudioManager.STREAM_MUSIC);// 使得音量键控制媒体声音
-			mContext = this;
 			setContentView(getResources().getIdentifier("base_activity_layout", "layout", getPackageName()));
 
 			activity_base_titlebar = (FrameLayout) findViewById(getResources().getIdentifier("activity_base_titlebar", "id", getPackageName()));
 			activity_base_content = (FrameLayout) findViewById(getResources().getIdentifier("activity_base_content", "id", getPackageName()));
-			app_context_root_layout = (LinearLayout) findViewById(getResources().getIdentifier("app_context_root_layout", "id", getPackageName()));
+//			app_context_root_layout = (LinearLayout) findViewById(getResources().getIdentifier("app_context_root_layout", "id", getPackageName()));
 
 			base_activity_line = (TextView) findViewById(getResources().getIdentifier("base_activity_line", "id", getPackageName()));
 
-			YYGApplication.getInstance().setContext(mContext);
 
 			View navigationBarHeight = findViewById(getResources().getIdentifier("navigationBarHeight", "id", getPackageName()));
 			if (YYGApplication.getInstance().isHasNavigationBar) {
@@ -416,12 +405,10 @@ public abstract class BaseActivity extends FragmentActivity implements ViewInit,
 		super.onDestroy();
 
 		try {
-			ScreenManager.getScreenManager().popActivity(BaseActivity.this);
 			dismissDialog();
 			activity_base_titlebar = null;
 			activity_base_content = null;
 			base_activity_line = null;
-			mContext = null;
 			if(mToast != null){
 				mToast.cancel();
 				mToast = null;
@@ -494,7 +481,13 @@ public abstract class BaseActivity extends FragmentActivity implements ViewInit,
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if (keyCode == KeyEvent.KEYCODE_BACK) {
-			finishActivity();
+			if(getSupportFragmentManager().getBackStackEntryCount() <= 1){
+				finishActivity();
+			}else{
+				getSupportFragmentManager().popBackStack();
+				return true;
+			}
+
 		}
 		return super.onKeyDown(keyCode, event);
 	}
@@ -510,18 +503,61 @@ public abstract class BaseActivity extends FragmentActivity implements ViewInit,
 		this.overridePendingTransition(0, R.anim.slide_out_right);
 	}
 
-	private BaseActivity reciprocalSecondActivity = null;
+//	private BaseActivity reciprocalSecondActivity = null;
 	@Override
 	public void onPanelSlide(View view, float v) {
-		if(reciprocalSecondActivity == null){
-			int activitySize = ScreenManager.getScreenManager().getActivitySize();
-			reciprocalSecondActivity = (BaseActivity) ScreenManager.getScreenManager().getActivityByIndex(activitySize - 2);
-		}
-
-		RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) reciprocalSecondActivity.app_context_root_layout.getLayoutParams();
-		int leftMargin = (int) ((1-v) * 300f);
-		lp.leftMargin = -leftMargin;
-		reciprocalSecondActivity.app_context_root_layout.setLayoutParams(lp);
+//		if(reciprocalSecondActivity == null){
+//			int activitySize = ScreenManager.getScreenManager().getActivitySize();
+//			reciprocalSecondActivity = (BaseActivity) ScreenManager.getScreenManager().getActivityByIndex(activitySize - 2);
+//		}
+//
+//		RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) reciprocalSecondActivity.app_context_root_layout.getLayoutParams();
+//		int leftMargin = (int) ((1-v) * 300f);
+//		lp.leftMargin = -leftMargin;
+//		reciprocalSecondActivity.app_context_root_layout.setLayoutParams(lp);
 	}
+
+	/**
+	 * 添加Fragment
+	 * @param fragment
+	 */
+	protected void addFragment(Fragment fragment)throws Exception{
+		if(fragment != null){
+			if(getFragmentLayoutId() == -100){
+				showToast("");
+				return;
+			}
+			FragmentManager manager = getSupportFragmentManager();
+			Fragment oldFragment = manager.findFragmentByTag(fragment.getClass().getSimpleName());
+			FragmentTransaction ft = manager.beginTransaction();
+			if(manager.getFragments() != null && !manager.getFragments().isEmpty()){
+				ft.setCustomAnimations(R.anim.home_push_leftin, R.anim.home_push_leftout,R.anim.home_push_rightin,R.anim.home_push_rightout);
+			}
+			if(oldFragment == null){
+				ft.add(getFragmentLayoutId(), fragment, fragment.getClass().getSimpleName()).addToBackStack(fragment.getClass().getSimpleName()).commitAllowingStateLoss();
+			}else{
+				ft.replace(getFragmentLayoutId(), oldFragment, oldFragment.getClass().getSimpleName()).addToBackStack(oldFragment.getClass().getSimpleName()).commitAllowingStateLoss();
+			}
+		}
+	}
+
+	/**
+	 * 移除当前Fragment
+	 */
+	protected void removeFragment()throws Exception{
+		if(getSupportFragmentManager().getBackStackEntryCount() > 1){
+			getSupportFragmentManager().popBackStack();
+		}else{
+			finishActivity();
+		}
+	}
+
+	/**
+	 * 获取布局中Fragment的ID
+	 * @return
+	 */
+	protected int getFragmentLayoutId()throws Exception{
+		return -100;
+	};
 
 }

@@ -1,12 +1,10 @@
 package com.pami.utils;
 
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.util.DisplayMetrics;
-import android.util.LruCache;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
@@ -16,6 +14,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Semaphore;
 
+import com.pami.PMApplication;
 import com.pami.bean.ImageBeanHolder;
 import com.pami.bean.ImageSize;
 
@@ -27,10 +26,6 @@ public class ImageLoader {
 
     private static ImageLoader instance;
 
-    /**
-     * 图片缓存的核心对象
-     */
-    private LruCache<String, Bitmap> mLruCache;
     /**
      * 线程池
      */
@@ -119,17 +114,6 @@ public class ImageLoader {
             }
         };
         mPoolThread.start();
-
-        int maxMemory = (int) Runtime.getRuntime().maxMemory();
-        int cacheMemory = maxMemory / 10;
-
-        mLruCache = new LruCache<String, Bitmap>(cacheMemory) {
-
-            @Override
-            protected int sizeOf(String key, Bitmap value) {
-                return value.getRowBytes() * value.getHeight();
-            }
-        };
 
         //创建线程池
         mThreadPool = Executors.newFixedThreadPool(mThreadCount);
@@ -240,7 +224,7 @@ public class ImageLoader {
     private void addBitmapToLruCache(String path, Bitmap bm) {
         if (getBitmapFromLruCache(path) == null) {
             if (bm != null) {
-                mLruCache.put(path, bm);
+            	PMApplication.getInstance().getmImageLoaderCache().put(path, bm);
             }
         }
     }
@@ -332,7 +316,7 @@ public class ImageLoader {
      * @return
      */
     private Bitmap getBitmapFromLruCache(String path) {
-        return mLruCache.get(path);
+        return PMApplication.getInstance().getmImageLoaderCache().get(path);
     }
 
 }

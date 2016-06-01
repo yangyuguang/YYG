@@ -47,9 +47,9 @@ public class HttpJSONRequest {
 	 * @param jsonResult 请求结果
 	 * @param errorListener 请求错误结果
 	 */
-	public void jsonPostRequest(String httpTag,String baseUrl, String method, ArrayMap<String, Object> params, Listener jsonResult,
+	public void jsonPostRequest(String httpTag,String baseUrl, String method, ArrayMap<String, Object> params, ArrayMap<String, String> header, Listener jsonResult,
 			ErrorListener errorListener) throws Exception{
-		jsonRequest(httpTag, baseUrl, method,Request.Method.POST, params, jsonResult, errorListener);
+		jsonRequest(httpTag, baseUrl, method,Request.Method.POST, params, header, jsonResult, errorListener);
 	}
 	
 	/**
@@ -61,9 +61,9 @@ public class HttpJSONRequest {
 	 * @param jsonResult 请求结果
 	 * @param errorListener 请求错误结果
 	 */
-	public void jsonGetRequest(String httpTag,String baseUrl, String method, ArrayMap<String, Object> params, Listener jsonResult,
+	public void jsonGetRequest(String httpTag,String baseUrl, String method, ArrayMap<String, Object> params, ArrayMap<String, String> header, Listener jsonResult,
 			ErrorListener errorListener) throws Exception{
-		jsonRequest(httpTag, baseUrl, method,Request.Method.GET, params, jsonResult, errorListener);
+		jsonRequest(httpTag, baseUrl, method,Request.Method.GET, params, header, jsonResult, errorListener);
 	}
 	/**
 	 * 发送http请求  参数封装成JSON
@@ -74,7 +74,7 @@ public class HttpJSONRequest {
 	 * @param jsonResult 请求结果
 	 * @param errorListener 请求错误结果
 	 */
-	private void jsonRequest(String httpTag,String baseUrl, String methodName,int method, ArrayMap<String, Object> params, Listener jsonResult,
+	private void jsonRequest(String httpTag,String baseUrl, String methodName,int method, ArrayMap<String, Object> params, final ArrayMap<String, String> header, Listener jsonResult,
 			ErrorListener errorListener) throws Exception{
 		PMApplication.getInstance().getRequestQueue().cancelAll(httpTag);
 		JsonObjectRequest jsonRequest = null;
@@ -86,7 +86,12 @@ public class HttpJSONRequest {
 				e.printStackTrace();
 			}
 			jsonRequest = new JsonObjectRequest(method, TextUtils.isEmpty(methodName) ? baseUrl : baseUrl + "/" + methodName,
-					jsonParam, jsonResult, errorListener);
+					jsonParam, jsonResult, errorListener){
+				@Override
+				public Map<String, String> getHeaders() throws AuthFailureError {
+					return getHttpsHeaders(header);
+				}
+			};
 		}else{
 			StringBuffer sb = new StringBuffer();
 			int index = 0;

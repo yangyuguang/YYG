@@ -3,13 +3,15 @@ package com.yangyg;
 import android.app.Application;
 import android.content.Context;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.support.v4.util.LruCache;
 import android.view.Display;
 import android.view.WindowManager;
 
-import com.squareup.okhttp.MediaType;
 import com.squareup.okhttp.OkHttpClient;
-import com.yangyg.activity.BaseActivity;
 import com.yangyg.http.BaseHttpRequest;
+import com.yangyg.utils.MLog;
+import com.yangyg.utils.ScreenManager;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -35,18 +37,14 @@ public class YYGApplication extends Application {
 	protected long writeTimeout = 10;
 	protected long readTimeOut = 30;
 
-//	public boolean isDown;
-//	public boolean isRun;
+	/**存储图片*/
+	private LruCache<String, Bitmap> mImageLoaderCache = null;
+
 
 	/**
 	 * 是否存在 NavigationBar true 表示存在 false 表示不存在
 	 */
 	public boolean isHasNavigationBar;
-
-	/**
-	 * 全局上下文对象
-	 */
-	private Context mContext;
 
 	/**
 	 * 全局LApplication唯一实例
@@ -80,6 +78,17 @@ public class YYGApplication extends Application {
 		instance = this;
 		isHasNavigationBar = checkDeviceHasNavigationBar(this);
 
+		int maxMemory = (int) Runtime.getRuntime().maxMemory();
+		int cacheMemory = maxMemory / 6;
+
+		MLog.e("yyg", "------应用程序【"+getPackageName()+"】最大使用内存数----->"+(maxMemory/1024)+"KB     分配了："+(cacheMemory/1024)+"KB   内存用于缓存图片");
+
+		mImageLoaderCache = new LruCache<String, Bitmap>(cacheMemory){
+			@Override
+			protected int sizeOf(String key, Bitmap value) {
+				return value.getRowBytes() * value.getHeight();
+			}
+		};
 	}
 
 	/**
@@ -191,30 +200,10 @@ public class YYGApplication extends Application {
 	 * 初始化屏幕的宽和高
 	 */
 	private void computeDiaplayWidthAndHeight() {
-		WindowManager mWindowManager = ((BaseActivity) getContext()).getWindowManager();
+		WindowManager mWindowManager = ScreenManager.getScreenManager().currentActivity().getWindowManager();
 		Display display = mWindowManager.getDefaultDisplay();
 		mDiaplayWidth = display.getWidth();
 		mDiaplayHeight = display.getHeight();
-	}
-
-	/**
-	 * 
-	 * @return 获取上下文对象
-	 */
-	public Context getContext() {
-		if (mContext == null) {
-			mContext = this;
-		}
-		return mContext;
-	}
-
-	/**
-	 * 设置上下文对象
-	 * 
-	 * @param mContext
-	 */
-	public void setContext(Context mContext) {
-		this.mContext = mContext;
 	}
 
 	/**
@@ -279,6 +268,14 @@ public class YYGApplication extends Application {
 			e.printStackTrace();
 		}
 		return hasNavigationBar;
+	}
+
+	public LruCache<String, Bitmap> getmImageLoaderCache() {
+		return mImageLoaderCache;
+	}
+
+	public void setmImageLoaderCache(LruCache<String, Bitmap> mImageLoaderCache) {
+		this.mImageLoaderCache = mImageLoaderCache;
 	}
 
 }
