@@ -37,37 +37,16 @@ public class ChooseButton extends View implements OnTouchListener {
     	invalidate();
     }
     public ChooseButton(Context context){
-        super(context);
-        try {
-        	bg_on = ImageSwitchUtil.drawableToBitmap(context.getResources().getDrawable(MResource.getIdByName(context, "drawable", "turnclose")));
-        	bg_off = ImageSwitchUtil.drawableToBitmap(context.getResources().getDrawable(MResource.getIdByName(context, "drawable", "turnoff")));
-        	slip_btn = ImageSwitchUtil.drawableToBitmap(context.getResources().getDrawable(MResource.getIdByName(context, "drawable", "choose_circle")));
-			init();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+        this(context, null);
     }
 
     public ChooseButton(Context context, AttributeSet attrs){
-        super(context, attrs);
+        this(context, attrs, 0);
         TypedArray array = null;
-        try {
-        	bg_on = ImageSwitchUtil.drawableToBitmap(context.getResources().getDrawable(MResource.getIdByName(context, "drawable", "turnclose")));
-        	bg_off = ImageSwitchUtil.drawableToBitmap(context.getResources().getDrawable(MResource.getIdByName(context, "drawable", "turnoff")));
-        	slip_btn = ImageSwitchUtil.drawableToBitmap(context.getResources().getDrawable(MResource.getIdByName(context, "drawable", "choose_circle")));
-			init();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}finally{
-			if(array != null){
-				array.recycle();
-			}
-		}
     }
 
     public ChooseButton(Context context, AttributeSet attrs, int defStyle){
         super(context, attrs, defStyle);
-        TypedArray array = null;
         try {
         	bg_on = ImageSwitchUtil.drawableToBitmap(context.getResources().getDrawable(MResource.getIdByName(context, "drawable", "turnclose")));
         	bg_off = ImageSwitchUtil.drawableToBitmap(context.getResources().getDrawable(MResource.getIdByName(context, "drawable", "turnoff")));
@@ -75,10 +54,6 @@ public class ChooseButton extends View implements OnTouchListener {
 			init();
 		} catch (Exception e) {
 			e.printStackTrace();
-		}finally{
-			if(array != null){
-				array.recycle();
-			}
 		}
     }
 

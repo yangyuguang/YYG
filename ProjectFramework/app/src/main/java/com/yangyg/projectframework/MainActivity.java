@@ -1,11 +1,14 @@
 package com.yangyg.projectframework;
 
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.app.DatePickerDialog;
+import android.bluetooth.BluetoothSocket;
 import android.content.Context;
 import android.content.IntentFilter;
 import android.net.wifi.p2p.WifiP2pManager;
 import android.os.Bundle;
+import android.support.v4.app.ActivityManagerCompat;
 import android.support.v4.util.ArrayMap;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -33,6 +36,7 @@ public class MainActivity extends Activity {
     private WifiP2pManager.Channel mChannel = null;
 
     private AppCompatActivity dpd = null;
+    private BluetoothSocket bs = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,6 +50,8 @@ public class MainActivity extends Activity {
      * 测试 wifi p2p
      */
     private void textWifiP2P() {
+//        ActivityManagerNative.getDefault()
+//        overridePendingTransition();
         mManager = (WifiP2pManager) getSystemService(Context.WIFI_P2P_SERVICE);
         mChannel = mManager.initialize(this, getMainLooper(), new WifiP2pManager.ChannelListener() {
             @Override

@@ -113,7 +113,8 @@ public abstract class BaseActivity extends FragmentActivity implements ViewInit,
 			slidingPaneLayout.setSliderFadeColor(getResources().getColor(android.R.color.transparent));
 
 			View leftView = new View(this);
-			leftView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+			ViewGroup.LayoutParams lp = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+			leftView.setLayoutParams(lp);
 			slidingPaneLayout.addView(leftView, 0);
 
 			ViewGroup decor = (ViewGroup) getWindow().getDecorView();
@@ -168,14 +169,12 @@ public abstract class BaseActivity extends FragmentActivity implements ViewInit,
 	private void setBarColor() throws Exception {
 		setBarColor(getResources().getIdentifier("colorPrimaryDark", "color", getPackageName()));
 	}
-
+	
 	/**
-	 * 指定titlebar的颜色
-	 * 
-	 * @param colorId
-	 *            颜色ID
+	 * 指定titlebar的颜色(电量栏的颜色)
+	 * @param colorId 颜色ID
 	 */
-	private void setBarColor(int colorId) throws Exception {
+	protected void setBarColor(int colorId) throws Exception {
 
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
 			SystemBarTintManager tintManager = new SystemBarTintManager(this);
