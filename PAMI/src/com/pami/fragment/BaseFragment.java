@@ -37,7 +37,7 @@ public abstract class BaseFragment extends Fragment implements ViewInit, HttpAct
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 		try {
-			initViewFromXML();
+			initViewFromXML(savedInstanceState);
 			initData();
 			fillView();
 			initListener();

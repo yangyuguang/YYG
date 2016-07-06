@@ -1,6 +1,9 @@
 package com.pami.utils;
 
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -127,5 +130,36 @@ public class JsonUtils {
 			e.printStackTrace();
 		}
 		return jo;
+	}
+	
+	public static <T> JSONObject getJsonArrayByMap(Map<String, Object> mapParams) {
+		try {
+			JSONObject jo = new JSONObject();;
+			
+			Set<String> set = mapParams.keySet();
+			Iterator<String> ii = set.iterator();
+			while(ii.hasNext()){
+				String key = ii.next();
+				Object obj = mapParams.get(key);
+				
+				if(obj instanceof List){
+					List<T> list = (List<T>) obj;
+					jo.put(key, JsonUtils.getJsonArrayByList(list));
+				}else if(obj instanceof String){
+					jo.put(key, obj.toString());
+				} else if(obj instanceof Map){
+					Map<String,Object> params = (Map<String, Object>) obj;
+					jo.put(key, getJsonArrayByMap(params));
+				}else{
+					jo.put(key, JsonUtils.getJsonByObject(obj));
+				}
+				
+			}
+			return jo;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+		
 	}
 }

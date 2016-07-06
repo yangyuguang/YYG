@@ -246,8 +246,11 @@ public class HttpJSONRequest {
 						jsonParam.put(key, JsonUtils.getJsonArrayByList(list));
 					}else if(obj instanceof String){
 						jsonParam.put(key, obj.toString());
+					} else if(obj instanceof Map){
+						Map<String,Object> mapParams = (Map<String, Object>) obj;
+						jsonParam.put(key, JsonUtils.getJsonArrayByMap(mapParams));
 					}else{
-						jsonParam.put(key, obj);
+						jsonParam.put(key, JsonUtils.getJsonByObject(obj));
 					}
 					
 				}

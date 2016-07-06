@@ -4,6 +4,7 @@ package com.yangyg.adapter;
 import com.yangyg.utils.ImageLoaderUtils;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.text.Spannable;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
@@ -162,6 +163,39 @@ public class ViewHolder {
 	 */
 	public ViewHolder setVisible(int resId) throws Exception {
 		this.getView(resId).setVisibility(View.VISIBLE);
+		return this;
+	}
+
+	/**
+	 * 设置背景颜色
+	 * @param resId view id
+	 * @param colorResId color resource id
+     * @return
+     */
+	public ViewHolder setBackgroundResource(int resId,int colorResId){
+		this.getView(resId).setBackgroundResource(colorResId);
+		return this;
+	}
+
+	/**
+	 * 设置背景颜色
+	 * @param resId view id
+	 * @param color background color
+     * @return
+     */
+	public ViewHolder setBackgroundColor(int resId,int color){
+		this.getView(resId).setBackgroundColor(color);
+		return this;
+	}
+
+	/**
+	 * 设置背景颜色
+	 * @param resId view id
+	 * @param drawable background drawable
+     * @return
+     */
+	public ViewHolder setBackground(int resId,Drawable drawable){
+		this.getView(resId).setBackground(drawable);
 		return this;
 	}
 

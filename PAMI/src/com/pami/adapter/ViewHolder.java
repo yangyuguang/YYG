@@ -3,6 +3,7 @@ package com.pami.adapter;
 import com.pami.utils.ImageLoaderUtils;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.text.Spannable;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
@@ -161,6 +162,21 @@ public class ViewHolder {
 	 */
 	public ViewHolder setVisible(int resId) throws Exception {
 		this.getView(resId).setVisibility(View.VISIBLE);
+		return this;
+	}
+	
+	public ViewHolder setBackgroundResource(int resId,int colorResId){
+		this.getView(resId).setBackgroundResource(colorResId);
+		return this;
+	}
+	
+	public ViewHolder setBackgroundColor(int resId,int color){
+		this.getView(resId).setBackgroundColor(color);
+		return this;
+	}
+	
+	public ViewHolder setBackground(int resId,Drawable drawable){
+		this.getView(resId).setBackground(drawable);
 		return this;
 	}
 

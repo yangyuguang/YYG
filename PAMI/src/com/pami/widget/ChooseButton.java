@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.View.OnTouchListener;
 
 import com.pami.utils.ImageSwitchUtil;
+import com.pami.utils.MLog;
 import com.pami.utils.MResource;
 
 
@@ -22,20 +23,15 @@ import com.pami.utils.MResource;
  *
  */
 public class ChooseButton extends View implements OnTouchListener {
-    private boolean NowChoose = false;// 记录当前按钮是否打开,true为打开,flase为关闭
-    private boolean isChecked;
-    private boolean OnSlip = false;// 记录用户是否在滑动的变量
-    private float DownX, NowX;// 按下时的x,当前的x
-    private Rect Btn_On, Btn_Off;// 打开和关闭状态下,游标的Rect .
+    private boolean nowChoose = false;// 记录当前按钮是否打开,true为打开,flase为关闭
+    private boolean onSlip = false;// 记录用户是否在滑动的变量
+    private float downX, nowX;// 按下时的x,当前的x
+    private Rect btn_On, btn_Off;// 打开和关闭状态下,游标的Rect .
     private boolean isChgLsnOn = false;
-    private OnChangedListener ChgLsn;
+    private OnChangedListener chgLsn;
     private Bitmap bg_on, bg_off, slip_btn;
     
     
-    public void setNowX(float x){
-    	this.NowX = x;
-    	invalidate();
-    }
     public ChooseButton(Context context){
         this(context, null);
     }
@@ -58,8 +54,8 @@ public class ChooseButton extends View implements OnTouchListener {
     }
 
     private void init()throws Exception{// 初始化  
-        Btn_On = new Rect(0, 0, slip_btn.getWidth(), slip_btn.getHeight());
-        Btn_Off = new Rect(bg_off.getWidth() - slip_btn.getWidth(), 0, bg_off.getWidth(),  slip_btn.getHeight());
+        btn_On = new Rect(0, 0, slip_btn.getWidth(), slip_btn.getHeight());
+        btn_Off = new Rect(bg_off.getWidth() - slip_btn.getWidth(), 0, bg_off.getWidth(),  slip_btn.getHeight());
         setOnTouchListener(this);// 设置监听器,也可以直接复写OnTouchEvent
     }
     
@@ -78,45 +74,38 @@ public class ChooseButton extends View implements OnTouchListener {
         Matrix matrix = new Matrix();
         Paint paint = new Paint();
         float x;
-//        LogUtils.e("------【"+NowX+"】【"+bg_on.getWidth()+"】【】【】-------------");
-        if (NowX -33< (bg_on.getWidth() / 2))// 滑动到前半段与后半段的背景不同,在此做判断
-        {
-            x = NowX - slip_btn.getWidth() / 2;
-            canvas.drawBitmap(bg_off, matrix, paint);// 画出关闭时的背景
-        }else{
-            x = bg_on.getWidth() - slip_btn.getWidth() / 2;
-            canvas.drawBitmap(bg_on, matrix, paint);// 画出打开时的背景
-        }
-        if (OnSlip)// 是否是在滑动状态,
-        {
-            if (NowX >= bg_on.getWidth())// 是否划出指定范围,不能让游标跑到外头,必须做这个判断
-                x = bg_on.getWidth() - slip_btn.getWidth() / 2;// 减去游标1/2的长度...
-            else if (NowX < 0){
-                x = 0;
-            } else{
-                x = NowX - slip_btn.getWidth() / 2;
-            }
-        }else {// 非滑动状态
-            if (NowChoose)// 根据现在的开关状态设置画游标的位置
-            {
-                x = Btn_Off.left;
-                canvas.drawBitmap(bg_on, matrix, paint);// 初始状态为true时应该画出打开状态图片
+        
+        if (onSlip){// 是否是在滑动状态,
+        	
+        	if (nowX -33< (bg_on.getWidth() / 2)){// 滑动到前半段与后半段的背景不同,在此做判断
+                x = nowX - slip_btn.getWidth() / 2;
+                canvas.drawBitmap(bg_off, matrix, paint);// 画出关闭时的背景
+                MLog.e("yygDebug", "----关闭----->1"+"   ,   "+x);
             }else{
-            	x = Btn_On.left;
+                x = bg_on.getWidth() - slip_btn.getWidth() / 2;
+                canvas.drawBitmap(bg_on, matrix, paint);// 画出打开时的背景
+                MLog.e("yygDebug", "----打开----->2"+"   ,   "+x);
+            }
+        	
+        }else {// 非滑动状态
+            if (nowChoose)// 根据现在的开关状态设置画游标的位置
+            {
+                x = btn_Off.left;
+                canvas.drawBitmap(bg_on, matrix, paint);// 初始状态为true时应该画出打开状态图片
+                MLog.e("yygDebug", "----打开----->3"+"   ,   "+x);
+            }else{
+            	x = btn_On.left;
+            	canvas.drawBitmap(bg_off, matrix, paint);
+            	MLog.e("yygDebug", "----关闭----->4"+"   ,   "+x);
             }
         }
       
-        if (isChecked){
-            canvas.drawBitmap(bg_on, matrix, paint);
-            x = Btn_Off.left;
-            isChecked = !isChecked;
-        }
-
         if (x < 0)// 对游标位置进行异常判断...
             x = 0;
         else if (x > bg_on.getWidth() - slip_btn.getWidth()){
             x = bg_on.getWidth() - slip_btn.getWidth();
         }
+        MLog.e("yygDebug", "--------->5"+"   ,   "+x);
         canvas.drawBitmap(slip_btn, x, 0, paint);// 画出游标.
     }
 
@@ -124,42 +113,42 @@ public class ChooseButton extends View implements OnTouchListener {
         switch (event.getAction()){
          // 根据动作来执行代码
             case MotionEvent.ACTION_MOVE:// 滑动
-                NowX = event.getX();
+                nowX = event.getX();
                 break;
 
             case MotionEvent.ACTION_DOWN:// 按下
                 if (event.getX() > bg_on.getWidth() || event.getY() > bg_on.getHeight())
                     return false;
-                OnSlip = true;
-                DownX = event.getX();
-                NowX = DownX;
+                onSlip = true;
+                downX = event.getX();
+                nowX = downX;
                 break;
 
             case MotionEvent.ACTION_CANCEL: // 移到控件外部
-                OnSlip = false;
-                boolean choose = NowChoose;
-                if (NowX >= (bg_on.getWidth() / 2)){
-                    NowX = bg_on.getWidth() - slip_btn.getWidth() / 2;
-                    NowChoose = true;
+                onSlip = false;
+                boolean choose = nowChoose;
+                if (nowX >= (bg_on.getWidth() / 2)){
+                    nowX = bg_on.getWidth() - slip_btn.getWidth() / 2;
+                    nowChoose = true;
                 }else{
-                    NowX = NowX - slip_btn.getWidth() / 2;
-                    NowChoose = false;
+                    nowX = nowX - slip_btn.getWidth() / 2;
+                    nowChoose = false;
                 }
-                if (isChgLsnOn && (choose != NowChoose)) // 如果设置了监听器,就调用其方法..
-                    ChgLsn.OnChanged(NowChoose);
+                if (isChgLsnOn && (choose != nowChoose)) // 如果设置了监听器,就调用其方法..
+                    chgLsn.OnChanged(nowChoose);
                 break;
             case MotionEvent.ACTION_UP:// 松开
-                OnSlip = false;
-                boolean LastChoose = NowChoose;
+                onSlip = false;
+                boolean LastChoose = nowChoose;
                 if (event.getX() >= (bg_on.getWidth() / 2)){
-                    NowX = bg_on.getWidth() - slip_btn.getWidth() / 2;
-                    NowChoose = true;
+                    nowX = bg_on.getWidth() - slip_btn.getWidth() / 2;
+                    nowChoose = true;
                 }else {
-                    NowX = NowX - slip_btn.getWidth() / 2;
-                    NowChoose = false;
+                    nowX = nowX - slip_btn.getWidth() / 2;
+                    nowChoose = false;
                 }
-                if (isChgLsnOn && (LastChoose != NowChoose)) // 如果设置了监听器,就调用其方法..                	
-                	ChgLsn.OnChanged(NowChoose);
+                if (isChgLsnOn && (LastChoose != nowChoose)) // 如果设置了监听器,就调用其方法..                	
+                	chgLsn.OnChanged(nowChoose);
                 break;
             default:
         }
@@ -169,24 +158,17 @@ public class ChooseButton extends View implements OnTouchListener {
 
     public void SetOnChangedListener(OnChangedListener l) {// 设置监听器,当状态修改的时候
         isChgLsnOn = true;
-        ChgLsn = l;
+        chgLsn = l;
     }
 
     public interface OnChangedListener{
         abstract void OnChanged(boolean CheckState );
     }
-
-    public void setCheck(boolean isChecked){
-        this.isChecked = isChecked;
-        NowChoose = isChecked;
+    
+    public void setCheckStaus(boolean status){
+    	this.nowChoose = status;
+    	invalidate();
     }
 
-	public boolean isChecked() {
-		return isChecked;
-	}
-
-	public void setChecked(boolean isChecked) {
-		this.isChecked = isChecked;
-	}
 
 }

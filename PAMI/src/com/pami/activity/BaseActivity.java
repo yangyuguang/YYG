@@ -80,7 +80,7 @@ public abstract class BaseActivity extends FragmentActivity implements ViewInit,
 
 			setTitleBar(getResources().getIdentifier("titlebar_base", "layout", getPackageName()));
 			setBarColor();
-			initViewFromXML();
+			initViewFromXML(arg0);
 			initData();
 			fillView();
 			initListener();

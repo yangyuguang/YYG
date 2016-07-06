@@ -1,6 +1,7 @@
 package com.pami.test;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.view.View;
 
 import com.pami.R;
@@ -10,7 +11,7 @@ public class MyTest extends BaseActivity {
 
 //	private RecyclerView
 	@Override
-	public void initViewFromXML() throws Exception {
+	public void initViewFromXML(Bundle arg0) throws Exception {
 		setContent(R.layout.activity_main);
 		hideTitleBar();
 //		showLoadingDialogAndHint("提示信息", "sdfsd");

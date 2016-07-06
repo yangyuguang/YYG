@@ -14,6 +14,7 @@ import android.content.ContentResolver;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
@@ -83,7 +84,7 @@ public class SelectImgCanPhotographActivity extends BaseActivity implements
 	};
 
 	@Override
-	public void initViewFromXML() throws Exception {
+	public void initViewFromXML(Bundle arg0) throws Exception {
 		hideTitleBar();
 		setContent(getResources().getIdentifier("pami_select_img_activity_layout", "layout", getPackageName()));
 
