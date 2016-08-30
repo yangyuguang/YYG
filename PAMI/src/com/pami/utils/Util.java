@@ -50,8 +50,8 @@ public class Util {
 	private static final double EARTH_RADIUS = 6378137;
 	public static int isShowLoding = 0;
 	private static Toast sToast = null;
-	
-//	private static Typeface customFont = null;
+
+	// private static Typeface customFont = null;
 	private static ArrayMap<String, Typeface> customFonts = new ArrayMap<String, Typeface>();
 
 	public static int getIsShowLoding() {
@@ -71,8 +71,7 @@ public class Util {
 		double radLat2 = rad(lat2);
 		double a = radLat1 - radLat2;
 		double b = rad(lng1) - rad(lng2);
-		double s = 2 * Math.asin(Math.sqrt(Math.pow(Math.sin(a / 2), 2) + Math.cos(radLat1) * Math.cos(radLat2)
-				* Math.pow(Math.sin(b / 2), 2)));
+		double s = 2 * Math.asin(Math.sqrt(Math.pow(Math.sin(a / 2), 2) + Math.cos(radLat1) * Math.cos(radLat2) * Math.pow(Math.sin(b / 2), 2)));
 		s = s * EARTH_RADIUS;
 		s = Math.round(s * 10000) / 10000;
 		return s;
@@ -130,7 +129,7 @@ public class Util {
 	 * @return
 	 */
 	public static boolean isPhone(String phoneNumber) {
-//		return regularVerify(phoneNumber, "^[1][2-9]\\d{9}");
+		// return regularVerify(phoneNumber, "^[1][2-9]\\d{9}");
 		return regularVerify(phoneNumber, "^1[3|4|5|7|8][0-9]\\d{8}$");
 	}
 
@@ -141,7 +140,8 @@ public class Util {
 	 * @return
 	 */
 	public static boolean isEmail(String email) {
-//		return regularVerify(email, "^\\w+([-+.]\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*$");
+		// return regularVerify(email,
+		// "^\\w+([-+.]\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*$");
 		return regularVerify(email, "^([a-zA-Z0-9]*[-_]?[a-zA-Z0-9]+)*@([a-zA-Z0-9]*[-_]?[a-zA-Z0-9]+)+[\\.][A-Za-z]{2,3}([\\.][A-Za-z]{2})?$");
 	}
 
@@ -309,8 +309,7 @@ public class Util {
 		double h = options.outHeight;
 
 		int lowerBound = (maxNumOfPixels == -1) ? 1 : (int) Math.ceil(Math.sqrt(w * h / maxNumOfPixels));
-		int upperBound = (minSideLength == -1) ? 128 : (int) Math.min(Math.floor(w / minSideLength),
-				Math.floor(h / minSideLength));
+		int upperBound = (minSideLength == -1) ? 128 : (int) Math.min(Math.floor(w / minSideLength), Math.floor(h / minSideLength));
 
 		if (upperBound < lowerBound) {
 			return lowerBound;
@@ -633,8 +632,7 @@ public class Util {
 				amountCount = 0;
 			}
 			String temp = new java.text.DecimalFormat(".00").format(amountCount);
-			if (temp.equals("0") || temp.equals("0.0") || temp.equals("0.00") || temp.equals(".00")
-					|| temp.equals(".0")) {
+			if (temp.equals("0") || temp.equals("0.0") || temp.equals("0.00") || temp.equals(".00") || temp.equals(".0")) {
 				temp = "";
 			}
 			if (temp.indexOf(".") == 0) {
@@ -705,8 +703,8 @@ public class Util {
 	}
 
 	/**
-	 * 判断字符串是否超长
-	 * 一个中文算两个字符  字母算一个字符   符号和数字算一个字符
+	 * 判断字符串是否超长 一个中文算两个字符 字母算一个字符 符号和数字算一个字符
+	 * 
 	 * @param result
 	 *            字符串的长度
 	 * @param max
@@ -756,48 +754,84 @@ public class Util {
 		}
 		return true;
 	}
-	
+
 	/**
-	 * 获取字符串的长度
-	 * 一个中文算两个字符  字母算一个字符   符号和数字算一个字符
+	 * 根据指定的字符串的长度 截取字符串 位置从0开始
+	 * 
+	 * @param value
+	 *            原始字符串
+	 * @param endIndex
+	 *            需要字符串的长度（说明：一个中文算两个字符 字母算一个字符 符号和数字算一个字符）
+	 * @return
+	 */
+	public static String substringFormZero(String value, int endIndex) {
+		if (TextUtils.isEmpty(value)) {
+			return null;
+		}
+		int valueLenght = getStringLenght(value);
+		if (valueLenght <= endIndex) {
+			return value;
+		}
+		int length = value.length();
+		String resultValue = "";
+		for (int i = endIndex / 2 - 1; i <= length; i++) {
+			String s = value.substring(0, i);
+			int sLenght = getStringLenght(s);
+			System.out.println("计算：" + sLenght + "   ,   " + endIndex + "【i:" + i + " , length:" + length + "】" + "    ,    " + s);
+
+			if (sLenght == endIndex) {
+				return s;
+			}
+			if (sLenght > endIndex && (sLenght - endIndex) >= 2) {
+				return resultValue;
+			} else {
+				resultValue = s;
+			}
+		}
+		return value;
+	}
+
+	/**
+	 * 获取字符串的长度 一个中文算两个字符 字母算一个字符 符号和数字算一个字符
+	 * 
 	 * @param result
 	 * @return
 	 */
-	public static int getStringLenght(String result){
-		if (!TextUtils.isEmpty(result)) {
-			int length = result.length();
-			int is_beyond = 0;
-			char[] cc = new char[1];
-			int strLength = 0;
-			String str = null;
-			char result_item;
-			for (int i = 0; i < length; i++) {
-				result_item = result.charAt(i);
-				cc[0] = result_item;
-				str = new String(cc);
-				strLength = str.getBytes().length;
-				switch (strLength) {
-				case 3: {// 一个中文
-					is_beyond += 2;
-					break;
-				}
-				case 2: {// 一个字母
-					is_beyond += 1;
-					break;
-				}
-				case 1: {// 一个符号 或者 数字
-					is_beyond += 1;
-					break;
-				}
-
-				default:
-					break;
-				}
-			}
-			return is_beyond;
+	public static int getStringLenght(String result) {
+		if (TextUtils.isEmpty(result)) {
+			return 0;
 		}
-		
-		return 0;
+		int length = result.length();
+		int is_beyond = 0;
+		char[] cc = new char[1];
+		int strLength = 0;
+		String str = null;
+		char result_item;
+		for (int i = 0; i < length; i++) {
+			result_item = result.charAt(i);
+			cc[0] = result_item;
+			str = new String(cc);
+			strLength = str.getBytes().length;
+			switch (strLength) {
+			case 3: {// 一个中文
+				is_beyond += 2;
+				break;
+			}
+			case 2: {// 一个字母
+				is_beyond += 1;
+				break;
+			}
+			case 1: {// 一个符号 或者 数字
+				is_beyond += 1;
+				break;
+			}
+
+			default:
+				break;
+			}
+		}
+		return is_beyond;
+
 	}
 
 	/**
@@ -825,29 +859,37 @@ public class Util {
 			toast.cancel();
 		toast = null;
 	}
-	
+
 	/**
-	 * 设置文字字体
-	 * 如果要改变Button的字体 必须使用此方法
-	 * @param context 上下文对象
-	 * @param view 按钮
-	 * @param text 文本
-	 * @param path 字体文件路径
+	 * 设置文字字体 如果要改变Button的字体 必须使用此方法
+	 * 
+	 * @param context
+	 *            上下文对象
+	 * @param view
+	 *            按钮
+	 * @param text
+	 *            文本
+	 * @param path
+	 *            字体文件路径
 	 */
-	public static void setTextTypeFace(Context context,TextView view,String text,String path){
+	public static void setTextTypeFace(Context context, TextView view, String text, String path) {
 		view.setText(text);
 		setTextTypeFace(context, view, path);
 	}
-	
+
 	/**
 	 * 设置文字字体
-	 * @param context 上下文对象
-	 * @param view 文件控件（TextView RadioButton等）
-	 * @param path 字体文件路径
+	 * 
+	 * @param context
+	 *            上下文对象
+	 * @param view
+	 *            文件控件（TextView RadioButton等）
+	 * @param path
+	 *            字体文件路径
 	 */
-	public static void setTextTypeFace(Context context,TextView view,String path){
+	public static void setTextTypeFace(Context context, TextView view, String path) {
 		Typeface customFont = customFonts.get(path);
-		if(customFont == null){
+		if (customFont == null) {
 			customFont = Typeface.createFromAsset(context.getAssets(), path);
 			customFonts.put(path, customFont);
 		}

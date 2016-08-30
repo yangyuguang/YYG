@@ -7,6 +7,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
+import android.util.SparseArray;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -14,6 +15,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.DatePicker;
 import android.widget.FrameLayout;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
@@ -37,8 +39,13 @@ import com.yangyg.widget.LoadingDialog;
 import com.yangyg.widget.LoadingDialog.OnDesmissListener;
 import com.yangyg.widget.switchback.SlidingPaneLayout;
 
+import java.io.OutputStream;
 import java.lang.reflect.Field;
+import java.net.HttpURLConnection;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.concurrent.Executor;
+import java.util.concurrent.PriorityBlockingQueue;
 
 
 public abstract class BaseActivity extends FragmentActivity implements ViewInit, HttpActionListener, OnClickListener, AppDownLineListener, SlidingPaneLayout.PanelSlideListener{
@@ -55,7 +62,7 @@ public abstract class BaseActivity extends FragmentActivity implements ViewInit,
 
 	private Toast mToast;
 
-	private HorizontalScrollView vp = null;
+	private PriorityBlockingQueue vp = null;
 //	public LinearLayout app_context_root_layout = null;
 
 	@Override

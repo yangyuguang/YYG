@@ -222,9 +222,11 @@ public class LoadRefreshListView extends ListView implements OnScrollListener {
 			} else {
 				isLastItemVisible = false;
 			}
-			if(firstVisibleItem == 0){
-				this.firstVisibleItem  = firstVisibleItem;
-			}
+			
+			this.firstVisibleItem  = firstVisibleItem;
+//			if(firstVisibleItem == 0){
+//				this.firstVisibleItem  = firstVisibleItem;
+//			}
 		
 	}
 

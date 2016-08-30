@@ -26,7 +26,7 @@ import com.pami.widget.LoadingDialog.OnDesmissListener;
 
 public abstract class BaseFragment extends Fragment implements ViewInit, HttpActionListener, OnClickListener {
 
-	protected FrameLayout titleBar;
+//	protected FrameLayout titleBar;
 	private boolean isChangeTitleBar = true;
 	private LoadingDialog loadingDialog;
 	private boolean loadingDialogIsShow = false;
@@ -78,7 +78,7 @@ public abstract class BaseFragment extends Fragment implements ViewInit, HttpAct
 
 		try {
 			// initData();
-			titleBar = new FrameLayout(getActivity());
+//			titleBar = new FrameLayout(getActivity());
 		} catch (Exception e) {
 			uploadException(e);
 		}
@@ -95,21 +95,21 @@ public abstract class BaseFragment extends Fragment implements ViewInit, HttpAct
 	/**
 	 * 设置activity的titlebar
 	 */
-	public void setTitleBar() throws Exception {
-		((BaseActivity) getActivity()).setTitleBar(titleBar);
-	}
+//	public void setTitleBar() throws Exception {
+//		((BaseActivity) getActivity()).setTitleBar(titleBar);
+//	}
 
 	@Override
 	public void setUserVisibleHint(boolean isVisibleToUser) {
 		super.setUserVisibleHint(isVisibleToUser);
-		try {
-
-			if (isChangeTitleBar && isVisibleToUser) {
-				setTitleBar();
-			}
-		} catch (Exception e) {
-			uploadException(e);
-		}
+//		try {
+//
+//			if (isChangeTitleBar && isVisibleToUser) {
+////				setTitleBar();
+//			}
+//		} catch (Exception e) {
+//			uploadException(e);
+//		}
 	}
 
 	public void setChangeTitleBar(boolean isChange) {
@@ -272,7 +272,7 @@ public abstract class BaseFragment extends Fragment implements ViewInit, HttpAct
 		super.onDestroy();
 		try {
 			dismissDialog();
-			titleBar = null;
+//			titleBar = null;
 			if (mToast != null) {
 				mToast.cancel();
 				mToast = null;

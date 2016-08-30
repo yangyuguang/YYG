@@ -112,7 +112,7 @@ public class ViewHolder {
 	 * @param imageId 图片ID
 	 * @return
 	 */
-	public ViewHolder setImage(int resId, int imageId) throws Exception {
+	public synchronized ViewHolder setImage(int resId, int imageId) throws Exception {
 		ImageView imageView = getView(resId);
 		imageView.setImageResource(imageId);
 		return this;
@@ -125,7 +125,7 @@ public class ViewHolder {
 	 * @param url 图片地址
 	 * @return
 	 */
-	public ViewHolder setImage(int resId, String url) throws Exception {
+	public synchronized ViewHolder setImage(int resId, String url) throws Exception {
 		ImageView imageView = getView(resId);
 		imageView.setTag(url);
 		ImageLoaderUtils.getinstance(mContext).getImage(imageView, url);

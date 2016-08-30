@@ -9,6 +9,7 @@ import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -82,6 +83,6 @@ public class LoadingDialog extends DialogFragment {
 	 * @param str
 	 */
 	public void setHintMessage(String str){
-		this.loding_mark_tv.setText(str);
+		this.loding_mark_tv.setText(TextUtils.isEmpty(str)?"":str);
 	}
 }

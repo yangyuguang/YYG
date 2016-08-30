@@ -1,5 +1,7 @@
 package com.pami.utils;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Stack;
 
 import android.app.Activity;
@@ -89,6 +91,9 @@ public class ScreenManager {
 	public Activity getActivityByIndex(int index){
 		Activity activity = null;
 		if (activityStack != null && !activityStack.isEmpty()) {
+			if(index >= activityStack.size()){
+				return null;
+			}
 			activity = activityStack.get(index);
 		}
 		return activity;
@@ -119,15 +124,21 @@ public class ScreenManager {
 	 * @param cls 不能关闭的activity
 	 */
 	public void popAllActivityExceptOne(Class cls) {
-		while (true) {
-			Activity activity = currentActivity();
-			if (activity == null) {
-				break;
+		if(cls == null){
+			return;
+		}
+		List<Activity> tmpList = new ArrayList<Activity>();
+		if (activityStack != null && !activityStack.isEmpty()) {
+			for(int i=0;i<activityStack.size();i++){
+				if(!activityStack.get(i).getClass().equals(cls)){
+					tmpList.add(activityStack.get(i));
+				}
 			}
-			if (cls != null && activity.getClass().equals(cls)) {
-				break;
+		}
+		if(!tmpList.isEmpty()){
+			for(Activity a:tmpList){
+				popActivity(a);
 			}
-			popActivity(activity);
 		}
 	}
 

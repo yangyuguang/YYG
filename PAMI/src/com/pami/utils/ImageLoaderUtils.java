@@ -36,7 +36,7 @@ public class ImageLoaderUtils {
                 .showImageOnLoading(mDefultImageResId)
                 .showImageForEmptyUri(mEmptyImageResId)
                 .showImageOnFail(mErrorImageResId).cacheInMemory(true)
-                .cacheOnDisc(true).considerExifParams(true)
+                .cacheOnDisk(true).considerExifParams(true)
                 .bitmapConfig(Bitmap.Config.RGB_565).build();
     }
     
@@ -87,7 +87,7 @@ public class ImageLoaderUtils {
                 .showImageOnLoading(defImageResId)
                 .showImageForEmptyUri(defImageResId)
                 .showImageOnFail(defImageResId).cacheInMemory(true)
-                .cacheOnDisc(true).considerExifParams(true)
+                .cacheOnDisk(true).considerExifParams(true)
                 .bitmapConfig(Bitmap.Config.RGB_565).build();
         imageLoader.displayImage(url, imageView, optionsT);
     }
@@ -108,7 +108,7 @@ public class ImageLoaderUtils {
         .showImageOnLoading(defImageResId)
         .showImageForEmptyUri(defImageResId)
         .showImageOnFail(defImageResId).cacheInMemory(true)
-        .cacheOnDisc(true).considerExifParams(true)
+        .cacheOnDisk(true).considerExifParams(true)
         .bitmapConfig(Bitmap.Config.RGB_565).displayer(new BitmapDisplayer() {
 			
 			@Override
@@ -139,7 +139,7 @@ public class ImageLoaderUtils {
                 .showImageOnLoading(defImageResId)
                 .showImageForEmptyUri(defImageResId)
                 .showImageOnFail(defImageResId).cacheInMemory(true)
-                .cacheOnDisc(false).considerExifParams(true)
+                .cacheOnDisk(false).considerExifParams(true)
                 .bitmapConfig(Bitmap.Config.RGB_565).build();
         imageLoader.displayImage(url, imageView, optionsT);
     }
@@ -200,7 +200,7 @@ public class ImageLoaderUtils {
                 .showImageForEmptyUri(emptyImageResId)
                 .showImageOnFail(errorImageResId).cacheInMemory(isCacheInMemory)
                 .imageScaleType(ImageScaleType.IN_SAMPLE_INT)
-                .cacheOnDisc(true).considerExifParams(true)
+                .cacheOnDisk(true).considerExifParams(true)
                 .displayer(new BitmapDisplayer() {
 
                     @Override
@@ -305,7 +305,7 @@ public class ImageLoaderUtils {
                 .showImageForEmptyUri(emptyImageResId)
                 .showImageOnFail(errorImageResId).cacheInMemory(isCacheInMemory)
                 .imageScaleType(ImageScaleType.IN_SAMPLE_INT)
-                .cacheOnDisc(true).considerExifParams(true)
+                .cacheOnDisk(true).considerExifParams(true)
                 .displayer(new BitmapDisplayer() {
 
                     @Override
@@ -342,5 +342,27 @@ public class ImageLoaderUtils {
          * 
          */
         imageLoader.displayImage(url, imageView, options);
+    }
+    
+    /**
+     * 清除图片的缓存  内存 和  文件的缓存
+     */
+    public void clearCache(){
+    	clearDiskCache();
+    	clearMemoryCache();
+    }
+    
+    /**
+     * 清除图片的文件缓存
+     */
+    public void clearDiskCache(){
+    	imageLoader.clearDiskCache();
+    }
+    
+    /**
+     * 清除图片的内存缓存
+     */
+    public void clearMemoryCache(){
+    	imageLoader.clearMemoryCache();
     }
 }
