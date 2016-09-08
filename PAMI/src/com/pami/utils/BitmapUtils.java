@@ -4,13 +4,14 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.util.Date;
 
-import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.Bitmap.CompressFormat;
 import android.graphics.Bitmap.Config;
 import android.graphics.BitmapFactory;
 import android.graphics.BitmapFactory.Options;
@@ -26,6 +27,7 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.media.ExifInterface;
 import android.text.TextUtils;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
@@ -644,6 +646,31 @@ public class BitmapUtils {
 
 		}
 		return bitmap;
+	}
+	
+	/**
+	 * 将View 转换成Bitmap
+	 * @param v
+	 * @return
+	 */
+	public static Bitmap createViewBitmap(View v) {  
+        Bitmap bitmap = Bitmap.createBitmap(v.getWidth(), v.getHeight(), Bitmap.Config.ARGB_8888);  
+        Canvas canvas = new Canvas(bitmap);  
+        v.draw(canvas);  
+        return bitmap;  
+    }
+	
+	public static byte[] bitmapSwitchToByteArray(Bitmap bitmap){
+		ByteArrayOutputStream output = new ByteArrayOutputStream();
+		bitmap.compress(CompressFormat.PNG, 100, output);
+		bitmap.recycle();
+		byte[] result = output.toByteArray();
+		try {
+			output.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return result;
 	}
 
 }
