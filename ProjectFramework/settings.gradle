@@ -1,1 +1,1 @@
-include ':app', ':yangyg', ':slienceinstall', ':switchback'
+include ':app', ':yangyg', ':slienceinstall', ':switchback', ':imageload', ':simpleimagedownload'

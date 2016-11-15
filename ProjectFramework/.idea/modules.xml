@@ -4,6 +4,8 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/ProjectFramework.iml" filepath="$PROJECT_DIR$/ProjectFramework.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/imageload/imageload.iml" filepath="$PROJECT_DIR$/imageload/imageload.iml" />
+      <module fileurl="file://$PROJECT_DIR$/simpleimagedownload/simpleimagedownload.iml" filepath="$PROJECT_DIR$/simpleimagedownload/simpleimagedownload.iml" />
       <module fileurl="file://$PROJECT_DIR$/slienceinstall/slienceinstall.iml" filepath="$PROJECT_DIR$/slienceinstall/slienceinstall.iml" />
       <module fileurl="file://$PROJECT_DIR$/switchback/switchback.iml" filepath="$PROJECT_DIR$/switchback/switchback.iml" />
       <module fileurl="file://$PROJECT_DIR$/yangyg/yangyg.iml" filepath="$PROJECT_DIR$/yangyg/yangyg.iml" />
