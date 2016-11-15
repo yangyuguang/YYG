@@ -29,6 +29,7 @@ import com.pami.listener.AppLisntenerManager;
 import com.pami.listener.HttpActionListener;
 import com.pami.listener.ViewInit;
 import com.pami.utils.HidenSoftKeyBoard;
+import com.pami.utils.MLog;
 import com.pami.utils.NetUtils;
 import com.pami.utils.ScreenManager;
 import com.pami.utils.ScreenUtils;
@@ -37,7 +38,8 @@ import com.pami.widget.LoadingDialog;
 import com.pami.widget.LoadingDialog.OnDesmissListener;
 import com.pami.widget.switchback.SlidingPaneLayout;
 
-public abstract class BaseActivity extends FragmentActivity implements ViewInit, HttpActionListener, OnClickListener, AppDownLineListener, SlidingPaneLayout.PanelSlideListener{
+public abstract class BaseActivity extends FragmentActivity implements ViewInit, HttpActionListener, OnClickListener, AppDownLineListener,
+		SlidingPaneLayout.PanelSlideListener {
 
 	private FrameLayout activity_base_titlebar = null;
 	private FrameLayout activity_base_content = null;
@@ -59,9 +61,10 @@ public abstract class BaseActivity extends FragmentActivity implements ViewInit,
 
 		try {
 			loadViewbefore();
-			
-			setContentView(getResources().getIdentifier("base_activity_layout", "layout", getPackageName()));
 
+			setContentView(getResources().getIdentifier("base_activity_layout", "layout", getPackageName()));
+			ScreenManager.getScreenManager().pushActivity(this);
+			
 			activity_base_titlebar = (FrameLayout) findViewById(getResources().getIdentifier("activity_base_titlebar", "id", getPackageName()));
 			activity_base_content = (FrameLayout) findViewById(getResources().getIdentifier("activity_base_content", "id", getPackageName()));
 
@@ -84,7 +87,7 @@ public abstract class BaseActivity extends FragmentActivity implements ViewInit,
 			initData();
 			fillView();
 			initListener();
-			ScreenManager.getScreenManager().pushActivity(this);
+			
 
 		} catch (Exception e) {
 			uploadException(e);
@@ -99,10 +102,10 @@ public abstract class BaseActivity extends FragmentActivity implements ViewInit,
 		if (isSupportSwipeBack()) {
 			SlidingPaneLayout slidingPaneLayout = new SlidingPaneLayout(this);
 			slidingPaneLayout.setmTouchSwitchBackSize(setMTouchSwitchBack());
-			//通过反射改变mOverhangSize的值为0，这个mOverhangSize值为菜单到右边屏幕的最短距离，默认
-			//是32dp，现在给它改成0
+			// 通过反射改变mOverhangSize的值为0，这个mOverhangSize值为菜单到右边屏幕的最短距离，默认
+			// 是32dp，现在给它改成0
 			try {
-				//属性
+				// 属性
 				Field f_overHang = SlidingPaneLayout.class.getDeclaredField("mOverhangSize");
 				f_overHang.setAccessible(true);
 				f_overHang.set(slidingPaneLayout, 0);
@@ -127,8 +130,8 @@ public abstract class BaseActivity extends FragmentActivity implements ViewInit,
 	}
 
 	/**
-	 * 是否支持滑动返回
-	 * true 表示支持   false 表示不支持
+	 * 是否支持滑动返回 true 表示支持 false 表示不支持
+	 * 
 	 * @return
 	 */
 	protected boolean isSupportSwipeBack() {
@@ -137,26 +140,30 @@ public abstract class BaseActivity extends FragmentActivity implements ViewInit,
 
 	/**
 	 * 设置滑动返回 点击的x区域
+	 * 
 	 * @return
-     */
-	protected float setMTouchSwitchBack(){
+	 */
+	protected float setMTouchSwitchBack() {
 		return 100f;
 	}
-	
+
 	/**
-	 * 上传log 日志
-	 * 注意调用此方法 app 必须重写PMApplication 并在 onCreate方法中 调用 setExceptionUrl(url) 将上传log信息的URL注入系统。否则将调用无效 。
-	 * 最后别忘记在清单文件中注册 重写的 PMApplication
+	 * 上传log 日志 注意调用此方法 app 必须重写PMApplication 并在 onCreate方法中 调用
+	 * setExceptionUrl(url) 将上传log信息的URL注入系统。否则将调用无效 。 最后别忘记在清单文件中注册 重写的
+	 * PMApplication
 	 * 
-	 * MLog.e("yyg", "有错误信息 ， 请认真查看log信息");
-		e.printStackTrace();
-		ExceptionUtils.uploadException(this, e, PMApplication.getInstance().getExceptionUrl());
+	 * MLog.e("yyg", "有错误信息 ， 请认真查看log信息"); e.printStackTrace();
+	 * ExceptionUtils.uploadException(this, e,
+	 * PMApplication.getInstance().getExceptionUrl());
+	 * 
 	 * @param e
 	 */
-	protected void uploadException(Exception e){};
+	protected void uploadException(Exception e) {
+	};
 
 	/**
 	 * 在设置布局文件之前调用的方法
+	 * 
 	 * @throws Exception
 	 */
 	public void loadViewbefore() throws Exception {
@@ -169,10 +176,12 @@ public abstract class BaseActivity extends FragmentActivity implements ViewInit,
 	private void setBarColor() throws Exception {
 		setBarColor(getResources().getIdentifier("colorPrimaryDark", "color", getPackageName()));
 	}
-	
+
 	/**
 	 * 指定titlebar的颜色(电量栏的颜色)
-	 * @param colorId 颜色ID
+	 * 
+	 * @param colorId
+	 *            颜色ID
 	 */
 	protected void setBarColor(int colorId) throws Exception {
 
@@ -282,7 +291,7 @@ public abstract class BaseActivity extends FragmentActivity implements ViewInit,
 
 	@Override
 	public void handleActionError(String actionName, Object object) {
-		
+
 	}
 
 	/**
@@ -317,25 +326,27 @@ public abstract class BaseActivity extends FragmentActivity implements ViewInit,
 	 * @param str
 	 */
 	private void setLoadingDialogHintMessage(String str) throws Exception {
-		if (loadingDialog == null) {
-			loadingDialog = new LoadingDialog(str);
-			loadingDialog.setOnDesmissListener(new OnDesmissListener() {
-
-				@Override
-				public void onDismiss(List<String> httpFlag) {
-					try {
-						loadingDialogIsShow = false;
-						if (httpFlag != null && !httpFlag.isEmpty()) {
-							clearHttpRequest(httpFlag);
-						}
-					} catch (Exception e) {
-						uploadException(e);
-					}
-				}
-			});
-		} else {
-			this.loadingDialog.setHintMessage(str);
+		if (loadingDialog != null && loadingDialogIsShow) {
+			loadingDialog.dismiss();
+			loadingDialog = null;
+			loadingDialogIsShow = false;
 		}
+		loadingDialog = new LoadingDialog(str);
+		loadingDialog.setOnDesmissListener(new OnDesmissListener() {
+
+			@Override
+			public void onDismiss(List<String> httpFlag) {
+				try {
+					
+					loadingDialogIsShow = false;
+					if (httpFlag != null && !httpFlag.isEmpty()) {
+						clearHttpRequest(httpFlag);
+					}
+				} catch (Exception e) {
+					uploadException(e);
+				}
+			}
+		});
 	}
 
 	/**
@@ -345,7 +356,6 @@ public abstract class BaseActivity extends FragmentActivity implements ViewInit,
 	 * @throws Exception
 	 */
 	private void showLoadingDialogByhttpTags(String... httpTags) throws Exception {
-		dismissDialog();
 		loadingDialog.setHttpFlags(httpTags);
 		loadingDialog.show(getSupportFragmentManager(), "loadingDialog" + System.currentTimeMillis());
 		loadingDialogIsShow = true;
@@ -375,9 +385,10 @@ public abstract class BaseActivity extends FragmentActivity implements ViewInit,
 	}
 
 	public void dismissDialog() throws Exception {
+		MLog.e("yyggs", "是否可以取消dialog           dialog是否为空："+(loadingDialog == null) + "        loadingDialogIsShow："+ loadingDialogIsShow);
 		if (loadingDialog != null && loadingDialogIsShow) {
-				loadingDialog.dismiss();
-				loadingDialog = null;
+			loadingDialog.dismiss();
+			loadingDialog = null;
 		}
 	}
 
@@ -408,7 +419,7 @@ public abstract class BaseActivity extends FragmentActivity implements ViewInit,
 			activity_base_titlebar = null;
 			activity_base_content = null;
 			base_activity_line = null;
-			if(mToast != null){
+			if (mToast != null) {
 				mToast.cancel();
 				mToast = null;
 			}
@@ -481,60 +492,64 @@ public abstract class BaseActivity extends FragmentActivity implements ViewInit,
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if (keyCode == KeyEvent.KEYCODE_BACK) {
-			if(getSupportFragmentManager().getBackStackEntryCount() <= 1){
+			if (getSupportFragmentManager().getBackStackEntryCount() <= 1) {
 				finishActivity();
-			}else{
+			} else {
 				getSupportFragmentManager().popBackStack();
 				return true;
 			}
-			
+
 		}
 		return super.onKeyDown(keyCode, event);
 	}
-	
+
 	/**
 	 * 添加Fragment
+	 * 
 	 * @param fragment
 	 */
-	protected void addFragment(Fragment fragment)throws Exception{
-		if(fragment != null){
-			if(getFragmentLayoutId() == -100){
+	protected void addFragment(Fragment fragment) throws Exception {
+		if (fragment != null) {
+			if (getFragmentLayoutId() == -100) {
 				showToast("");
 				return;
 			}
 			FragmentManager manager = getSupportFragmentManager();
 			Fragment oldFragment = manager.findFragmentByTag(fragment.getClass().getSimpleName());
 			FragmentTransaction ft = manager.beginTransaction();
-			if(manager.getFragments() != null && !manager.getFragments().isEmpty()){
-				ft.setCustomAnimations(R.anim.home_push_leftin, R.anim.home_push_leftout,R.anim.home_push_rightin,R.anim.home_push_rightout);
+			if (manager.getFragments() != null && !manager.getFragments().isEmpty()) {
+				ft.setCustomAnimations(R.anim.home_push_leftin, R.anim.home_push_leftout, R.anim.home_push_rightin, R.anim.home_push_rightout);
 			}
-			if(oldFragment == null){
-				ft.add(getFragmentLayoutId(), fragment, fragment.getClass().getSimpleName()).addToBackStack(fragment.getClass().getSimpleName()).commitAllowingStateLoss();
-			}else{
-				ft.replace(getFragmentLayoutId(), oldFragment, oldFragment.getClass().getSimpleName()).addToBackStack(oldFragment.getClass().getSimpleName()).commitAllowingStateLoss();
+			if (oldFragment == null) {
+				ft.add(getFragmentLayoutId(), fragment, fragment.getClass().getSimpleName()).addToBackStack(fragment.getClass().getSimpleName())
+						.commitAllowingStateLoss();
+			} else {
+				ft.replace(getFragmentLayoutId(), oldFragment, oldFragment.getClass().getSimpleName())
+						.addToBackStack(oldFragment.getClass().getSimpleName()).commitAllowingStateLoss();
 			}
 		}
 	}
-	
+
 	/**
 	 * 移除当前Fragment
 	 */
-	protected void removeFragment()throws Exception{
-		if(getSupportFragmentManager().getBackStackEntryCount() > 1){
+	protected void removeFragment() throws Exception {
+		if (getSupportFragmentManager().getBackStackEntryCount() > 1) {
 			getSupportFragmentManager().popBackStack();
-		}else{
+		} else {
 			finishActivity();
 		}
 	}
-	
+
 	/**
 	 * 获取布局中Fragment的ID
+	 * 
 	 * @return
 	 */
-	protected int getFragmentLayoutId()throws Exception{
+	protected int getFragmentLayoutId() throws Exception {
 		return -100;
 	};
-	
+
 	@Override
 	public void onPanelClosed(View view) {
 
@@ -546,18 +561,21 @@ public abstract class BaseActivity extends FragmentActivity implements ViewInit,
 		this.overridePendingTransition(0, R.anim.slide_out_right);
 	}
 
-//	private int activitySize = 0;
-//	private Activity reciprocalSecondActivity = null;
-//	private ViewGroup exitDecorChild = null;
+	// private int activitySize = 0;
+	// private Activity reciprocalSecondActivity = null;
+	// private ViewGroup exitDecorChild = null;
 	@Override
 	public void onPanelSlide(View view, float v) {
-//		if(reciprocalSecondActivity == null){
-//			activitySize = ScreenManager.getScreenManager().getActivitySize();
-//			reciprocalSecondActivity = ScreenManager.getScreenManager().getActivityByIndex(activitySize - 2);
-//			ViewGroup decor = (ViewGroup) reciprocalSecondActivity.getWindow().getDecorView();
-//			exitDecorChild = (ViewGroup) decor.getChildAt(0);
-//		}
-//		exitDecorChild.setAlpha(v);
+		// if(reciprocalSecondActivity == null){
+		// activitySize = ScreenManager.getScreenManager().getActivitySize();
+		// reciprocalSecondActivity =
+		// ScreenManager.getScreenManager().getActivityByIndex(activitySize -
+		// 2);
+		// ViewGroup decor = (ViewGroup)
+		// reciprocalSecondActivity.getWindow().getDecorView();
+		// exitDecorChild = (ViewGroup) decor.getChildAt(0);
+		// }
+		// exitDecorChild.setAlpha(v);
 	}
 
 }
