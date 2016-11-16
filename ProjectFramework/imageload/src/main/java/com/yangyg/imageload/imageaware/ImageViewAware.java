@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.ViewGroup;
+import android.view.animation.AnimationSet;
 import android.widget.ImageView;
 
 import java.lang.reflect.Field;
@@ -94,6 +95,10 @@ public class ImageViewAware implements ViewAware{
      */
     public void setImageBitmap(Bitmap bitmap){
         mImageView.setImageBitmap(bitmap);
+    }
+    public void setImageBitmap(Bitmap bitmap, AnimationSet animationSet){
+        mImageView.setImageBitmap(bitmap);
+        mImageView.startAnimation(animationSet);
     }
     /**
      * 设置图片

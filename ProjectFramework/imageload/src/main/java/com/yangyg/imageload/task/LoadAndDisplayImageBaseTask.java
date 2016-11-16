@@ -4,11 +4,13 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Handler;
 import android.text.TextUtils;
+import android.view.animation.AnimationSet;
 
 import com.yangyg.imageload.ImageLoaderConfiger;
 import com.yangyg.imageload.download.ImageDownloadInfo;
 import com.yangyg.imageload.download.InputStreamBean;
 import com.yangyg.imageload.listener.ImageLoaderProgressListener;
+import com.yangyg.imageload.util.AnimationUtil;
 import com.yangyg.imageload.util.BitmapUtils;
 import com.yangyg.imageload.util.FileHelper;
 
@@ -145,7 +147,11 @@ public abstract class LoadAndDisplayImageBaseTask implements Runnable {
     protected void setBitmapToView(Bitmap tailorBitmap) {
         Object tag = mInfo.getmImageViewAware().getImageView().getTag();
         if (tag != null && !TextUtils.isEmpty(tag.toString()) && tag.toString().equals(mInfo.getUrl())) {
-            mInfo.getmImageViewAware().setImageBitmap(tailorBitmap);
+            if(mInfo.getmDisplayImageOption().getAnimationSet() == null){
+                mInfo.getmImageViewAware().setImageBitmap(tailorBitmap);
+            }else{
+                mInfo.getmImageViewAware().setImageBitmap(tailorBitmap, mInfo.getmDisplayImageOption().getAnimationSet());
+            }
         }
 
         //将图片缓存到内存

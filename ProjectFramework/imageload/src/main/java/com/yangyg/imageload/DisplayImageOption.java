@@ -1,8 +1,7 @@
 package com.yangyg.imageload;
 
-
+import android.view.animation.AnimationSet;
 import com.yangyg.imageload.listener.ImageLoaderProgressListener;
-
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
@@ -14,7 +13,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 public class DisplayImageOption {
 
-
+    AnimationSet mAnimationSet = null;
     int imageLoadingId = 0;
     int imageFail = 0;
     int imageForEmptUri = 0;
@@ -25,6 +24,13 @@ public class DisplayImageOption {
     AtomicBoolean isCacheDisk = new AtomicBoolean(true);
     //硬盘缓存的路径
     String cacheDiskPath = null;
+
+    public DisplayImageOption(AnimationSet animationSet){
+        this.mAnimationSet = animationSet;
+    }
+    public DisplayImageOption(){
+        
+    }
 
     public ImageLoaderProgressListener getImageLoaderProgressListener() {
         return imageLoaderProgressListener;
@@ -95,4 +101,11 @@ public class DisplayImageOption {
         return new DisplayImageOption();
     }
 
+    public AnimationSet getAnimationSet() {
+        return mAnimationSet;
+    }
+
+    public void setAnimationSet(AnimationSet mAnimationSet) {
+        this.mAnimationSet = mAnimationSet;
+    }
 }

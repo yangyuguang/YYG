@@ -1,5 +1,6 @@
 package com.yangyg.imageload.task;
 
+import android.graphics.Movie;
 import android.os.Handler;
 import android.text.TextUtils;
 import android.util.Log;
@@ -11,6 +12,7 @@ import com.yangyg.imageload.download.ImageSourceType;
 import com.yangyg.imageload.download.InputStreamBean;
 
 import java.io.File;
+import java.io.FileInputStream;
 
 /**
  * 加载并显示图片的Task
