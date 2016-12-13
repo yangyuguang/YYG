@@ -29,7 +29,7 @@ public class DisplayImageOption {
         this.mAnimationSet = animationSet;
     }
     public DisplayImageOption(){
-        
+
     }
 
     public ImageLoaderProgressListener getImageLoaderProgressListener() {

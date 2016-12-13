@@ -3,8 +3,6 @@ package com.pami.adapter;
 import java.util.List;
 
 import android.content.Context;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 
 public abstract class DragGridViewAdapter<T> extends PMBaseAdapter<T>{
